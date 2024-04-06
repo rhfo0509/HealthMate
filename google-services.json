@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "434608870171",
+    "project_id": "final-project-473cd",
+    "storage_bucket": "final-project-473cd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:434608870171:android:803451191fedbb4266f9be",
+        "android_client_info": {
+          "package_name": "com.rhfo0509.HealthMate"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCZhCoYUNG6pE8TOO2MrM-AHUvn1luR4BE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

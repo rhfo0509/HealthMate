@@ -1,20 +1,22 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+// 설치할 때 npx expo install 패키지명으로 설치하기
 
-export default function App() {
+import React from "react";
+import { NavigationContainer } from "@react-navigation/native";
+import RootStack from "./screens/RootStack";
+import { UserContextProvider } from "./contexts/UserContext";
+import { ActionSheetProvider } from "@expo/react-native-action-sheet";
+import "react-native-get-random-values";
+
+function App() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <ActionSheetProvider>
+      <UserContextProvider>
+        <NavigationContainer>
+          <RootStack />
+        </NavigationContainer>
+      </UserContextProvider>
+    </ActionSheetProvider>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default App;

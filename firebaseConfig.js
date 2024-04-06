@@ -1,0 +1,36 @@
+import { initializeApp, getApps, getApp } from "firebase/app";
+import { getStorage } from 'firebase/storage';
+import { getReactNativePersistence, initializeAuth } from "firebase/auth";
+// import "firebase/database";
+// import "firebase/firestore";
+// import {...} from "firebase/functions";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+// Initialize Firebase
+const firebaseConfig = {
+  apiKey: "AIzaSyCZhCoYUNG6pE8TOO2MrM-AHUvn1luR4BE",
+  authDomain: "final-project-473cd.firebaseapp.com",
+  databaseURL: "https://final-project-473cd.firebaseio.com",
+  projectId: "final-project-473cd",
+  storageBucket: 'gs://final-project-473cd.appspot.com',
+  // messagingSenderId: 'sender-id',
+  // appId: 'app-id',
+  // measurementId: 'G-measurement-id',
+};
+
+export const initFirebase = () => {
+  let app = null;
+  if (getApps().length === 0) {
+    try {
+      app = initializeApp(firebaseConfig);
+      initializeAuth(app, {
+        persistence: getReactNativePersistence(AsyncStorage),
+      });
+      const storage = getStorage(app, 'gs://final-project-473cd.appspot.com');
+    } catch (e) {
+      console.error(e);
+    }
+  } else {
+    app = getApp();
+  }
+};
