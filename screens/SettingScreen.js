@@ -1,16 +1,14 @@
 import React from "react";
 import { Pressable, StyleSheet, View, Text } from "react-native";
-// import { useUserContext } from '../contexts/UserContext';
-// import { logOut } from '../lib/auth';
-import { useDispatch } from "react-redux";
-import { logOut } from '../actions/authActions';
+import { useUserContext } from '../contexts/UserContext';
+import { logOut } from '../lib/auth';
 
 function SettingScreen() {
-  // const {setUser} = useUserContext();
-  const dispatch = useDispatch();
+  const {setUser} = useUserContext();
 
   const onLogout = async () => {
-    dispatch(logOut());
+    await logOut();
+    setUser(null);
   }
   return (
     <View style={styles.block}>
