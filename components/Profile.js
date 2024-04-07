@@ -11,44 +11,62 @@ import {
   View,
   Text,
 } from "react-native";
-import { getPosts } from "../lib/posts";
-import { getUser } from "../lib/users";
+// import { getPosts } from "../lib/posts";
+import { getMembersByTrainer, getUser } from "../lib/users";
 import Avatar from "./Avatar";
-import PostGridItem from "./PostGridItem";
+import MemberList from "./MemberList";
+// import PostGridItem from "./PostGridItem";
 
 function Profile({ userId }) {
   const [user, setUser] = useState(null);
-  const [posts, setPosts] = useState(null);
+  // const [posts, setPosts] = useState(null);
+  const [members, setMembers] = useState([]);
 
   useEffect(() => {
     getUser(userId).then(setUser);
-    getPosts(userId).then(setPosts);
+    // getPosts(userId).then(setPosts);
+    getMembersByTrainer(userId).then(setMembers);
   }, [userId]);
 
-  if (!user || !posts) {
+  // if (!user || !posts) {
+  if (!user || !members) {
     return (
       <ActivityIndicator style={styles.spinner} size={32} color="#6200ee" />
     );
   }
 
   return (
-    <FlatList
-      style={styles.block}
-      data={posts}
-      renderItem={renderItem}
-      numColumns={3}
-      keyExtractor={(item) => item.id}
-      ListHeaderComponent={
-        <View style={styles.userInfo}>
-          <Avatar source={user.photoURL && { uri: user.photoURL }} size={128} />
-          <Text style={styles.username}>{user.displayName}</Text>
-        </View>
-      }
-    />
+    // <FlatList
+    //   style={styles.block}
+    //   data={posts}
+    //   renderItem={renderItem}
+    //   numColumns={3}
+    //   keyExtractor={(item) => item.id}
+    //   ListHeaderComponent={
+    // <View style={styles.userInfo}>
+    //   <Avatar source={user.photoURL && { uri: user.photoURL }} size={128} />
+    //   <Text style={styles.username}>{user.displayName}</Text>
+    // </View>
+    //   }
+    // />
+    <View style={styles.block}>
+      <MemberList
+        ListHeaderComponent={
+          <View style={styles.userInfo}>
+            <Avatar
+              source={user.photoURL && { uri: user.photoURL }}
+              size={128}
+            />
+            <Text style={styles.username}>{user.displayName}</Text>
+          </View>
+        }
+        members={members}
+      />
+    </View>
   );
 }
 
-const renderItem = ({item}) => <PostGridItem post={item} />
+// const renderItem = ({ item }) => <PostGridItem post={item} />;
 
 const styles = StyleSheet.create({
   spinner: {

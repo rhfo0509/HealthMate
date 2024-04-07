@@ -69,13 +69,8 @@ const styles = StyleSheet.create({
     height: 54,
     width: 54,
     position: "absolute",
-    left: "50%",
-    transform: [
-      {
-        translateX: -27,
-      },
-    ],
-    bottom: TABBAR_HEIGHT / 2,
+    right: 10,
+    bottom: TABBAR_HEIGHT + 10,
   },
   circle: {
     backgroundColor: "#6200ee",

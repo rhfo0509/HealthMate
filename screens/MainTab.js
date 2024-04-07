@@ -5,6 +5,7 @@ import MyProfileStack from "./MyProfileStack";
 import { MaterialIcons } from "@expo/vector-icons";
 import CameraButton from "../components/CameraButton";
 import { StyleSheet, View } from "react-native";
+import AddMemberButton from "../components/AddMemberButton";
 
 const Tab = createBottomTabNavigator();
 
@@ -39,7 +40,8 @@ function MainTab() {
           />
         </Tab.Navigator>
       </View>
-      <CameraButton />
+      {/* <CameraButton /> */}
+      <AddMemberButton />
     </>
   );
 }
