@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
 import { useNavigation } from "@react-navigation/native";
-
 import Profile from "../components/Profile";
 import { useUserContext } from "../contexts/UserContext";
 import IconRightButton from "../components/IconRightButton";
+import AddMemberButton from "../components/AddMemberButton";
 
 function MyProfileScreen() {
   const { user } = useUserContext();
@@ -19,7 +19,12 @@ function MyProfileScreen() {
       ),
     });
   }, [navigation, user]);
-  return <Profile userId={user.id} />;
+  return (
+    <>
+      <Profile userId={user.id} />
+      <AddMemberButton />
+    </>
+  );
 }
 
 export default MyProfileScreen;

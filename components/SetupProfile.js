@@ -143,7 +143,6 @@ function SetupProfile() {
               onChange={onDateSelected}
               display="spinner"
               maximumDate={new Date()}
-              on
             />
           )}
           <Text>{birthDate.toLocaleString()}</Text>

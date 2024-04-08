@@ -41,7 +41,7 @@ function MainTab() {
         </Tab.Navigator>
       </View>
       {/* <CameraButton /> */}
-      <AddMemberButton />
+      {/* <AddMemberButton /> */}
     </>
   );
 }
