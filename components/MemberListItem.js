@@ -9,11 +9,11 @@ function MemberListItem({ member }) {
   const { displayName, birthDate, phoneNumber } = member; // 사용하기 편하게 객체 구조 분해 할당
   const navigation = useNavigation();
 
-  // const onPress = () => {
-  //   navigation.navigate('Write', {
-  //     log,
-  //   });
-  // };
+  const onPress = () => {
+    navigation.navigate("MemberDetail", {
+      member,
+    });
+  };
 
   return (
     <Pressable
@@ -22,7 +22,7 @@ function MemberListItem({ member }) {
         Platform.OS === "ios" && pressed && { backgroundColor: "#efefef" },
       ]}
       android_ripple={{ color: "#ededed" }}
-      // onPress={onPress}
+      onPress={onPress}
     >
       <Text style={styles.date}>{birthDate}</Text>
       <Text style={styles.title}>{displayName}</Text>
