@@ -8,7 +8,9 @@ import {
   View,
   Button,
   Text,
+  TouchableOpacity,
 } from "react-native";
+import { MaterialIcons } from "@expo/vector-icons";
 import RNPickerSelect from "react-native-picker-select";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 import { logOut } from "../lib/auth";
@@ -103,6 +105,7 @@ function SetupProfile() {
       </Pressable>
       <View style={styles.form}>
         <BorderedInput
+          hasMarginBottom
           placeholder="이름"
           value={displayName}
           onChangeText={setDisplayName}
@@ -135,8 +138,27 @@ function SetupProfile() {
             label: "회원 / 트레이너 선택",
           }}
         />
-        <View>
-          <Button onPress={() => setShow(true)} title="생년월일 선택" />
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+            marginHorizontal: 5,
+          }}
+        >
+          <TouchableOpacity
+            style={{
+              flexDirection: "row",
+              alignItems: "center",
+              backgroundColor: "#e9ecef",
+              padding: 10,
+              borderRadius: 5,
+            }}
+            onPress={() => setShow(true)}
+          >
+            <MaterialIcons name="calendar-month" size={24} color="black" />
+            <Text> 생년월일 입력</Text>
+          </TouchableOpacity>
           {show && (
             <RNDateTimePicker
               value={birthDate}
@@ -145,7 +167,7 @@ function SetupProfile() {
               maximumDate={new Date()}
             />
           )}
-          <Text>{birthDate.toLocaleString()}</Text>
+          <Text>{format(birthDate, "yyyy년 MM월 dd일")}</Text>
         </View>
         {loading ? (
           <ActivityIndicator size={32} color="#6200ee" style={styles.spinner} />
