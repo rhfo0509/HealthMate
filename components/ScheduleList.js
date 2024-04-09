@@ -9,8 +9,8 @@ import {
 } from "react-native-swipe-list";
 import {
   getMembersByTrainer,
-  addScheduleToMember,
-  addScheduleToTrainer,
+  // addScheduleToMember,
+  // addScheduleToTrainer,
 } from "../lib/users";
 import {
   createSchedule,

@@ -13,8 +13,8 @@ import { useNavigation } from "@react-navigation/native";
 import { useUserContext } from "../contexts/UserContext";
 import {
   getMembersByTrainer,
-  addScheduleToMember,
-  addScheduleToTrainer,
+  // addScheduleToMember,
+  // addScheduleToTrainer,
 } from "../lib/users";
 import { createSchedule } from "../lib/schedules";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
@@ -52,11 +52,11 @@ function AddScheduleButton() {
     });
     console.log("schedule", schedule.id);
 
-    if (schedule) {
-      await addScheduleToMember(selectedMemberId, schedule.id);
-      await addScheduleToTrainer(trainer.id, schedule.id);
-      console.log("스케줄이 회원과 트레이너에게 추가되었습니다.");
-    }
+    // if (schedule) {
+    //   await addScheduleToMember(selectedMemberId, schedule.id);
+    //   await addScheduleToTrainer(trainer.id, schedule.id);
+    //   console.log("스케줄이 회원과 트레이너에게 추가되었습니다.");
+    // }
 
     setShowModal(false);
     setSelectedMemberId("");
