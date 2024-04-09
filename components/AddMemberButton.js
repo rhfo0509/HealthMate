@@ -1,3 +1,5 @@
+// User가 Trainer인 경우에만 버튼 활성화
+
 import React, { useState } from "react";
 import {
   View,
@@ -8,29 +10,23 @@ import {
   TextInput,
 } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
 import { useUserContext } from "../contexts/UserContext";
 import { addMemberToTrainer } from "../lib/users";
 
-// const TABBAR_HEIGHT = 49;
-
 function AddMemberButton() {
-  const navigation = useNavigation();
   const [show, setShow] = useState(false);
   const [memberId, setMemberId] = useState("");
   const { user: trainer } = useUserContext();
 
   const onPress = () => {
-    setShow(true);
-  };
-  const onSubmit = () => {
+    // 트레이너의 회원 목록에 새 회원 추가
     addMemberToTrainer(trainer.id, memberId);
     setMemberId("");
-    setShow(false); // Modal 닫기
+    setShow(false);
   };
   return (
     <View style={styles.wrapper}>
-      <Pressable style={styles.circle} onPress={onPress}>
+      <Pressable style={styles.circle} onPress={() => setShow(true)}>
         <MaterialIcons name="person-add" size={24} color="white" />
       </Pressable>
       <Modal
@@ -47,7 +43,7 @@ function AddMemberButton() {
               value={memberId}
               onChangeText={setMemberId}
             />
-            <Button title="Add Member" onPress={onSubmit} />
+            <Button title="Add Member" onPress={onPress} />
           </View>
         </View>
       </Modal>

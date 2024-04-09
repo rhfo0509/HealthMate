@@ -17,10 +17,7 @@ function MemberListItem({ member }) {
 
   return (
     <Pressable
-      style={({ pressed }) => [
-        styles.block,
-        Platform.OS === "ios" && pressed && { backgroundColor: "#efefef" },
-      ]}
+      style={({ pressed }) => [styles.block]}
       android_ripple={{ color: "#ededed" }}
       onPress={onPress}
     >
