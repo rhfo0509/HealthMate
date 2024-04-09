@@ -24,7 +24,7 @@ import { format } from "date-fns";
 // const TABBAR_HEIGHT = 49;
 
 function AddScheduleButton() {
-  const navigation = useNavigation();
+  // const navigation = useNavigation();
   const [showModal, setShowModal] = useState(false);
   const [memberList, setMemberList] = useState([]);
   const { user: trainer } = useUserContext();
@@ -50,7 +50,7 @@ function AddScheduleButton() {
       startTime: format(startTime, "HH:mm"),
       endTime: format(endTime, "HH:mm"),
     });
-    console.log("schedule", schedule);
+    console.log("schedule", schedule.id);
 
     if (schedule) {
       await addScheduleToMember(selectedMemberId, schedule.id);

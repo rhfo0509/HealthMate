@@ -14,7 +14,7 @@ import SignForm from "../components/SignForm";
 import SignButtons from "../components/SignButtons";
 import { logIn, signUp } from "../lib/auth";
 import { getUser } from "../lib/users";
-import { useUserContext } from '../contexts/UserContext';
+import { useUserContext } from "../contexts/UserContext";
 
 function SignInScreen({ navigation, route }) {
   const { isSignUp } = route.params ?? {};
@@ -24,7 +24,7 @@ function SignInScreen({ navigation, route }) {
     confirmPassword: "",
   });
   const [loading, setLoading] = useState();
-  const {setUser} = useUserContext();
+  const { setUser } = useUserContext();
   const createChangeTextHandler = (name) => (value) => {
     setForm({ ...form, [name]: value });
   };
@@ -42,7 +42,7 @@ function SignInScreen({ navigation, route }) {
         setUser(profile);
       }
     } catch (e) {
-      console.log(e.code)
+      console.log(e.code);
       const messages = {
         "auth/email-already-in-use": "이미 가입된 이메일입니다.",
         "auth/wrong-password": "잘못된 비밀번호입니다.",
