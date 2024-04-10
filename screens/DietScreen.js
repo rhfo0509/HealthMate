@@ -1,12 +1,21 @@
 import React from "react";
-import { Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
+import CalendarHeader from "../components/CalendarHeader";
+import WriteButton from "../components/WriteButton";
 
 function DietScreen() {
   return (
-    <View>
-      <Text>이 곳은 식단 페이지입니다.</Text>
+    <View style={styles.block}>
+      <CalendarHeader />
+      <WriteButton type="diet" />
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  block: {
+    flex: 1,
+  },
+});
 
 export default DietScreen;
