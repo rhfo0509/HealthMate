@@ -1,42 +1,25 @@
 import React, { useState, useEffect } from "react";
-import {
-  View,
-  Pressable,
-  StyleSheet,
-  Modal,
-  Button,
-  TextInput,
-  Text,
-} from "react-native";
+import { View, Pressable, StyleSheet, Modal, Button, Text } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
 import { useUserContext } from "../contexts/UserContext";
-import {
-  getMembersByTrainer,
-  // addScheduleToMember,
-  // addScheduleToTrainer,
-} from "../lib/users";
+import { getMembersByTrainer } from "../lib/users";
 import { createSchedule } from "../lib/schedules";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 import RNPickerSelect from "react-native-picker-select";
 import { format } from "date-fns";
 
-// const TABBAR_HEIGHT = 49;
-
-function AddScheduleButton() {
-  // const navigation = useNavigation();
-  const [showModal, setShowModal] = useState(false);
-  const [memberList, setMemberList] = useState([]);
+function AddScheduleButton({ selectedDate }) {
   const { user: trainer } = useUserContext();
 
-  // const [memberName, setMemberName] = useState("");
-  const [selectedMemberId, setSelectedMemberId] = useState("");
-  const [date, setDate] = useState(new Date());
-  const [startTime, setStartTime] = useState(new Date());
-  const [endTime, setEndTime] = useState(new Date());
+  const [showModal, setShowModal] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showStartTimePicker, setShowStartTimePicker] = useState(false);
   const [showEndTimePicker, setShowEndTimePicker] = useState(false);
+  const [memberList, setMemberList] = useState([]);
+  const [selectedMemberId, setSelectedMemberId] = useState("");
+  const [date, setDate] = useState(new Date(selectedDate));
+  const [startTime, setStartTime] = useState(null);
+  const [endTime, setEndTime] = useState(null);
 
   useEffect(() => {
     getMembersByTrainer(trainer.id).then(setMemberList);
@@ -50,17 +33,10 @@ function AddScheduleButton() {
       startTime: format(startTime, "HH:mm"),
       endTime: format(endTime, "HH:mm"),
     });
-    console.log("schedule", schedule.id);
-
-    // if (schedule) {
-    //   await addScheduleToMember(selectedMemberId, schedule.id);
-    //   await addScheduleToTrainer(trainer.id, schedule.id);
-    //   console.log("스케줄이 회원과 트레이너에게 추가되었습니다.");
-    // }
 
     setShowModal(false);
     setSelectedMemberId("");
-    setDate(new Date());
+    setDate(new Date(selectedDate));
     setStartTime(new Date());
     setEndTime(new Date());
   };
@@ -69,6 +45,7 @@ function AddScheduleButton() {
     setShowDatePicker(false);
     setDate(selectedDate || date);
   };
+
   const onChangeStartTime = (event, selectedTime) => {
     setShowStartTimePicker(false);
     setStartTime(selectedTime || startTime);
@@ -79,11 +56,6 @@ function AddScheduleButton() {
     setEndTime(selectedTime || endTime);
   };
 
-  // const onSubmit = () => {
-  //   addMemberToTrainer(trainer.id, memberId);
-  //   setMemberId("");
-  //   setShow(false); // Modal 닫기
-  // };
   return (
     <View style={styles.wrapper}>
       <Pressable style={styles.circle} onPress={() => setShowModal(true)}>
@@ -105,50 +77,130 @@ function AddScheduleButton() {
               })}
               placeholder={{
                 label: "회원 선택",
+                color: "#ced4da",
               }}
             />
-            <Button title="날짜" onPress={() => setShowDatePicker(true)} />
-            {showDatePicker && (
-              <RNDateTimePicker
-                value={date}
-                display="spinner"
-                onChange={onChangeDate}
-              />
-            )}
-            <Button
-              title="시작 시간"
-              onPress={() => setShowStartTimePicker(true)}
-            />
-            {showStartTimePicker && (
-              <RNDateTimePicker
-                value={startTime}
-                mode="time"
-                is24Hour={true}
-                display="spinner"
-                onChange={onChangeStartTime}
-                minuteInterval={10}
-              />
-            )}
-            <Button
-              title="종료 시간"
-              onPress={() => setShowEndTimePicker(true)}
-            />
-            {showEndTimePicker && (
-              <RNDateTimePicker
-                value={endTime}
-                mode="time"
-                is24Hour={true}
-                display="spinner"
-                onChange={onChangeEndTime}
-                minuteInterval={10}
-              />
-            )}
-            <Button title="저장" onPress={handleSave} />
-            <Button
-              title="닫기"
-              onPress={() => setShowModal(false)}
-              color="gray"
-            />
+            <View>
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  marginBottom: 10,
+                }}
+              >
+                <Pressable
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    backgroundColor: "#e9ecef",
+                    padding: 5,
+                    borderRadius: 5,
+                    marginRight: 30,
+                  }}
+                  onPress={() => setShowDatePicker(true)}
+                >
+                  <MaterialIcons
+                    name="calendar-month"
+                    size={24}
+                    color="black"
+                  />
+                  <Text> 날짜</Text>
+                </Pressable>
+                {showDatePicker && (
+                  <RNDateTimePicker
+                    value={date}
+                    display="spinner"
+                    onChange={onChangeDate}
+                  />
+                )}
+                <Text>{format(date, "yyyy년 MM월 dd일")}</Text>
+              </View>
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  marginBottom: 10,
+                }}
+              >
+                <Pressable
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    backgroundColor: "#e9ecef",
+                    padding: 5,
+                    borderRadius: 5,
+                    marginRight: 30,
+                  }}
+                  onPress={() => setShowStartTimePicker(true)}
+                >
+                  <MaterialIcons name="access-time" size={24} color="black" />
+                  <Text> 시작시간</Text>
+                </Pressable>
+                {showStartTimePicker && (
+                  <RNDateTimePicker
+                    value={startTime || new Date()}
+                    mode="time"
+                    is24Hour={true}
+                    display="spinner"
+                    onChange={onChangeStartTime}
+                    minuteInterval={10}
+                  />
+                )}
+                {startTime && <Text>{format(startTime, `hh시 mm분`)}</Text>}
+              </View>
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  marginBottom: 30,
+                }}
+              >
+                <Pressable
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                    backgroundColor: "#e9ecef",
+                    padding: 5,
+                    borderRadius: 5,
+                    marginRight: 30,
+                  }}
+                  onPress={() => setShowEndTimePicker(true)}
+                >
+                  <MaterialIcons name="access-time" size={24} color="black" />
+                  <Text> 종료시간</Text>
+                </Pressable>
+                {showEndTimePicker && (
+                  <RNDateTimePicker
+                    value={endTime || new Date()}
+                    mode="time"
+                    is24Hour={true}
+                    display="spinner"
+                    onChange={onChangeEndTime}
+                    minuteInterval={10}
+                  />
+                )}
+                {endTime && <Text>{format(endTime, "hh시 mm분")}</Text>}
+              </View>
+            </View>
+
+            <View
+              style={{
+                flexDirection: "row",
+                position: "absolute",
+                bottom: 10,
+                right: 10,
+              }}
+            >
+              <Pressable onPress={handleSave} style={{ padding: 10 }}>
+                <Text style={{ fontSize: 16, fontWeight: "bold" }}>저장</Text>
+              </Pressable>
+              <Pressable
+                onPress={() => setShowModal(false)}
+                style={{ padding: 10 }}
+              >
+                <Text style={{ fontSize: 16, fontWeight: "bold" }}>닫기</Text>
+              </Pressable>
+            </View>
           </View>
         </View>
       </Modal>
