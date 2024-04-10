@@ -77,6 +77,15 @@ function AddScheduleButton({ selectedDate }) {
       >
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
+            <View
+              style={{
+                position: "absolute",
+                top: 15,
+                left: 22,
+              }}
+            >
+              <Text style={{ fontSize: 24 }}>일정 추가</Text>
+            </View>
             <RNPickerSelect
               value={selectedMemberId}
               onValueChange={(value) => setSelectedMemberId(value)}
@@ -94,6 +103,7 @@ function AddScheduleButton({ selectedDate }) {
                   flexDirection: "row",
                   alignItems: "center",
                   marginBottom: 10,
+                  marginLeft: -60,
                 }}
               >
                 <Pressable
@@ -103,7 +113,7 @@ function AddScheduleButton({ selectedDate }) {
                     backgroundColor: "#e9ecef",
                     padding: 5,
                     borderRadius: 5,
-                    marginRight: 30,
+                    marginRight: 50,
                   }}
                   onPress={() => setShowDatePicker(true)}
                 >
@@ -112,7 +122,7 @@ function AddScheduleButton({ selectedDate }) {
                     size={24}
                     color="black"
                   />
-                  <Text> 날짜</Text>
+                  <Text> 날짜 선택</Text>
                 </Pressable>
                 {showDatePicker && (
                   <RNDateTimePicker
@@ -128,6 +138,7 @@ function AddScheduleButton({ selectedDate }) {
                   flexDirection: "row",
                   alignItems: "center",
                   marginBottom: 10,
+                  marginLeft: -60,
                 }}
               >
                 <Pressable
@@ -142,7 +153,7 @@ function AddScheduleButton({ selectedDate }) {
                   onPress={() => setShowStartTimePicker(true)}
                 >
                   <MaterialIcons name="access-time" size={24} color="black" />
-                  <Text> 시작시간</Text>
+                  <Text> 시작시간 선택</Text>
                 </Pressable>
                 {showStartTimePicker && (
                   <RNDateTimePicker
@@ -160,7 +171,8 @@ function AddScheduleButton({ selectedDate }) {
                 style={{
                   flexDirection: "row",
                   alignItems: "center",
-                  marginBottom: 30,
+                  marginBottom: 10,
+                  marginLeft: -60,
                 }}
               >
                 <Pressable
@@ -175,7 +187,7 @@ function AddScheduleButton({ selectedDate }) {
                   onPress={() => setShowEndTimePicker(true)}
                 >
                   <MaterialIcons name="access-time" size={24} color="black" />
-                  <Text> 종료시간</Text>
+                  <Text> 종료시간 선택</Text>
                 </Pressable>
                 {showEndTimePicker && (
                   <RNDateTimePicker
@@ -239,7 +251,8 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     backgroundColor: "white",
-    padding: 20,
+    paddingHorizontal: 20,
+    paddingVertical: 50,
     borderRadius: 10,
     width: "80%",
     alignItems: "center",
