@@ -1,28 +1,32 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
-import { format, parse } from "date-fns";
-import { ko } from "date-fns/locale";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
+import { format, parse, formatDistanceToNow } from "date-fns";
+import { ko } from "date-fns/locale";
 import { updateSchedule } from "../lib/schedules";
+import { getUser } from "../lib/users";
+import Avatar from "./Avatar";
 
 function ScheduleListItem({ schedule }) {
-  const [showPicker, setShowPicker] = useState(null);
+  const [show, setShow] = useState(null);
+  const [member, setMember] = useState(null);
   const { id, date, startTime, endTime, memberId, trainerId } = schedule;
 
+  useEffect(() => {
+    getUser(memberId).then(setMember);
+  }, []);
+
   const handlePress = (pickerType) => {
-    setShowPicker(pickerType);
+    setShow(pickerType);
   };
 
   const handleChange = async (event, selectedValue) => {
     const updateFields = {};
 
     if (event.type === "dismissed") {
-      // 사용자가 선택을 취소한 경우
-      setShowPicker(null);
+      setShow(null);
     } else {
-      // 사용자가 값을 선택한 경우
-      console.log(format(selectedValue, "yyyy-MM-dd"));
-      switch (showPicker) {
+      switch (show) {
         case "date":
           updateFields.date = format(selectedValue, "yyyy-MM-dd");
           break;
@@ -35,14 +39,13 @@ function ScheduleListItem({ schedule }) {
         default:
           break;
       }
-      console.log(id, updateFields);
       updateSchedule(id, updateFields);
-      setShowPicker(null);
+      setShow(null);
     }
   };
 
   const renderPicker = () => {
-    if (showPicker === "date") {
+    if (show === "date") {
       return (
         <RNDateTimePicker
           value={parse(date, "yyyy-MM-dd", new Date())}
@@ -50,11 +53,11 @@ function ScheduleListItem({ schedule }) {
           onChange={handleChange}
         />
       );
-    } else if (showPicker === "startTime" || showPicker === "endTime") {
+    } else if (show === "startTime" || show === "endTime") {
       return (
         <RNDateTimePicker
           value={parse(
-            showPicker === "startTime" ? startTime : endTime,
+            show === "startTime" ? startTime : endTime,
             "HH:mm",
             new Date()
           )}
@@ -71,29 +74,25 @@ function ScheduleListItem({ schedule }) {
 
   return (
     <Pressable style={styles.block} android_ripple={{ color: "#ededed" }}>
-      <View style={styles.date}>
+      <View style={styles.title}>
         <Pressable
-          android_ripple={{ color: "#f1f3f5" }}
           onPress={() => handlePress("date")}
+          style={{ marginRight: 5 }}
         >
-          <Text>{date}</Text>
+          <Text style={styles.text}>{date}</Text>
         </Pressable>
-        <Pressable
-          android_ripple={{ color: "#f1f3f5" }}
-          onPress={() => handlePress("startTime")}
-        >
-          <Text>{startTime}</Text>
+        <Pressable onPress={() => handlePress("startTime")}>
+          <Text style={styles.text}>{startTime}</Text>
         </Pressable>
-        <Pressable
-          android_ripple={{ color: "#f1f3f5" }}
-          onPress={() => handlePress("endTime")}
-        >
-          <Text>{endTime}</Text>
+        <Text style={styles.text}> ~ </Text>
+        <Pressable onPress={() => handlePress("endTime")}>
+          <Text style={styles.text}>{endTime}</Text>
         </Pressable>
       </View>
       {renderPicker()}
-      <Text style={styles.title}>{memberId}</Text>
-      <Text style={styles.body}>{trainerId}</Text>
+      <Text style={styles.body}>
+        {member?.displayName} 님의 수업이 있습니다.
+      </Text>
     </Pressable>
   );
 }
@@ -111,15 +110,18 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   title: {
-    color: "#263238",
-    fontSize: 18,
-    fontWeight: "bold",
+    flexDirection: "row",
     marginBottom: 8,
   },
   body: {
     color: "#37474f",
     fontSize: 16,
     lineHeight: 21,
+  },
+  text: {
+    color: "#263238",
+    fontSize: 18,
+    fontWeight: "bold",
   },
 });
 
