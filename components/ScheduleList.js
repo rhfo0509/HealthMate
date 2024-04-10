@@ -25,7 +25,6 @@ function ScheduleList({ schedules, ListHeaderComponent }) {
         style={styles.block}
         renderItem={({ item }) => <ScheduleListItem schedule={item} />}
         keyExtractor={(schedule) => schedule.id}
-        ItemSeparatorComponent={() => <View style={styles.separator} />}
         ListHeaderComponent={ListHeaderComponent}
         renderRightActions={({ item }) => (
           <SwipeableQuickActions>
@@ -68,11 +67,6 @@ function ScheduleList({ schedules, ListHeaderComponent }) {
 
 const styles = StyleSheet.create({
   block: { flex: 1 },
-  separator: {
-    backgroundColor: "#e0e0e0",
-    height: 1,
-    width: "100%",
-  },
 });
 
 export default ScheduleList;

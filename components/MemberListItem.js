@@ -30,8 +30,10 @@ function MemberListItem({ member }) {
       onPress={onPress}
     >
       <View style={{ flexDirection: "row", alignItems: "center" }}>
-        <Avatar source={member.photoURL && { uri: member.photoURL }} />
-        <Text style={styles.text}>{displayName}</Text>
+        <Avatar source={photoURL && { uri: photoURL }} />
+        <View style={{ flex: 1 }}>
+          <Text style={styles.text}>{displayName}</Text>
+        </View>
         <Text style={styles.text}>
           ({calculateAge(birthDate)}/{gender === "Male" ? "남" : "여"})
         </Text>
