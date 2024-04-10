@@ -15,12 +15,14 @@ import {
 import { getMembersByTrainer, getUser } from "../lib/users";
 import Avatar from "./Avatar";
 import MemberList from "./MemberList";
+import MemberSearchBar from "./MemberSearchBar";
 // import PostGridItem from "./PostGridItem";
 
 function Profile({ userId }) {
   const [user, setUser] = useState(null);
   // const [posts, setPosts] = useState(null);
   const [members, setMembers] = useState([]);
+  const [filteredMembers, setFilteredMembers] = useState([]);
 
   useEffect(() => {
     getUser(userId).then(setUser);
@@ -52,15 +54,21 @@ function Profile({ userId }) {
     <View style={styles.block}>
       <MemberList
         ListHeaderComponent={
-          <View style={styles.userInfo}>
-            <Avatar
-              source={user.photoURL && { uri: user.photoURL }}
-              size={128}
+          <>
+            <View style={styles.userInfo}>
+              <Avatar
+                source={user.photoURL && { uri: user.photoURL }}
+                size={128}
+              />
+              <Text style={styles.username}>{user.displayName}</Text>
+            </View>
+            <MemberSearchBar
+              members={members}
+              setFilteredMembers={setFilteredMembers}
             />
-            <Text style={styles.username}>{user.displayName}</Text>
-          </View>
+          </>
         }
-        members={members}
+        members={filteredMembers.length > 0 ? filteredMembers : members}
       />
     </View>
   );

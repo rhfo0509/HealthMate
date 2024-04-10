@@ -40,6 +40,7 @@
     "react-native-calendar-picker": "^8.0.2",
     "react-native-calendar-strip": "^2.2.6",
     "react-native-calendars": "^1.1304.1",
+    "react-native-elements": "^3.4.3",
     "react-native-gesture-handler": "~2.14.0",
     "react-native-get-random-values": "~1.8.0",
     "react-native-pager-view": "6.2.3",
