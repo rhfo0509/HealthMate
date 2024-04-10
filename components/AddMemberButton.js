@@ -16,7 +16,10 @@ function AddMemberButton() {
 
   const handleSave = () => {
     // 트레이너의 회원 목록에 새 회원 추가
-    addMemberToTrainer(trainer.id, memberId);
+    addMemberToTrainer(trainer.id, {
+      name: memberName,
+      phoneNumber: memberPhoneNumber,
+    });
     setMemberName("");
     setMemberPhoneNumber("");
     setShow(false);
