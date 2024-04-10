@@ -118,14 +118,12 @@ function AddScheduleButton({ selectedDate }) {
                 </Pressable>
                 {showDatePicker && (
                   <RNDateTimePicker
-                    value={
-                      date || parse(selectedDate, "yyyy-MM-dd", new Date())
-                    }
+                    value={parse(selectedDate, "yyyy-MM-dd", new Date())}
                     display="spinner"
                     onChange={onChangeDate}
                   />
                 )}
-                <Text>{selectedDate}</Text>
+                <Text>{date ? format(date, "yyyy-MM-dd") : selectedDate}</Text>
               </View>
               <View
                 style={{
@@ -158,7 +156,7 @@ function AddScheduleButton({ selectedDate }) {
                     minuteInterval={10}
                   />
                 )}
-                {startTime && <Text>{format(startTime, `hh시 mm분`)}</Text>}
+                {startTime && <Text>{format(startTime, `HH시 mm분`)}</Text>}
               </View>
               <View
                 style={{
@@ -191,7 +189,7 @@ function AddScheduleButton({ selectedDate }) {
                     minuteInterval={10}
                   />
                 )}
-                {endTime && <Text>{format(endTime, "hh시 mm분")}</Text>}
+                {endTime && <Text>{format(endTime, "HH시 mm분")}</Text>}
               </View>
             </View>
 
