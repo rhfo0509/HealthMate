@@ -1,14 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
-import {
-  format,
-  parse,
-  formatDistance,
-  isToday,
-  set,
-  differenceInMinutes,
-} from "date-fns";
+import { format, parse, formatDistance, isToday, set } from "date-fns";
 import { ko } from "date-fns/locale";
 import { updateSchedule } from "../lib/schedules";
 import { getUser } from "../lib/users";
@@ -110,28 +103,28 @@ function ScheduleListItem({ schedule }) {
   };
 
   return (
-    <Pressable style={styles.block} android_ripple={{ color: "#ededed" }}>
-      <View style={styles.title}>
-        <Pressable
-          onPress={() => handlePress("date")}
-          style={{ marginRight: 5 }}
-        >
+    <View
+      style={[styles.block, { flexDirection: "row", alignItems: "center" }]}
+    >
+      <Avatar source={member?.photoURL && { uri: member?.photoURL }} />
+      <View style={{ flexDirection: "row" }}>
+        <Text style={[styles.text, { width: 60 }]}>{member?.displayName}</Text>
+        <Pressable onPress={() => handlePress("date")}>
           <Text style={styles.text}>{date}</Text>
         </Pressable>
         <Pressable onPress={() => handlePress("startTime")}>
           <Text style={styles.text}>{startTime}</Text>
         </Pressable>
-        <Text style={styles.text}> ~ </Text>
+        <Text style={styles.text}>~</Text>
         <Pressable onPress={() => handlePress("endTime")}>
           <Text style={styles.text}>{endTime}</Text>
         </Pressable>
+        {today && (
+          <Text style={styles.text}>··· {formatDate(startTime, endTime)}</Text>
+        )}
       </View>
       {renderPicker()}
-      <Text style={styles.body}>
-        {member?.displayName} 님의 수업이 있습니다.
-        {today && formatDate(startTime, endTime)}
-      </Text>
-    </Pressable>
+    </View>
   );
 }
 
@@ -139,27 +132,14 @@ const styles = StyleSheet.create({
   block: {
     backgroundColor: "white",
     paddingHorizontal: 16,
-    paddingVertical: 24,
-  },
-  date: {
-    flexDirection: "row",
-    fontSize: 12,
-    color: "#546e7a",
-    marginBottom: 8,
-  },
-  title: {
-    flexDirection: "row",
-    marginBottom: 8,
-  },
-  body: {
-    color: "#37474f",
-    fontSize: 16,
-    lineHeight: 21,
+    paddingVertical: 16,
+    borderRadius: 20,
+    marginBottom: 5,
   },
   text: {
-    color: "#263238",
-    fontSize: 18,
-    fontWeight: "bold",
+    color: "#37474f",
+    fontSize: 14,
+    paddingLeft: 4,
   },
 });
 
