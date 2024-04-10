@@ -18,7 +18,6 @@ function MemberList({ members, ListHeaderComponent }) {
       style={styles.block}
       renderItem={({ item }) => <MemberListItem member={item} />}
       keyExtractor={(member) => member.id}
-      ItemSeparatorComponent={() => <View style={styles.separator} />}
       ListHeaderComponent={ListHeaderComponent}
       renderRightActions={({ item }) => (
         <SwipeableQuickActions>

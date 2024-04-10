@@ -1,12 +1,11 @@
 import React from "react";
-import { Platform, Pressable, StyleSheet, Text } from "react-native";
-import { formatDistanceToNow, format } from "date-fns";
-import { ko } from "date-fns/locale";
+import { Pressable, StyleSheet, Text, View } from "react-native";
+import { differenceInYears, parse } from "date-fns";
 import { useNavigation } from "@react-navigation/native";
+import Avatar from "./Avatar";
 
 function MemberListItem({ member }) {
-  console.log(member);
-  const { displayName, birthDate, phoneNumber } = member; // 사용하기 편하게 객체 구조 분해 할당
+  const { displayName, birthDate, gender, photoURL } = member;
   const navigation = useNavigation();
 
   const onPress = () => {
@@ -15,15 +14,28 @@ function MemberListItem({ member }) {
     });
   };
 
+  const calculateAge = (birthDate) => {
+    const diff =
+      differenceInYears(
+        Date.now(),
+        parse(birthDate, "yyyy-MM-dd", new Date())
+      ) + 1;
+    return diff;
+  };
+
   return (
     <Pressable
       style={({ pressed }) => [styles.block]}
       android_ripple={{ color: "#ededed" }}
       onPress={onPress}
     >
-      <Text style={styles.date}>{birthDate}</Text>
-      <Text style={styles.title}>{displayName}</Text>
-      <Text style={styles.body}>{phoneNumber}</Text>
+      <View style={{ flexDirection: "row", alignItems: "center" }}>
+        <Avatar source={member.photoURL && { uri: member.photoURL }} />
+        <Text style={styles.text}>{displayName}</Text>
+        <Text style={styles.text}>
+          ({calculateAge(birthDate)}/{gender === "Male" ? "남" : "여"})
+        </Text>
+      </View>
     </Pressable>
   );
 }
@@ -32,23 +44,14 @@ const styles = StyleSheet.create({
   block: {
     backgroundColor: "white",
     paddingHorizontal: 16,
-    paddingVertical: 24,
+    paddingVertical: 16,
+    borderRadius: 20,
+    marginBottom: 5,
   },
-  date: {
-    fontSize: 12,
-    color: "#546e7a",
-    marginBottom: 8,
-  },
-  title: {
-    color: "#263238",
-    fontSize: 18,
-    fontWeight: "bold",
-    marginBottom: 8,
-  },
-  body: {
+  text: {
     color: "#37474f",
     fontSize: 16,
-    lineHeight: 21,
+    paddingLeft: 8,
   },
 });
 
