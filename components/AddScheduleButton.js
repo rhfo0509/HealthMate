@@ -6,7 +6,7 @@ import { getMembersByTrainer } from "../lib/users";
 import { createSchedule } from "../lib/schedules";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 import RNPickerSelect from "react-native-picker-select";
-import { format } from "date-fns";
+import { format, parse } from "date-fns";
 
 function AddScheduleButton({ selectedDate }) {
   const { user: trainer } = useUserContext();
@@ -17,7 +17,7 @@ function AddScheduleButton({ selectedDate }) {
   const [showEndTimePicker, setShowEndTimePicker] = useState(false);
   const [memberList, setMemberList] = useState([]);
   const [selectedMemberId, setSelectedMemberId] = useState("");
-  const [date, setDate] = useState(new Date(selectedDate));
+  const [date, setDate] = useState(null);
   const [startTime, setStartTime] = useState(null);
   const [endTime, setEndTime] = useState(null);
 
@@ -25,8 +25,10 @@ function AddScheduleButton({ selectedDate }) {
     getMembersByTrainer(trainer.id).then(setMemberList);
   }, [trainer.id]);
 
+  console.log(selectedDate, date);
+
   const handleSave = async () => {
-    const schedule = await createSchedule({
+    await createSchedule({
       memberId: selectedMemberId,
       trainerId: trainer.id,
       date: format(date, "yyyy-MM-dd"),
@@ -36,9 +38,17 @@ function AddScheduleButton({ selectedDate }) {
 
     setShowModal(false);
     setSelectedMemberId("");
-    setDate(new Date(selectedDate));
-    setStartTime(new Date());
-    setEndTime(new Date());
+    setDate(null);
+    setStartTime(null);
+    setEndTime(null);
+  };
+
+  const handleClose = () => {
+    setShowModal(false);
+    setSelectedMemberId("");
+    setDate(null);
+    setStartTime(null);
+    setEndTime(null);
   };
 
   const onChangeDate = (event, selectedDate) => {
@@ -108,12 +118,14 @@ function AddScheduleButton({ selectedDate }) {
                 </Pressable>
                 {showDatePicker && (
                   <RNDateTimePicker
-                    value={date}
+                    value={
+                      date || parse(selectedDate, "yyyy-MM-dd", new Date())
+                    }
                     display="spinner"
                     onChange={onChangeDate}
                   />
                 )}
-                <Text>{format(date, "yyyy년 MM월 dd일")}</Text>
+                <Text>{selectedDate}</Text>
               </View>
               <View
                 style={{
@@ -194,10 +206,7 @@ function AddScheduleButton({ selectedDate }) {
               <Pressable onPress={handleSave} style={{ padding: 10 }}>
                 <Text style={{ fontSize: 16, fontWeight: "bold" }}>저장</Text>
               </Pressable>
-              <Pressable
-                onPress={() => setShowModal(false)}
-                style={{ padding: 10 }}
-              >
+              <Pressable onPress={handleClose} style={{ padding: 10 }}>
                 <Text style={{ fontSize: 16, fontWeight: "bold" }}>닫기</Text>
               </Pressable>
             </View>
