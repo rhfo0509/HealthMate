@@ -2,7 +2,8 @@
 // 하단 두번째 탭인 사용자 탭을 누를 때 보여지는 MyProfileScreen
 // 즉, 프로필이 보여지는 화면이 두 개이기 때문에 Profile 컴포넌트를 따로 만듦
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
+import { useFocusEffect } from "@react-navigation/native";
 import {
   ActivityIndicator,
   FlatList,
@@ -24,11 +25,13 @@ function Profile({ userId }) {
   const [members, setMembers] = useState([]);
   const [filteredMembers, setFilteredMembers] = useState([]);
 
-  useEffect(() => {
-    getUser(userId).then(setUser);
-    // getPosts(userId).then(setPosts);
-    getMembersByTrainer(userId).then(setMembers);
-  }, [userId]);
+  useFocusEffect(
+    useCallback(() => {
+      getUser(userId).then(setUser);
+      // getPosts(userId).then(setPosts);
+      getMembersByTrainer(userId).then(setMembers);
+    }, [userId])
+  );
 
   // if (!user || !posts) {
   if (!user || !members) {
