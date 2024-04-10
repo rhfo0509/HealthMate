@@ -1,7 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
-import { format, parse, formatDistanceToNow } from "date-fns";
+import {
+  format,
+  parse,
+  formatDistance,
+  isToday,
+  set,
+  differenceInMinutes,
+} from "date-fns";
 import { ko } from "date-fns/locale";
 import { updateSchedule } from "../lib/schedules";
 import { getUser } from "../lib/users";
@@ -11,6 +18,36 @@ function ScheduleListItem({ schedule }) {
   const [show, setShow] = useState(null);
   const [member, setMember] = useState(null);
   const { id, date, startTime, endTime, memberId, trainerId } = schedule;
+  const parsedDate = parse(date, "yyyy-MM-dd", new Date());
+
+  // 오늘 날짜인지 확인
+  const today = isToday(parsedDate);
+
+  // 오늘 날짜면 남은 시간 표시, 진행중이면 진행중이라고 표시
+  function formatDate(startTime, endTime) {
+    const [startHours, startMinutes] = startTime.split(":").map(Number);
+    const [endHours, endMinutes] = endTime.split(":").map(Number);
+    const now = Date.now();
+
+    const startDate = set(parsedDate, {
+      hours: startHours,
+      minutes: startMinutes,
+    });
+
+    const endDate = set(parsedDate, {
+      hours: endHours,
+      minutes: endMinutes,
+    });
+
+    if (now >= startDate && now <= endDate) {
+      return "진행 중";
+    }
+
+    return formatDistance(startDate.getTime(), now, {
+      addSuffix: "true",
+      locale: ko,
+    });
+  }
 
   useEffect(() => {
     getUser(memberId).then(setMember);
@@ -48,7 +85,7 @@ function ScheduleListItem({ schedule }) {
     if (show === "date") {
       return (
         <RNDateTimePicker
-          value={parse(date, "yyyy-MM-dd", new Date())}
+          value={parsedDate}
           display="spinner"
           onChange={handleChange}
         />
@@ -92,6 +129,7 @@ function ScheduleListItem({ schedule }) {
       {renderPicker()}
       <Text style={styles.body}>
         {member?.displayName} 님의 수업이 있습니다.
+        {today && formatDate(startTime, endTime)}
       </Text>
     </Pressable>
   );
