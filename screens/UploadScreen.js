@@ -3,7 +3,6 @@ import {
   StyleSheet,
   View,
   TextInput,
-  Image,
   useWindowDimensions,
   Animated,
   Keyboard,
@@ -18,8 +17,8 @@ import {
   ref,
   getDownloadURL,
   uploadBytesResumable,
-  uploadString
 } from "firebase/storage";
+import CameraButton from "../components/CameraButton";
 
 function UploadScreen() {
   const route = useRoute();
@@ -34,16 +33,24 @@ function UploadScreen() {
 
   const onSubmit = useCallback(async () => {
     navigation.pop();
+    let photoURL = null;
+
+    // 사진 없이 글만 등록한 경우
+    if (!result) {
+      await createPost({ description, photoURL, user });
+      return;
+    }
+
+    // 사진과 함께 등록한 경우
     const asset = result.assets[0];
-    console.log(asset);
     const extension = asset.uri.split(".").pop();
     const storageRef = ref(storage, `/photo/${user.id}/${v4()}.${extension}`);
     const post = await fetch(asset.uri);
-      const postBlob = await post.blob();
-      await uploadBytesResumable(storageRef, postBlob).then(async (snapshot) => {
-        const photoURL = await getDownloadURL(storageRef);
-        await createPost({description, photoURL, user});
-      });
+    const postBlob = await post.blob();
+    await uploadBytesResumable(storageRef, postBlob).then(async (snapshot) => {
+      photoURL = await getDownloadURL(storageRef);
+      await createPost({ description, photoURL, user });
+    });
   }, [result, user, description, navigation]);
 
   useEffect(() => {
@@ -76,11 +83,13 @@ function UploadScreen() {
 
   return (
     <View style={styles.block}>
-      <Animated.Image
-        source={{ uri: result.assets[0]?.uri }}
-        style={[styles.image, { height: animation }]}
-        resizeMode="cover"
-      />
+      {result && (
+        <Animated.Image
+          source={{ uri: result.assets[0]?.uri }}
+          style={[styles.image, { height: animation }]}
+          resizeMode="cover"
+        />
+      )}
       <TextInput
         style={styles.input}
         multiline={true}
@@ -89,6 +98,7 @@ function UploadScreen() {
         value={description}
         onChangeText={setDescription}
       />
+      <CameraButton />
     </View>
   );
 }

@@ -5,8 +5,6 @@ import { useActionSheet } from "@expo/react-native-action-sheet";
 import * as ImagePicker from "expo-image-picker";
 import { useNavigation } from "@react-navigation/native";
 
-const TABBAR_HEIGHT = 49;
-
 const imagePickerOption = {
   mediaTypes: ImagePicker.MediaTypeOptions.Images,
   maxWidth: 768,
@@ -21,7 +19,7 @@ function CameraButton() {
     if (result.canceled || !result) {
       return;
     }
-    navigation.push("Upload", { result });
+    navigation.navigate("Upload", { result });
   };
 
   const onLaunchCamera = async () => {
@@ -70,7 +68,7 @@ const styles = StyleSheet.create({
     width: 54,
     position: "absolute",
     right: 10,
-    bottom: TABBAR_HEIGHT + 10,
+    bottom: 10,
   },
   circle: {
     backgroundColor: "#6200ee",
