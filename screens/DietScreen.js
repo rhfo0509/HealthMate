@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { useRoute } from "@react-navigation/native";
+import React, { useState, useCallback, useEffect } from "react";
+import { useRoute, useFocusEffect } from "@react-navigation/native";
 import { StyleSheet, View, FlatList } from "react-native";
 import { getPosts } from "../lib/posts";
 import CalendarHeader from "../components/CalendarHeader";
@@ -13,9 +13,15 @@ function DietScreen() {
   const { memberId, postType } = route.params;
   const { user } = useUserContext();
 
-  useEffect(() => {
-    getPosts(user.id, memberId, postType).then(setPosts);
-  }, []);
+  // useEffect(() => {
+  //   getPosts(user.id, memberId, postType).then(setPosts);
+  // }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      getPosts(user.id, memberId, postType).then(setPosts);
+    }, [])
+  );
 
   return (
     <View style={styles.block}>
