@@ -1,15 +1,6 @@
-import React, { useRef, useState } from "react";
-import {
-  Alert,
-  Keyboard,
-  Platform,
-  StyleSheet,
-  Text,
-  View,
-} from "react-native";
+import React, { useState } from "react";
+import { Alert, Keyboard, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import CustomButton from "../components/CustomButton";
-import BorderedInput from "../components/BorderedInput";
 import SignForm from "../components/SignForm";
 import SignButtons from "../components/SignButtons";
 import { logIn, signUp } from "../lib/auth";
@@ -57,7 +48,10 @@ function SignInScreen({ navigation, route }) {
   };
   return (
     <SafeAreaView style={styles.fullScreen}>
-      <Text style={styles.text}>PublicGallery</Text>
+      <Text style={styles.title}>HealthMate</Text>
+      <Text style={styles.description}>
+        회원과 트레이너를 위한 PT 관리 플랫폼
+      </Text>
       <View style={styles.form}>
         <SignForm
           isSignUp={isSignUp}
@@ -81,9 +75,12 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  text: {
-    fontSize: 32,
+  title: {
+    fontSize: 48,
     fontWeight: "bold",
+  },
+  description: {
+    fontSize: 16,
   },
   form: {
     marginTop: 64,
