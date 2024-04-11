@@ -11,38 +11,34 @@ const Tab = createBottomTabNavigator();
 
 function MainTab() {
   return (
-    <>
-      <View style={styles.block}>
-        <Tab.Navigator
-          screenOptions={{
-            headerShown: false,
-            tabBarShowLabel: false,
-            tabBarActiveTintColor: "#6200ee",
+    <View style={styles.block}>
+      <Tab.Navigator
+        screenOptions={{
+          headerShown: false,
+          tabBarShowLabel: false,
+          tabBarActiveTintColor: "#6200ee",
+        }}
+      >
+        <Tab.Screen
+          name="HomeStack"
+          component={HomeStack}
+          options={{
+            tabBarIcon: ({ color }) => (
+              <MaterialIcons name="home" size={24} color={color} />
+            ),
           }}
-        >
-          <Tab.Screen
-            name="HomeStack"
-            component={HomeStack}
-            options={{
-              tabBarIcon: ({ color }) => (
-                <MaterialIcons name="home" size={24} color={color} />
-              ),
-            }}
-          />
-          <Tab.Screen
-            name="MyProfileStack"
-            component={MyProfileStack}
-            options={{
-              tabBarIcon: ({ color }) => (
-                <MaterialIcons name="person" size={24} color={color} />
-              ),
-            }}
-          />
-        </Tab.Navigator>
-      </View>
-      {/* <CameraButton /> */}
-      {/* <AddMemberButton /> */}
-    </>
+        />
+        <Tab.Screen
+          name="MyProfileStack"
+          component={MyProfileStack}
+          options={{
+            tabBarIcon: ({ color }) => (
+              <MaterialIcons name="person" size={24} color={color} />
+            ),
+          }}
+        />
+      </Tab.Navigator>
+    </View>
   );
 }
 

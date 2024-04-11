@@ -10,7 +10,6 @@ function MyProfileScreen() {
   const navigation = useNavigation();
   useEffect(() => {
     navigation.setOptions({
-      title: user.displayName,
       headerRight: () => (
         <IconRightButton
           name="settings"
