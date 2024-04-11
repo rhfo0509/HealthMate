@@ -24,6 +24,7 @@ function UploadScreen() {
   const route = useRoute();
   const navigation = useNavigation();
   const { result } = route.params || {};
+  const { memberId, postType } = route.params || "";
   const { width } = useWindowDimensions();
   const animation = useRef(new Animated.Value(width)).current;
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
@@ -37,7 +38,7 @@ function UploadScreen() {
 
     // 사진 없이 글만 등록한 경우
     if (!result) {
-      await createPost({ description, photoURL, user });
+      await createPost({ description, photoURL, user, memberId, postType });
       return;
     }
 
@@ -49,7 +50,7 @@ function UploadScreen() {
     const postBlob = await post.blob();
     await uploadBytesResumable(storageRef, postBlob).then(async (snapshot) => {
       photoURL = await getDownloadURL(storageRef);
-      await createPost({ description, photoURL, user });
+      await createPost({ description, photoURL, user, memberId, postType });
     });
   }, [result, user, description, navigation]);
 
@@ -98,7 +99,7 @@ function UploadScreen() {
         value={description}
         onChangeText={setDescription}
       />
-      <CameraButton />
+      <CameraButton memberId={memberId} postType={postType} />
     </View>
   );
 }

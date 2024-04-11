@@ -11,7 +11,7 @@ const imagePickerOption = {
   maxHeight: 768,
 };
 
-function CameraButton() {
+function CameraButton({ memberId, postType }) {
   const { showActionSheetWithOptions } = useActionSheet();
   const navigation = useNavigation();
 
@@ -19,7 +19,7 @@ function CameraButton() {
     if (result.canceled || !result) {
       return;
     }
-    navigation.navigate("Upload", { result });
+    navigation.navigate("Upload", { result, memberId, postType });
   };
 
   const onLaunchCamera = async () => {

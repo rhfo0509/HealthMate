@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useRoute, useNavigation } from "@react-navigation/native";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import DietScreen from "./DietScreen";
 import ExerciseScreen from "./ExerciseScreen";
@@ -7,6 +8,15 @@ import { View } from "react-native";
 const Tab = createMaterialTopTabNavigator();
 
 function MemberDetailScreen() {
+  const route = useRoute();
+  const navigation = useNavigation();
+  const { member } = route.params;
+  useEffect(() => {
+    navigation.setOptions({
+      title: member.displayName,
+    });
+  }, [navigation, member]);
+
   return (
     <Tab.Navigator
       screenOptions={{
@@ -19,13 +29,15 @@ function MemberDetailScreen() {
         name="Diet"
         component={DietScreen}
         options={{
-          tabBarLabel: "오늘의 식단",
+          tabBarLabel: "식단일지",
         }}
+        initialParams={{ memberId: member.id, postType: "Diet" }}
       />
       <Tab.Screen
         name="Exercise"
         component={ExerciseScreen}
-        options={{ tabBarLabel: "오늘의 운동" }}
+        options={{ tabBarLabel: "운동일지" }}
+        initialParams={{ memberId: member.id, postType: "Exercise" }}
       />
     </Tab.Navigator>
   );
