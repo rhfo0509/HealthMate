@@ -2,9 +2,9 @@ import React, { useMemo } from "react";
 import { View, StyleSheet, Text, Image, Pressable } from "react-native";
 import Avatar from "./Avatar";
 import { useNavigation, useNavigationState } from "@react-navigation/native";
-import { useUserContext } from '../contexts/UserContext';
-import { MaterialIcons } from '@expo/vector-icons';
-import usePostActions from '../hooks/usePostActions';
+import { useUserContext } from "../contexts/UserContext";
+import { MaterialIcons } from "@expo/vector-icons";
+import usePostActions from "../hooks/usePostActions";
 
 function PostCard({ user, photoURL, description, createdAt, id }) {
   const routeNames = useNavigationState((state) => state.routeNames);
@@ -14,7 +14,7 @@ function PostCard({ user, photoURL, description, createdAt, id }) {
     () => (createdAt ? new Date(createdAt.seconds * 1000) : new Date()),
     [createdAt]
   );
-  const {user: me} = useUserContext();
+  const { user: me } = useUserContext();
   const isMyPost = me.id === user.id;
 
   const onOpenProfile = () => {
@@ -29,7 +29,7 @@ function PostCard({ user, photoURL, description, createdAt, id }) {
     }
   };
 
-  const {onPressMore} = usePostActions({id, description});
+  const { onPressMore } = usePostActions({ id, description });
 
   return (
     <View style={styles.block}>
@@ -44,12 +44,14 @@ function PostCard({ user, photoURL, description, createdAt, id }) {
           </Pressable>
         )}
       </View>
-      <Image
-        source={{ uri: photoURL }}
-        style={styles.image}
-        resizeMethod="resize"
-        resizeMode="cover"
-      />
+      {photoURL && (
+        <Image
+          source={{ uri: photoURL }}
+          style={styles.image}
+          resizeMethod="resize"
+          resizeMode="cover"
+        />
+      )}
       <View style={styles.paddingBlock}>
         <Text style={styles.description}>{description}</Text>
         <Text date={date} style={styles.date}>
