@@ -1,12 +1,11 @@
 import { useNavigation, useRoute } from "@react-navigation/native";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { format } from "date-fns";
 import {
   ActivityIndicator,
   Pressable,
   StyleSheet,
   View,
-  Button,
   Text,
   TouchableOpacity,
 } from "react-native";
@@ -29,23 +28,21 @@ import Avatar from "./Avatar";
 
 function SetupProfile() {
   const navigation = useNavigation();
+  const { params } = useRoute();
+  const { uid } = params || {};
+  const storage = getStorage();
+
+  const { setUser } = useUserContext();
+  const [show, setShow] = useState(false);
+  const [response, setResponse] = useState(null);
+  const [loading, setLoading] = useState(false);
+
   const [displayName, setDisplayName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [birthDate, setBirthDate] = useState(new Date());
-  const [show, setShow] = useState(false);
   const [gender, setGender] = useState("");
   const [role, setRole] = useState("");
-  const { setUser } = useUserContext();
-  const [response, setResponse] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const storage = getStorage();
 
-  const { params } = useRoute();
-  const { uid } = params || {};
-
-  useEffect(() => {
-    console.log(displayName, phoneNumber, birthDate, gender, role, response);
-  }, [displayName, phoneNumber, birthDate, gender, role, response]);
   const onSubmit = async () => {
     setLoading(true);
 
@@ -125,6 +122,7 @@ function SetupProfile() {
           ]}
           placeholder={{
             label: "성별 선택",
+            color: "#ced4da",
           }}
         />
         <RNPickerSelect
@@ -136,6 +134,7 @@ function SetupProfile() {
           ]}
           placeholder={{
             label: "회원 / 트레이너 선택",
+            color: "#ced4da",
           }}
         />
         <View
