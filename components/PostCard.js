@@ -36,7 +36,8 @@ function PostCard({ user, photoURL, description, createdAt, id }) {
       <View style={[styles.head, styles.paddingBlock]}>
         <Pressable style={styles.profile} onPress={onOpenProfile}>
           <Avatar source={user.photoURL && { uri: user.photoURL }} />
-          <Text style={styles.displayName}>{user.displayName}</Text>
+          {/* TODO: 일단 트레이너 기준으로 화면을 설계하였기 때문에 "트레이너"로 설정, 후에 회원 기준 화면을 설계할 때 분기처리하기 */}
+          <Text style={styles.displayName}>{user.displayName} 트레이너</Text>
         </Pressable>
         {isMyPost && (
           <Pressable hitSlop={8} onPress={onPressMore}>
