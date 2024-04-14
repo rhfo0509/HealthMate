@@ -49,6 +49,7 @@ function DietScreen() {
         data={filteredPosts}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
+        ItemSeparatorComponent={() => <View style={styles.separator} />}
       />
       <WriteButton postType={postType} memberId={memberId} />
     </View>
@@ -69,6 +70,11 @@ const renderItem = ({ item }) => (
 const styles = StyleSheet.create({
   block: {
     flex: 1,
+  },
+  separator: {
+    backgroundColor: "#e0e0e0",
+    height: 1,
+    width: "100%",
   },
 });
 
