@@ -62,6 +62,7 @@ const renderItem = ({ item }) => (
     id={item.id}
     user={item.user}
     photoURL={item.photoURL}
+    isDetailMode={false}
   />
 );
 

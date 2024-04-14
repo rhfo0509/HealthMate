@@ -6,9 +6,14 @@ import { useUserContext } from "../contexts/UserContext";
 import { MaterialIcons } from "@expo/vector-icons";
 import usePostActions from "../hooks/usePostActions";
 
-function PostCard({ user, photoURL, description, createdAt, id }) {
-  const routeNames = useNavigationState((state) => state.routeNames);
-  // routeNames 배열에 "MyProfile"이 있을 경우 사용자 정보를 눌렀을 때 내 프로필 화면으로 이동
+function PostCard({
+  user,
+  photoURL,
+  description,
+  createdAt,
+  id,
+  isDetailMode,
+}) {
   const navigation = useNavigation();
   const date = useMemo(
     () => (createdAt ? new Date(createdAt.seconds * 1000) : new Date()),
@@ -17,48 +22,55 @@ function PostCard({ user, photoURL, description, createdAt, id }) {
   const { user: me } = useUserContext();
   const isMyPost = me.id === user.id;
 
-  const onOpenProfile = () => {
-    // 아래와 같이 수정
-    if (routeNames.find((routeName) => routeName === "MyProfile")) {
-      navigation.navigate("MyProfile");
-    } else {
-      navigation.navigate("Profile", {
-        userId: user.id,
-        displayName: user.displayName,
-      });
-    }
+  const onPressPost = () => {
+    navigation.navigate("Post", {
+      user,
+      photoURL,
+      description,
+      createdAt,
+      id,
+      isDetailMode: true,
+    });
   };
 
   const { onPressMore } = usePostActions({ id, description });
 
   return (
     <View style={styles.block}>
-      <View style={[styles.head, styles.paddingBlock]}>
-        <Pressable style={styles.profile} onPress={onOpenProfile}>
-          <Avatar source={user.photoURL && { uri: user.photoURL }} />
-          {/* TODO: 일단 트레이너 기준으로 화면을 설계하였기 때문에 "트레이너"로 설정, 후에 회원 기준 화면을 설계할 때 분기처리하기 */}
-          <Text style={styles.displayName}>{user.displayName} 트레이너</Text>
-        </Pressable>
-        {isMyPost && (
-          <Pressable hitSlop={8} onPress={onPressMore}>
-            <MaterialIcons name="more-vert" size={20} />
-          </Pressable>
-        )}
-      </View>
-      {photoURL && (
-        <Image
-          source={{ uri: photoURL }}
-          style={styles.image}
-          resizeMethod="resize"
-          resizeMode="cover"
-        />
+      {!isDetailMode && (
+        <View style={[styles.head, styles.paddingBlock]}>
+          <View style={styles.profile}>
+            <Avatar source={user.photoURL && { uri: user.photoURL }} />
+            {/* TODO: 일단 트레이너 기준으로 화면을 설계하였기 때문에 "트레이너"로 설정, 후에 회원 기준 화면을 설계할 때 분기처리하기 */}
+            <Text style={styles.displayName}>{user.displayName} 트레이너</Text>
+          </View>
+          {isMyPost && (
+            <Pressable hitSlop={8} onPress={onPressMore}>
+              <MaterialIcons name="more-vert" size={20} />
+            </Pressable>
+          )}
+        </View>
       )}
-      <View style={styles.paddingBlock}>
-        <Text style={styles.description}>{description}</Text>
-        <Text date={date} style={styles.date}>
-          {date.toLocaleString()}
-        </Text>
-      </View>
+      <Pressable
+        android_ripple={{ color: "#ededed" }}
+        onPress={onPressPost}
+        disabled={isDetailMode}
+      >
+        {photoURL && (
+          <Image
+            source={{ uri: photoURL }}
+            style={styles.image}
+            resizeMethod="resize"
+            resizeMode="cover"
+          />
+        )}
+        <View style={styles.paddingBlock}>
+          <Text style={styles.description}>{description}</Text>
+          <Text date={date} style={styles.date}>
+            {date.toLocaleString()}
+          </Text>
+        </View>
+      </Pressable>
     </View>
   );
 }
