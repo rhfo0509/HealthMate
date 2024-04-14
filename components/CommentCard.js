@@ -15,7 +15,7 @@ function CommentCard({ user, createdAt, id, content }) {
   const { user: me } = useUserContext();
   const isMyComment = me.id === user.id;
 
-  // const { onPressMore } = usePostActions({ id, description });
+  // const { onPressMore } = usePostActions({ id, content });
 
   return (
     <View style={styles.block}>

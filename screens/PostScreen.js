@@ -14,7 +14,7 @@ function PostScreen() {
 
   const [showModal, setShowModal] = useState(false);
   const [comments, setComments] = useState([]);
-  const { user, photoURL, description, createdAt, id } = route.params;
+  const { user, photoURL, content, createdAt, id } = route.params;
 
   useEffect(() => {
     getComments(id).then(setComments);
@@ -43,7 +43,7 @@ function PostScreen() {
         ListHeaderComponent={
           <PostCard
             createdAt={createdAt}
-            description={description}
+            content={content}
             id={id}
             user={user}
             photoURL={photoURL}

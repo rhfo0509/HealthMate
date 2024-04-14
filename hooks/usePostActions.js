@@ -2,13 +2,13 @@ import { useActionSheet } from "@expo/react-native-action-sheet";
 import { removePost } from "../lib/posts";
 import { useNavigation, useRoute } from "@react-navigation/native";
 
-export default function usePostActions({ id, description }) {
+export default function usePostActions({ id, content }) {
   const { showActionSheetWithOptions } = useActionSheet();
   const navigation = useNavigation();
   const route = useRoute();
 
   const edit = () => {
-    navigation.navigate("Modify", { id, description });
+    navigation.navigate("Modify", { id, content });
   };
   const remove = () => {
     removePost(id);
@@ -22,7 +22,7 @@ export default function usePostActions({ id, description }) {
   };
 
   const onPressMore = () => {
-    const options = ["설명 수정", "게시글 삭제", "취소"];
+    const options = ["수정", "삭제", "취소"];
     const destructiveButtonIndex = 1;
     const cancelButtonIndex = 2;
 
