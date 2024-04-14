@@ -24,7 +24,7 @@ function Profile({ userId }) {
 
   if (!user || !members) {
     return (
-      <ActivityIndicator style={styles.spinner} size={32} color="#6200ee" />
+      <ActivityIndicator style={styles.spinner} size={32} color="royalblue" />
     );
   }
 

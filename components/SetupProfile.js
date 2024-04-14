@@ -169,7 +169,11 @@ function SetupProfile() {
           <Text>{format(birthDate, "yyyy년 MM월 dd일")}</Text>
         </View>
         {loading ? (
-          <ActivityIndicator size={32} color="#6200ee" style={styles.spinner} />
+          <ActivityIndicator
+            size={32}
+            color="royalblue"
+            style={styles.spinner}
+          />
         ) : (
           <View style={styles.buttons}>
             <CustomButton title="다음" onPress={onSubmit} hasMarginBottom />

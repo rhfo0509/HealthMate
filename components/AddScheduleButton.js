@@ -236,7 +236,7 @@ const styles = StyleSheet.create({
     bottom: 10,
   },
   circle: {
-    backgroundColor: "#6200ee",
+    backgroundColor: "royalblue",
     borderRadius: 27,
     height: 54,
     width: 54,

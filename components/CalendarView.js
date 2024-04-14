@@ -16,10 +16,10 @@ function CalendarView({ markedDates, selectedDate, onSelectDate }) {
       markedDates={markedSelectedDate}
       onDayPress={(day) => onSelectDate(day.dateString)}
       theme={{
-        selectedDayBackgroundColor: "#009688",
-        arrowColor: "#009688",
-        dotColor: "#009688",
-        todayTextColor: "#009688",
+        selectedDayBackgroundColor: "royalblue",
+        arrowColor: "royalblue",
+        dotColor: "royalblue",
+        todayTextColor: "royalblue",
       }}
     />
   );

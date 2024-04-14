@@ -18,9 +18,9 @@ function SignButtons({ isSignUp, onSubmit, loading }) {
   if (loading) {
     return (
       <View style={styles.spinnerWrapper}>
-        <ActivityIndicator size={32} color="#6200ee" />
+        <ActivityIndicator size={32} color="royalblue" />
       </View>
-    )
+    );
   }
 
   return (
@@ -39,8 +39,8 @@ const styles = StyleSheet.create({
   spinnerWrapper: {
     marginTop: 64,
     height: 104,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   buttons: {
     marginTop: 64,
