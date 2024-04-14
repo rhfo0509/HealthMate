@@ -59,7 +59,7 @@ function ExerciseScreen() {
 const renderItem = ({ item }) => (
   <PostCard
     createdAt={item.createdAt}
-    description={item.description}
+    content={item.content}
     id={item.id}
     user={item.user}
     photoURL={item.photoURL}

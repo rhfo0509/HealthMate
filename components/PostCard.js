@@ -6,14 +6,7 @@ import { useUserContext } from "../contexts/UserContext";
 import { MaterialIcons } from "@expo/vector-icons";
 import usePostActions from "../hooks/usePostActions";
 
-function PostCard({
-  user,
-  photoURL,
-  description,
-  createdAt,
-  id,
-  isDetailMode,
-}) {
+function PostCard({ user, photoURL, content, createdAt, id, isDetailMode }) {
   const navigation = useNavigation();
   const date = useMemo(
     () => (createdAt ? new Date(createdAt.seconds * 1000) : new Date()),
@@ -26,14 +19,14 @@ function PostCard({
     navigation.navigate("Post", {
       user,
       photoURL,
-      description,
+      content,
       createdAt,
       id,
       isDetailMode: true,
     });
   };
 
-  const { onPressMore } = usePostActions({ id, description });
+  const { onPressMore } = usePostActions({ id, content });
 
   return (
     <View style={styles.block}>
@@ -65,7 +58,7 @@ function PostCard({
           />
         )}
         <View style={styles.paddingBlock}>
-          <Text style={styles.description}>{description}</Text>
+          <Text style={styles.content}>{content}</Text>
           <Text date={date} style={styles.date}>
             {date.toLocaleString()}
           </Text>
@@ -105,7 +98,7 @@ const styles = StyleSheet.create({
     aspectRatio: 1,
     marginBottom: 16,
   },
-  description: {
+  content: {
     fontSize: 16,
     lineHeight: 24,
     marginBottom: 8,
