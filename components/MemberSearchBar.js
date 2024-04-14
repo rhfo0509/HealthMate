@@ -17,6 +17,7 @@ function MemberSearchBar({ members, setFilteredMembers }) {
       placeholder="검색할 회원을 입력하세요."
       onChangeText={handleSearch}
       value={searchText}
+      lightTheme={true}
     />
   );
 }
