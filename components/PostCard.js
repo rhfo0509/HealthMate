@@ -4,7 +4,7 @@ import Avatar from "./Avatar";
 import { useNavigation, useNavigationState } from "@react-navigation/native";
 import { useUserContext } from "../contexts/UserContext";
 import { MaterialIcons } from "@expo/vector-icons";
-import usePostActions from "../hooks/usePostActions";
+import useActions from "../hooks/useActions";
 
 function PostCard({ user, photoURL, content, createdAt, id, isDetailMode }) {
   const navigation = useNavigation();
@@ -26,7 +26,7 @@ function PostCard({ user, photoURL, content, createdAt, id, isDetailMode }) {
     });
   };
 
-  const { onPressMore } = usePostActions({ id, content });
+  const { onPressMore } = useActions({ id, content });
 
   return (
     <View style={styles.block}>

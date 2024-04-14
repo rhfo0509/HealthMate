@@ -2,7 +2,7 @@ import { useActionSheet } from "@expo/react-native-action-sheet";
 import { removePost } from "../lib/posts";
 import { useNavigation, useRoute } from "@react-navigation/native";
 
-export default function usePostActions({ id, content }) {
+export default function useActions({ id, content, type }) {
   const { showActionSheetWithOptions } = useActionSheet();
   const navigation = useNavigation();
   const route = useRoute();

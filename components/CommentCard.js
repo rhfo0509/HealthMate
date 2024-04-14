@@ -4,7 +4,7 @@ import Avatar from "./Avatar";
 import { useNavigation, useNavigationState } from "@react-navigation/native";
 import { useUserContext } from "../contexts/UserContext";
 import { MaterialIcons } from "@expo/vector-icons";
-import usePostActions from "../hooks/usePostActions";
+import useActions from "../hooks/useActions";
 
 function CommentCard({ user, createdAt, id, content }) {
   const navigation = useNavigation();
@@ -15,7 +15,7 @@ function CommentCard({ user, createdAt, id, content }) {
   const { user: me } = useUserContext();
   const isMyComment = me.id === user.id;
 
-  // const { onPressMore } = usePostActions({ id, content });
+  // const { onPressMore } = useActions({ id, content });
 
   return (
     <View style={styles.block}>
