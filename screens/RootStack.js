@@ -44,12 +44,12 @@ function RootStack() {
           <Stack.Screen
             name="Upload"
             component={UploadScreen}
-            options={{ title: "새 게시물" }}
+            options={{ title: "새 게시글" }}
           />
           <Stack.Screen
             name="Modify"
             component={ModifyScreen}
-            options={{ title: "설명 수정" }}
+            options={{ title: "게시글 수정" }}
           />
           <Stack.Screen
             name="Setting"
