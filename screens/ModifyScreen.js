@@ -3,6 +3,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { StyleSheet, TextInput, View } from "react-native";
 import IconRightButton from "../components/IconRightButton";
 import { updatePost } from "../lib/posts";
+import { updateComment } from "../lib/comments";
 
 function ModifyScreen() {
   const navigation = useNavigation();
@@ -10,10 +11,18 @@ function ModifyScreen() {
   const [content, setContent] = useState(params.content);
 
   const onSubmit = useCallback(() => {
-    updatePost({
-      id: params.id,
-      content,
-    });
+    if (params.type === "Post") {
+      updatePost({
+        id: params.id,
+        content,
+      });
+    } else {
+      updateComment({
+        id: params.id,
+        content,
+      });
+    }
+
     // TODO: 포스트 및 포스트 목록 업데이트
     navigation.pop();
   }, [navigation, params.id, content]);
@@ -28,7 +37,7 @@ function ModifyScreen() {
       <TextInput
         style={styles.input}
         multiline={true}
-        placeholder="게시글을 입력하세요."
+        placeholder="글을 입력하세요."
         textAlignVertical="top"
         value={content}
         onChangeText={setContent}

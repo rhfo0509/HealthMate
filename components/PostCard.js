@@ -26,7 +26,7 @@ function PostCard({ user, photoURL, content, createdAt, id, isDetailMode }) {
     });
   };
 
-  const { onPressMore } = useActions({ id, content });
+  const { onPressMore } = useActions({ id, content, type: "Post" });
 
   return (
     <View style={styles.block}>

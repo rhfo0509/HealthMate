@@ -1,24 +1,21 @@
 import { useActionSheet } from "@expo/react-native-action-sheet";
 import { removePost } from "../lib/posts";
 import { useNavigation, useRoute } from "@react-navigation/native";
+import { removeComment } from "../lib/comments";
 
 export default function useActions({ id, content, type }) {
   const { showActionSheetWithOptions } = useActionSheet();
   const navigation = useNavigation();
-  const route = useRoute();
 
   const edit = () => {
-    navigation.navigate("Modify", { id, content });
+    navigation.navigate("Modify", { id, content, type });
   };
   const remove = () => {
-    removePost(id);
-
-    // 현재 단일 포스트 조회 화면이라면 뒤로가기
-    if (route.name === "Post") {
-      navigation.pop();
+    if (type === "Post") {
+      removePost(id);
+    } else {
+      removeComment(id);
     }
-
-    // TODO: 홈 및 프로필 화면의 목록 업데이트
   };
 
   const onPressMore = () => {

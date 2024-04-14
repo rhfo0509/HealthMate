@@ -15,7 +15,7 @@ function CommentCard({ user, createdAt, id, content }) {
   const { user: me } = useUserContext();
   const isMyComment = me.id === user.id;
 
-  // const { onPressMore } = useActions({ id, content });
+  const { onPressMore } = useActions({ id, content, type: "Comment" });
 
   return (
     <View style={styles.block}>
@@ -26,8 +26,7 @@ function CommentCard({ user, createdAt, id, content }) {
           <Text style={styles.displayName}>{user.displayName} 트레이너</Text>
         </View>
         {isMyComment && (
-          // <Pressable hitSlop={8} onPress={onPressMore}>
-          <Pressable hitSlop={8}>
+          <Pressable hitSlop={8} onPress={onPressMore}>
             <MaterialIcons name="more-vert" size={20} />
           </Pressable>
         )}
