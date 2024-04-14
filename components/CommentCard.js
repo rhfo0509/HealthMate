@@ -6,7 +6,7 @@ import { useUserContext } from "../contexts/UserContext";
 import { MaterialIcons } from "@expo/vector-icons";
 import useActions from "../hooks/useActions";
 
-function CommentCard({ user, createdAt, id, content }) {
+function CommentCard({ user, createdAt, id, postId, content }) {
   const navigation = useNavigation();
   const date = useMemo(
     () => (createdAt ? new Date(createdAt.seconds * 1000) : new Date()),
@@ -15,7 +15,8 @@ function CommentCard({ user, createdAt, id, content }) {
   const { user: me } = useUserContext();
   const isMyComment = me.id === user.id;
 
-  const { onPressMore } = useActions({ id, content, type: "Comment" });
+  // postId가 있으면 댓글, 없으면 게시글
+  const { onPressMore } = useActions({ id, content, postId });
 
   return (
     <View style={styles.block}>

@@ -20,10 +20,6 @@ function PostScreen() {
     getComments(id).then(setComments);
   }, [showModal]);
 
-  const onPress = () => {
-    setShowModal(true);
-  };
-
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => (
@@ -31,6 +27,20 @@ function PostScreen() {
       ),
     });
   }, [navigation, onPress]);
+
+  const renderItem = ({ item }) => (
+    <CommentCard
+      createdAt={item.createdAt}
+      content={item.content}
+      id={item.id}
+      postId={id}
+      user={item.user}
+    />
+  );
+
+  const onPress = () => {
+    setShowModal(true);
+  };
 
   return (
     <View style={styles.block}>
@@ -61,15 +71,6 @@ function PostScreen() {
     </View>
   );
 }
-
-const renderItem = ({ item }) => (
-  <CommentCard
-    createdAt={item.createdAt}
-    content={item.content}
-    id={item.id}
-    user={item.user}
-  />
-);
 
 const styles = StyleSheet.create({
   block: {

@@ -11,13 +11,14 @@ function ModifyScreen() {
   const [content, setContent] = useState(params.content);
 
   const onSubmit = useCallback(() => {
-    if (params.type === "Post") {
-      updatePost({
-        id: params.id,
+    if (params.postId) {
+      updateComment({
+        postId: params.postId,
+        commentId: params.id,
         content,
       });
     } else {
-      updateComment({
+      updatePost({
         id: params.id,
         content,
       });

@@ -3,18 +3,18 @@ import { removePost } from "../lib/posts";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { removeComment } from "../lib/comments";
 
-export default function useActions({ id, content, type }) {
+export default function useActions({ id, content, postId }) {
   const { showActionSheetWithOptions } = useActionSheet();
   const navigation = useNavigation();
 
   const edit = () => {
-    navigation.navigate("Modify", { id, content, type });
+    navigation.navigate("Modify", { id, content, postId });
   };
   const remove = () => {
-    if (type === "Post") {
-      removePost(id);
+    if (postId) {
+      removeComment({ postId, commentId: id });
     } else {
-      removeComment(id);
+      removePost(id);
     }
   };
 
