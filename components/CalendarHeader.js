@@ -2,7 +2,7 @@ import React from "react";
 import { View, StyleSheet } from "react-native";
 import CalendarStrip from "react-native-calendar-strip";
 
-function CalendarHeader() {
+function CalendarHeader({ markedDates, selectedDate, onSelectDate }) {
   return (
     <View style={styles.block}>
       <CalendarStrip
@@ -13,6 +13,9 @@ function CalendarHeader() {
         dateNumberStyle={{ color: "#495057" }}
         dateNameStyle={{ color: "#495057" }}
         iconContainer={{ flex: 0.1 }}
+        markedDates={markedDates}
+        onDateSelected={(date) => onSelectDate(new Date(date))}
+        selectedDate={new Date(selectedDate)}
       />
     </View>
   );

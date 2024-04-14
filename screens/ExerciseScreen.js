@@ -6,10 +6,12 @@ import CalendarHeader from "../components/CalendarHeader";
 import WriteButton from "../components/WriteButton";
 import PostCard from "../components/PostCard";
 import { useUserContext } from "../contexts/UserContext";
+import { isSameDay, format } from "date-fns";
 
 function ExerciseScreen() {
   const route = useRoute();
-  const [posts, setPosts] = useState(null);
+  const [posts, setPosts] = useState([]);
+  const [selectedDate, setSelectedDate] = useState(new Date());
   const { memberId, postType } = route.params;
   const { user } = useUserContext();
 
@@ -23,12 +25,28 @@ function ExerciseScreen() {
     }, [])
   );
 
+  const markedDates = posts?.map((post) => {
+    const date = post.createdAt?.toDate();
+    return { date, lines: [{ color: "royalblue", selectedColor: "crimson" }] };
+  });
+
+  const filteredPosts = posts.filter((post) => {
+    return isSameDay(
+      format(post.createdAt?.toDate(), "yyyy-MM-dd"),
+      format(selectedDate, "yyyy-MM-dd")
+    );
+  });
+
   return (
     <View style={styles.block}>
-      <CalendarHeader />
+      <CalendarHeader
+        markedDates={markedDates}
+        selectedDate={selectedDate}
+        onSelectDate={setSelectedDate}
+      />
       <FlatList
         style={{ marginTop: 100, backgroundColor: "white" }}
-        data={posts}
+        data={filteredPosts}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
       />
