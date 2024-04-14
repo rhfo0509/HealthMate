@@ -13,6 +13,7 @@ import {
   onSnapshot,
   // limit,
 } from "firebase/firestore";
+import { getTrainerSchedules } from "../lib/schedules";
 
 function CalendarScreen() {
   const { user } = useUserContext();
@@ -22,6 +23,10 @@ function CalendarScreen() {
   const [selectedDate, setSelectedDate] = useState(
     format(new Date(), "yyyy-MM-dd")
   );
+
+  useEffect(() => {
+    getTrainerSchedules(user.id).then(setScheduleList);
+  }, [user.id]);
 
   useFocusEffect(
     useCallback(() => {
