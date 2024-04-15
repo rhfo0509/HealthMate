@@ -16,6 +16,11 @@ function CalendarHeader({ markedDates, selectedDate, onSelectDate }) {
         markedDates={markedDates}
         onDateSelected={(date) => onSelectDate(new Date(date))}
         selectedDate={new Date(selectedDate)}
+        highlightDateContainerStyle={{
+          backgroundColor: "royalblue",
+        }}
+        highlightDateNameStyle={{ color: "white" }}
+        highlightDateNumberStyle={{ color: "white" }}
       />
     </View>
   );
