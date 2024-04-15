@@ -38,7 +38,7 @@ function UploadScreen() {
 
     // 사진 없이 글만 등록한 경우
     if (!result) {
-      await createPost({ content, photoURL, user, memberId, postType });
+      createPost({ content, photoURL, user, memberId, postType });
       return;
     }
 
@@ -50,7 +50,7 @@ function UploadScreen() {
     const postBlob = await post.blob();
     await uploadBytesResumable(storageRef, postBlob).then(async (snapshot) => {
       photoURL = await getDownloadURL(storageRef);
-      await createPost({ content, photoURL, user, memberId, postType });
+      createPost({ content, photoURL, user, memberId, postType });
     });
   }, [result, user, content, navigation]);
 
