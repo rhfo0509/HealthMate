@@ -33,7 +33,7 @@ function MemberList({ members, ListHeaderComponent }) {
                   },
                   {
                     text: "확인",
-                    onPress: () => {
+                    onPress: async () => {
                       deleteMemberWithSchedules(user.id, item.id);
                       removeMemberByTrainer(user.id, item.id);
                     },

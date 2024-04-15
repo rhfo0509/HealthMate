@@ -26,12 +26,15 @@ function MyProfileScreen() {
     });
   }, [navigation, user]);
 
-  useFocusEffect(
-    useCallback(() => {
-      // getUser(userId).then(setUser);
-      getMembersByTrainer(user.id).then(setMembers);
-    }, [user.id])
-  );
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     getMembersByTrainer(user.id).then(setMembers);
+  //   }, [user.id])
+  // );
+
+  useEffect(() => {
+    getMembersByTrainer(user.id).then(setMembers);
+  }, [members]);
 
   return (
     <View style={styles.block}>
