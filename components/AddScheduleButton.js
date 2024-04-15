@@ -25,8 +25,8 @@ function AddScheduleButton({ selectedDate }) {
     getMembersByTrainer(trainer.id).then(setMemberList);
   }, [trainer.id]);
 
-  const handleSave = async () => {
-    await createSchedule({
+  const handleSave = () => {
+    createSchedule({
       memberId: selectedMemberId,
       trainerId: trainer.id,
       date: date ? format(date, "yyyy-MM-dd") : selectedDate,

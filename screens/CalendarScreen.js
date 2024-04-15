@@ -24,26 +24,39 @@ function CalendarScreen() {
     format(new Date(), "yyyy-MM-dd")
   );
 
+  // 최초로 CalendarScreen 접근 시
   useEffect(() => {
     getTrainerSchedules(user.id).then(setScheduleList);
-  }, [user.id]);
+  }, []);
 
-  useFocusEffect(
-    useCallback(() => {
-      const q = query(schedulesCollection, where("trainerId", "==", user.id));
-      const unsubscribe = onSnapshot(q, (snapshot) => {
-        unsubscribe();
-        const schedules = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        setScheduleList(schedules);
-      });
-      // return () => {
-      //   unsubscribe();
-      // };
-    }, [user.id])
-  );
+  // schedules 컬렉션에 변화 발생시
+  useEffect(() => {
+    const q = query(schedulesCollection, where("trainerId", "==", user.id));
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const schedules = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setScheduleList(schedules);
+    });
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     const q = query(schedulesCollection, where("trainerId", "==", user.id));
+  //     const unsubscribe = onSnapshot(q, (snapshot) => {
+  //       unsubscribe();
+  //       const schedules = snapshot.docs.map((doc) => ({
+  //         id: doc.id,
+  //         ...doc.data(),
+  //       }));
+  //       setScheduleList(schedules);
+  //     });
+  //   }, [user.id])
+  // );
 
   const markedDates = scheduleList.reduce((acc, cur) => {
     acc[cur.date] = { marked: true };
