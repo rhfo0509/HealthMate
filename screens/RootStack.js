@@ -15,6 +15,7 @@ const Stack = createNativeStackNavigator();
 function RootStack() {
   const { user, setUser } = useUserContext();
 
+  // 사용자 정보가 바뀔 때마다 setUser가 다시 생성되므로 setUser를 dependency array로 설정
   useEffect(() => {
     // 컴포넌트 첫 로딩 시 로그인 상태를 확인하고 UserContext에 적용
     const unsubscribe = subscribeAuth(async (currentUser) => {

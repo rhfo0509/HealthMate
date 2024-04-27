@@ -31,6 +31,7 @@ function DietScreen() {
   }, []);
 
   // posts 컬렉션에 변화 발생시
+  // Fix: postsCollection을 dependency array로 설정하여 컬렉션에 변화가 발생할 때만 useEffect 실행
   useEffect(() => {
     const q = query(
       postsCollection,
@@ -49,7 +50,7 @@ function DietScreen() {
     return () => {
       unsubscribe();
     };
-  }, []);
+  }, [postsCollection]);
 
   // useFocusEffect(
   //   useCallback(() => {
