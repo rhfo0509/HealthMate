@@ -9,6 +9,7 @@ import MainTab from "./MainTab";
 import { getUser } from "../lib/users";
 import { subscribeAuth } from "../lib/auth";
 import SettingScreen from "./SettingScreen";
+import PostScreen from "./PostScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -55,6 +56,11 @@ function RootStack() {
             name="Setting"
             component={SettingScreen}
             options={{ title: "설정" }}
+          />
+          <Stack.Screen
+            name="Post"
+            component={PostScreen}
+            options={{ title: "게시글" }}
           />
         </>
       ) : (
