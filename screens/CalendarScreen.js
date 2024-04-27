@@ -30,7 +30,6 @@ function CalendarScreen() {
   }, []);
 
   // schedules 컬렉션에 변화 발생시
-  // Fix: schedulesCollection을 dependency array로 설정하여 컬렉션에 변화가 발생할 때만 useEffect 실행
   useEffect(() => {
     const q = query(schedulesCollection, where("trainerId", "==", user.id));
     const unsubscribe = onSnapshot(q, (snapshot) => {
@@ -43,7 +42,7 @@ function CalendarScreen() {
     return () => {
       unsubscribe();
     };
-  }, [schedulesCollection]);
+  }, []);
 
   // useFocusEffect(
   //   useCallback(() => {
