@@ -42,26 +42,26 @@ function AddScheduleButton({ selectedDate }) {
   };
 
   const handleClose = () => {
-    setShowModal(false);
     setSelectedMemberId("");
     setDate(null);
     setStartTime(null);
     setEndTime(null);
+    setShowModal(false);
   };
 
   const onChangeDate = (event, selectedDate) => {
     setShowDatePicker(false);
-    setDate(selectedDate || date);
+    setDate(selectedDate);
   };
 
   const onChangeStartTime = (event, selectedTime) => {
     setShowStartTimePicker(false);
-    setStartTime(selectedTime || startTime);
+    event.type === "set" ? setStartTime(selectedTime) : setStartTime(startTime);
   };
 
   const onChangeEndTime = (event, selectedTime) => {
     setShowEndTimePicker(false);
-    setEndTime(selectedTime || endTime);
+    event.type === "set" ? setEndTime(selectedTime) : setEndTime(endTime);
   };
 
   return (
