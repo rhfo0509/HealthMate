@@ -38,9 +38,9 @@ function AddMemberButton() {
       </Pressable>
       <Modal
         visible={show}
-        animationType="slide"
+        animationType="fade"
         transparent={true}
-        onRequestClose={() => setShow(false)}
+        onRequestClose={handleClose}
       >
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>

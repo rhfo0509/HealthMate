@@ -70,10 +70,10 @@ function AddScheduleButton({ selectedDate }) {
         <MaterialIcons name="event" size={24} color="white" />
       </Pressable>
       <Modal
-        animationType="slide"
-        transparent={true}
+        animationType="fade"
+        transparent
         visible={showModal}
-        onRequestClose={() => setShowModal(false)}
+        onRequestClose={handleClose}
       >
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
