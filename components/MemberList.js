@@ -8,7 +8,7 @@ import {
 } from "react-native-swipe-list";
 import { removeMemberByTrainer } from "../lib/users";
 import { useUserContext } from "../contexts/UserContext";
-import { removeMemberWithSchedules } from "../lib/schedules";
+import { removeSchedulesWithMember } from "../lib/schedules";
 
 function MemberList({ members, ListHeaderComponent }) {
   const { user } = useUserContext();
@@ -34,7 +34,7 @@ function MemberList({ members, ListHeaderComponent }) {
                   {
                     text: "확인",
                     onPress: async () => {
-                      removeMemberWithSchedules(user.id, item.id);
+                      removeSchedulesWithMember(user.id, item.id);
                       removeMemberByTrainer(user.id, item.id);
                     },
                   },
