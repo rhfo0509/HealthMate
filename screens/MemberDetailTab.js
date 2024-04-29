@@ -4,6 +4,7 @@ import { createMaterialTopTabNavigator } from "@react-navigation/material-top-ta
 import DietScreen from "./DietScreen";
 import ExerciseScreen from "./ExerciseScreen";
 import { View, StyleSheet } from "react-native";
+import IconRightButton from "../components/IconRightButton";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -15,6 +16,12 @@ function MemberDetailTab() {
     navigation.setOptions({
       // TODO: 일단 트레이너 기준으로 화면을 설계하였기 때문에 "회원"으로 설정, 후에 회원 기준 화면을 설계할 때 분기처리하기
       title: `${member.displayName} 회원`,
+      headerRight: () => (
+        <IconRightButton
+          name="remember-me"
+          onPress={() => navigation.push("Membership")}
+        />
+      ),
     });
   }, [navigation, member]);
 

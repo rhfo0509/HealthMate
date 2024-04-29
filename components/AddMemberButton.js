@@ -1,43 +1,255 @@
 // User가 Trainer인 경우에만 버튼 활성화
 
 import React, { useState } from "react";
-import { View, Pressable, StyleSheet, Modal, Text } from "react-native";
+import {
+  View,
+  Pressable,
+  StyleSheet,
+  Modal,
+  Text,
+  TextInput,
+} from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useUserContext } from "../contexts/UserContext";
 import { addMemberToTrainer } from "../lib/users";
 import BorderedInput from "./BorderedInput";
+import RNDateTimePicker from "@react-native-community/datetimepicker";
+import { CheckBox } from "react-native-elements";
+import { format } from "date-fns";
 
 function AddMemberButton() {
-  const [show, setShow] = useState(false);
+  const [showFirst, setShowFirst] = useState(false);
+  const [showSecond, setShowSecond] = useState(false);
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const [showStartTimePicker, setShowStartTimePicker] = useState(false);
+  const [showEndTimePicker, setShowEndTimePicker] = useState(false);
   // const [memberId, setMemberId] = useState("");
   const [memberName, setMemberName] = useState("");
   const [memberPhoneNumber, setMemberPhoneNumber] = useState("");
+  // const [firstModalInfo, setFirstModalInfo] = useState({
+  //   memberName: "",
+  //   memberPhoneNumber: "",
+  //   startYear: null,
+  //   startMonth: null,
+  //   startDay: null,
+  //   count: 0,
+  // });
+  // const [secondModalInfo, setSecondModalInfo] = useState({
+  //   days: {
+  //     월: { checked: false, startHours: null, startMinutes: null, endHours: null, endMinutes: null },
+  //     화: { checked: false, startHours: null, startMinutes: null, endHours: null, endMinutes: null },
+  //     수: { checked: false, startHours: null, startMinutes: null, endHours: null, endMinutes: null },
+  //     목: { checked: false, startHours: null, startMinutes: null, endHours: null, endMinutes: null },
+  //     금: { checked: false, startHours: null, startMinutes: null, endHours: null, endMinutes: null },
+  //     토: { checked: false, startHours: null, startMinutes: null, endHours: null, endMinutes: null },
+  //     일: { checked: false, startHours: null, startMinutes: null, endHours: null, endMinutes: null },
+  //   },
+  // });
+
+  const [membershipInfo, setMembershipInfo] = useState({
+    startYear: null,
+    startMonth: null,
+    startDay: null,
+    count: 0,
+    days: {
+      월: {
+        checked: false,
+        startHours: null,
+        startMinutes: null,
+        endHours: null,
+        endMinutes: null,
+      },
+      화: {
+        checked: false,
+        startHours: null,
+        startMinutes: null,
+        endHours: null,
+        endMinutes: null,
+      },
+      수: {
+        checked: false,
+        startHours: null,
+        startMinutes: null,
+        endHours: null,
+        endMinutes: null,
+      },
+      목: {
+        checked: false,
+        startHours: null,
+        startMinutes: null,
+        endHours: null,
+        endMinutes: null,
+      },
+      금: {
+        checked: false,
+        startHours: null,
+        startMinutes: null,
+        endHours: null,
+        endMinutes: null,
+      },
+      토: {
+        checked: false,
+        startHours: null,
+        startMinutes: null,
+        endHours: null,
+        endMinutes: null,
+      },
+      일: {
+        checked: false,
+        startHours: null,
+        startMinutes: null,
+        endHours: null,
+        endMinutes: null,
+      },
+    },
+  });
   const { user: trainer } = useUserContext();
 
   const handleSave = () => {
-    // 트레이너의 회원 목록에 새 회원 추가
+    console.log(trainer.id, memberName, memberPhoneNumber);
     addMemberToTrainer(trainer.id, {
       name: memberName,
       phoneNumber: memberPhoneNumber,
+      membershipInfo,
     });
     setMemberName("");
     setMemberPhoneNumber("");
-    setShow(false);
+    setMembershipInfo({
+      startYear: null,
+      startMonth: null,
+      startDay: null,
+      count: 0,
+      days: {
+        월: {
+          checked: false,
+          startHours: null,
+          startMinutes: null,
+          endHours: null,
+          endMinutes: null,
+        },
+        화: {
+          checked: false,
+          startHours: null,
+          startMinutes: null,
+          endHours: null,
+          endMinutes: null,
+        },
+        수: {
+          checked: false,
+          startHours: null,
+          startMinutes: null,
+          endHours: null,
+          endMinutes: null,
+        },
+        목: {
+          checked: false,
+          startHours: null,
+          startMinutes: null,
+          endHours: null,
+          endMinutes: null,
+        },
+        금: {
+          checked: false,
+          startHours: null,
+          startMinutes: null,
+          endHours: null,
+          endMinutes: null,
+        },
+        토: {
+          checked: false,
+          startHours: null,
+          startMinutes: null,
+          endHours: null,
+          endMinutes: null,
+        },
+        일: {
+          checked: false,
+          startHours: null,
+          startMinutes: null,
+          endHours: null,
+          endMinutes: null,
+        },
+      },
+    });
+    setShowSecond(false);
+  };
+
+  const handleNext = () => {
+    setShowFirst(false);
+    setShowSecond(true);
   };
 
   const handleClose = () => {
     setMemberName("");
     setMemberPhoneNumber("");
-    setShow(false);
+    setMembershipInfo({
+      startYear: null,
+      startMonth: null,
+      startDay: null,
+      count: 0,
+      days: {
+        월: {
+          checked: false,
+          startHours: null,
+          startMinutes: null,
+          endHours: null,
+          endMinutes: null,
+        },
+        화: {
+          checked: false,
+          startHours: null,
+          startMinutes: null,
+          endHours: null,
+          endMinutes: null,
+        },
+        수: {
+          checked: false,
+          startHours: null,
+          startMinutes: null,
+          endHours: null,
+          endMinutes: null,
+        },
+        목: {
+          checked: false,
+          startHours: null,
+          startMinutes: null,
+          endHours: null,
+          endMinutes: null,
+        },
+        금: {
+          checked: false,
+          startHours: null,
+          startMinutes: null,
+          endHours: null,
+          endMinutes: null,
+        },
+        토: {
+          checked: false,
+          startHours: null,
+          startMinutes: null,
+          endHours: null,
+          endMinutes: null,
+        },
+        일: {
+          checked: false,
+          startHours: null,
+          startMinutes: null,
+          endHours: null,
+          endMinutes: null,
+        },
+      },
+    });
+    setShowFirst(false);
+    setShowSecond(false);
   };
 
   return (
     <View style={styles.wrapper}>
-      <Pressable style={styles.circle} onPress={() => setShow(true)}>
+      <Pressable style={styles.circle} onPress={() => setShowFirst(true)}>
         <MaterialIcons name="person-add" size={24} color="white" />
       </Pressable>
       <Modal
-        visible={show}
+        visible={showFirst}
         animationType="fade"
         transparent={true}
         onRequestClose={handleClose}
@@ -51,7 +263,7 @@ function AddMemberButton() {
                 left: 22,
               }}
             >
-              <Text style={{ fontSize: 24 }}>회원 추가</Text>
+              <Text style={{ fontSize: 24 }}>회원 및 회원권 등록</Text>
             </View>
             <BorderedInput
               hasMarginBottom
@@ -68,16 +280,238 @@ function AddMemberButton() {
             <View
               style={{
                 flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <Text>시작일자</Text>
+              <TextInput
+                style={styles.input}
+                placeholder="년"
+                value={membershipInfo.startYear}
+                onChangeText={(text) =>
+                  setMembershipInfo((prevInfo) => ({
+                    ...prevInfo,
+                    startYear: text,
+                  }))
+                }
+                keyboardType="numeric"
+                maxLength={4}
+              />
+              <TextInput
+                style={styles.input}
+                placeholder="월"
+                value={membershipInfo.startMonth}
+                onChangeText={(text) =>
+                  setMembershipInfo((prevInfo) => ({
+                    ...prevInfo,
+                    startMonth: text,
+                  }))
+                }
+                keyboardType="numeric"
+                maxLength={2}
+              />
+              <TextInput
+                style={styles.input}
+                placeholder="일"
+                value={membershipInfo.startDay}
+                onChangeText={(text) =>
+                  setMembershipInfo((prevInfo) => ({
+                    ...prevInfo,
+                    startDay: text,
+                  }))
+                }
+                keyboardType="numeric"
+                maxLength={2}
+              />
+            </View>
+            <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <Text>횟수</Text>
+              <TextInput
+                style={styles.input}
+                keyboardType="numeric"
+                maxLength={2}
+                onChangeText={(text) => {
+                  setMembershipInfo((prevInfo) => ({
+                    ...prevInfo,
+                    count: text,
+                  }));
+                }}
+              />
+              <Text>회</Text>
+            </View>
+            <View
+              style={{
+                flexDirection: "row",
+                position: "absolute",
+                bottom: 10,
+                right: 10,
+              }}
+            >
+              <Pressable onPress={handleNext} style={{ padding: 10 }}>
+                <Text style={{ fontSize: 16, fontWeight: "bold" }}>다음</Text>
+              </Pressable>
+              <Pressable onPress={handleClose} style={{ padding: 10 }}>
+                <Text style={{ fontSize: 16, fontWeight: "bold" }}>취소</Text>
+              </Pressable>
+            </View>
+          </View>
+        </View>
+      </Modal>
+      <Modal
+        visible={showSecond}
+        animationType="fade"
+        transparent={true}
+        onRequestClose={handleClose}
+      >
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <View
+              style={{
+                position: "absolute",
+                top: 15,
+                left: 22,
+              }}
+            >
+              <Text style={{ fontSize: 24 }}>회원 스케줄 입력</Text>
+            </View>
+            <View>
+              <View>
+                {Object.entries(membershipInfo.days).map(([day, data]) => (
+                  <View
+                    key={day}
+                    style={{ flexDirection: "row", alignItems: "center" }}
+                  >
+                    <Text>{day}</Text>
+                    <CheckBox
+                      checked={data.checked}
+                      onPress={() => {
+                        setMembershipInfo((prevInfo) => ({
+                          ...prevInfo,
+                          days: {
+                            ...prevInfo.days,
+                            [day]: {
+                              ...prevInfo.days[day],
+                              checked: !data.checked,
+                            },
+                          },
+                        }));
+                      }}
+                    />
+                    <View
+                      style={{
+                        borderWidth: 1,
+                        borderRadius: 2,
+                        paddingHorizontal: 10,
+                        marginRight: 10,
+                        height: 24,
+                        width: 72,
+                        flexDirection: "row",
+                        alignItems: "center",
+                      }}
+                    >
+                      <TextInput
+                        keyboardType="numeric"
+                        maxLength={2}
+                        editable={data.checked}
+                        onChangeText={(text) => {
+                          setMembershipInfo((prevInfo) => ({
+                            ...prevInfo,
+                            days: {
+                              ...prevInfo.days,
+                              [day]: {
+                                ...prevInfo.days[day],
+                                startHours: text,
+                              },
+                            },
+                          }));
+                        }}
+                      />
+                      <Text style={{ marginRight: 5 }}> : </Text>
+                      <TextInput
+                        keyboardType="numeric"
+                        maxLength={2}
+                        editable={data.checked}
+                        onChangeText={(text) => {
+                          setMembershipInfo((prevInfo) => ({
+                            ...prevInfo,
+                            days: {
+                              ...prevInfo.days,
+                              [day]: {
+                                ...prevInfo.days[day],
+                                startMinutes: text,
+                              },
+                            },
+                          }));
+                        }}
+                      />
+                    </View>
+                    <Text style={{ marginRight: 10 }}>~</Text>
+                    <View
+                      style={{
+                        borderWidth: 1,
+                        borderRadius: 2,
+                        paddingHorizontal: 10,
+                        marginRight: 10,
+                        height: 24,
+                        width: 72,
+                        flexDirection: "row",
+                        alignItems: "center",
+                      }}
+                    >
+                      <TextInput
+                        keyboardType="numeric"
+                        maxLength={2}
+                        editable={data.checked}
+                        onChangeText={(text) => {
+                          setMembershipInfo((prevInfo) => ({
+                            ...prevInfo,
+                            days: {
+                              ...prevInfo.days,
+                              [day]: {
+                                ...prevInfo.days[day],
+                                endHours: text,
+                              },
+                            },
+                          }));
+                        }}
+                      />
+                      <Text style={{ marginRight: 5 }}> : </Text>
+                      <TextInput
+                        keyboardType="numeric"
+                        maxLength={2}
+                        editable={data.checked}
+                        onChangeText={(text) => {
+                          setMembershipInfo((prevInfo) => ({
+                            ...prevInfo,
+                            days: {
+                              ...prevInfo.days,
+                              [day]: {
+                                ...prevInfo.days[day],
+                                endMinutes: text,
+                              },
+                            },
+                          }));
+                        }}
+                      />
+                    </View>
+                  </View>
+                ))}
+              </View>
+            </View>
+            <View
+              style={{
+                flexDirection: "row",
                 position: "absolute",
                 bottom: 10,
                 right: 10,
               }}
             >
               <Pressable onPress={handleSave} style={{ padding: 10 }}>
-                <Text style={{ fontSize: 16, fontWeight: "bold" }}>저장</Text>
+                <Text style={{ fontSize: 16, fontWeight: "bold" }}>등록</Text>
               </Pressable>
               <Pressable onPress={handleClose} style={{ padding: 10 }}>
-                <Text style={{ fontSize: 16, fontWeight: "bold" }}>닫기</Text>
+                <Text style={{ fontSize: 16, fontWeight: "bold" }}>취소</Text>
               </Pressable>
             </View>
           </View>
@@ -104,6 +538,15 @@ const styles = StyleSheet.create({
     width: 54,
     alignItems: "center",
     justifyContent: "center",
+  },
+  input: {
+    width: "24%",
+    borderWidth: 1,
+    borderColor: "#bdbdbd",
+    padding: 10,
+    borderRadius: 5,
+    marginHorizontal: 7,
+    marginVertical: 15,
   },
   modalContainer: {
     flex: 1,

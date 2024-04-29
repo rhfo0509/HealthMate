@@ -10,6 +10,7 @@ import { getUser } from "../lib/users";
 import { subscribeAuth } from "../lib/auth";
 import SettingScreen from "./SettingScreen";
 import PostScreen from "./PostScreen";
+import MembershipScreen from "./MembershipScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -61,6 +62,11 @@ function RootStack() {
             name="Post"
             component={PostScreen}
             options={{ title: "게시글" }}
+          />
+          <Stack.Screen
+            name="Membership"
+            component={MembershipScreen}
+            options={{ title: "회원권 관리" }}
           />
         </>
       ) : (
