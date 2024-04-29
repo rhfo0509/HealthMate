@@ -162,7 +162,7 @@ function AddScheduleButton({ selectedDate }) {
                     is24Hour={true}
                     display="spinner"
                     onChange={onChangeStartTime}
-                    minuteInterval={10}
+                    minuteInterval={30}
                   />
                 )}
                 {startTime && <Text>{format(startTime, `HH시 mm분`)}</Text>}
@@ -196,7 +196,7 @@ function AddScheduleButton({ selectedDate }) {
                     is24Hour={true}
                     display="spinner"
                     onChange={onChangeEndTime}
-                    minuteInterval={10}
+                    minuteInterval={30}
                   />
                 )}
                 {endTime && <Text>{format(endTime, "HH시 mm분")}</Text>}

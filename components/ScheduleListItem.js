@@ -93,7 +93,7 @@ function ScheduleListItem({ schedule }) {
           )}
           mode="time"
           is24Hour={true}
-          minuteInterval={10}
+          minuteInterval={30}
           display="spinner"
           onChange={handleChange}
         />
