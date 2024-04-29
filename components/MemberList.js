@@ -9,6 +9,7 @@ import {
 import { removeMemberByTrainer } from "../lib/users";
 import { useUserContext } from "../contexts/UserContext";
 import { removeSchedulesWithMember } from "../lib/schedules";
+import { removeMembershipWithMember } from "../lib/membership";
 
 function MemberList({ members, ListHeaderComponent }) {
   const { user } = useUserContext();
@@ -35,6 +36,7 @@ function MemberList({ members, ListHeaderComponent }) {
                     text: "확인",
                     onPress: async () => {
                       removeSchedulesWithMember(user.id, item.id);
+                      removeMembershipWithMember(user.id, item.id);
                       removeMemberByTrainer(user.id, item.id);
                     },
                   },
