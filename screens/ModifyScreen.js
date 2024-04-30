@@ -1,5 +1,5 @@
 import { useNavigation, useRoute } from "@react-navigation/native";
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { StyleSheet, TextInput, View } from "react-native";
 import IconRightButton from "../components/IconRightButton";
 import { updatePost } from "../lib/posts";
@@ -8,6 +8,7 @@ import { updateComment } from "../lib/comments";
 function ModifyScreen() {
   const navigation = useNavigation();
   const { params } = useRoute();
+  const inputRef = useRef(null);
   const [content, setContent] = useState(params.content);
 
   const onSubmit = useCallback(() => {
@@ -33,9 +34,15 @@ function ModifyScreen() {
       headerRight: () => <IconRightButton onPress={onSubmit} name="check" />,
     });
   }, [navigation, onSubmit]);
+
+  useEffect(() => {
+    inputRef.current.focus();
+  }, []);
+
   return (
     <View style={styles.block}>
       <TextInput
+        ref={inputRef}
         style={styles.input}
         multiline={true}
         placeholder="글을 입력하세요."

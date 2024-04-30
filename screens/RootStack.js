@@ -51,7 +51,7 @@ function RootStack() {
           <Stack.Screen
             name="Modify"
             component={ModifyScreen}
-            options={{ title: "게시글 수정" }}
+            options={{ title: "수정" }}
           />
           <Stack.Screen
             name="Setting"
