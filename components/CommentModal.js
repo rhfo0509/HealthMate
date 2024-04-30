@@ -2,15 +2,20 @@ import React, { useState } from "react";
 import { View, StyleSheet, Modal, TextInput } from "react-native";
 import { useUserContext } from "../contexts/UserContext";
 import { useNavigation } from "@react-navigation/native";
-import { createComment } from "../lib/comments";
+import { createComment, createSubComment } from "../lib/comments";
 
-function CommentModal({ showModal, setShowModal, postId }) {
+function CommentModal({ showModal, setShowModal, postId, commentId }) {
   const navigation = useNavigation();
   const { user } = useUserContext();
   const [content, setContent] = useState("");
   const onSubmit = async (content) => {
     setShowModal(false);
-    await createComment({ content, user, postId });
+    // commentId가 있는 경우: 대댓글, commentId가 없는 경우: 댓글
+    if (commentId) {
+      await createSubComment({ content, user, postId, commentId });
+    } else {
+      await createComment({ content, user, postId });
+    }
   };
 
   return (

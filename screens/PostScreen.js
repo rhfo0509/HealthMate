@@ -18,7 +18,7 @@ function PostScreen() {
 
   useEffect(() => {
     getComments(id).then(setComments);
-  }, [showModal]);
+  }, []);
 
   useEffect(() => {
     navigation.setOptions({
@@ -35,6 +35,7 @@ function PostScreen() {
       id={item.id}
       postId={id}
       user={item.user}
+      isSub={false}
     />
   );
 
@@ -62,11 +63,9 @@ function PostScreen() {
         }
       />
       <CommentModal
-        // handleClose={handleClose}
         showModal={showModal}
         setShowModal={setShowModal}
         postId={id}
-        // handleSave={handleSave}
       />
     </View>
   );
