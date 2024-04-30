@@ -95,7 +95,6 @@ function WeeklyCalendarScreen() {
     const selectedMember = members.find(
       (member) => member.id === schedule.memberId
     );
-    console.log(selectedMember);
 
     return {
       id: schedule.id,
