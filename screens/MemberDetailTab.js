@@ -19,7 +19,7 @@ function MemberDetailTab() {
       headerRight: () => (
         <IconRightButton
           name="remember-me"
-          onPress={() => navigation.push("Membership")}
+          onPress={() => navigation.push("Membership", { memberId: member.id })}
         />
       ),
     });
