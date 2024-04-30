@@ -9,7 +9,7 @@ import CommentModal from "../components/CommentModal";
 import { FlatList } from "react-native-gesture-handler";
 import { getSubComments } from "../lib/comments";
 
-function CommentCard({ user, createdAt, id, postId, content, isSub }) {
+function CommentCard({ createdAt, content, id, user, postId, parentId }) {
   const navigation = useNavigation();
   const date = useMemo(
     () => (createdAt ? new Date(createdAt.seconds * 1000) : new Date()),
@@ -27,17 +27,17 @@ function CommentCard({ user, createdAt, id, postId, content, isSub }) {
   const onPress = () => {
     setShowModal(true);
   };
-  // postId가 있으면 댓글, 없으면 게시글
-  const { onPressMore } = useActions({ id, content, postId });
+  // postId가 있으면 댓글, 없으면 게시글 / 부모 댓글(parentId)이 있으면 대댓글, 아니라면 댓글
+  const { onPressMore } = useActions({ id, content, postId, parentId });
 
   const renderItem = ({ item }) => (
     <CommentCard
       createdAt={item.createdAt}
       content={item.content}
       id={item.id}
-      postId={id}
       user={item.user}
-      isSub={true}
+      postId={postId}
+      parentId={id}
     />
   );
 
@@ -51,10 +51,10 @@ function CommentCard({ user, createdAt, id, postId, content, isSub }) {
         ItemSeparatorComponent={() => <View style={styles.separator} />}
         ListHeaderComponent={
           <Pressable
-            style={[styles.block, isSub ? styles.sub : null]}
+            style={[styles.block, parentId ? styles.sub : null]}
             android_ripple={{ color: "#ededed" }}
             onPress={onPress}
-            disabled={isSub ? true : false}
+            disabled={parentId ? true : false}
           >
             <View style={[styles.head, styles.paddingBlock]}>
               <View style={styles.profile}>

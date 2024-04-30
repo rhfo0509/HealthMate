@@ -3,7 +3,7 @@ import React, { useState, useEffect, useCallback, useRef } from "react";
 import { StyleSheet, TextInput, View } from "react-native";
 import IconRightButton from "../components/IconRightButton";
 import { updatePost } from "../lib/posts";
-import { updateComment } from "../lib/comments";
+import { updateComment, updateSubComment } from "../lib/comments";
 
 function ModifyScreen() {
   const navigation = useNavigation();
@@ -12,15 +12,22 @@ function ModifyScreen() {
   const [content, setContent] = useState(params.content);
 
   const onSubmit = useCallback(() => {
-    if (params.postId) {
-      updateComment({
+    if (!params.postId) {
+      updatePost({
+        id: params.id,
+        content,
+      });
+    } else if (params.parentId) {
+      updateSubComment({
         postId: params.postId,
-        commentId: params.id,
+        commentId: params.parentId,
+        subCommentId: params.id,
         content,
       });
     } else {
-      updatePost({
-        id: params.id,
+      updateComment({
+        postId: params.postId,
+        commentId: params.id,
         content,
       });
     }

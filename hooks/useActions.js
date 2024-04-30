@@ -1,20 +1,22 @@
 import { useActionSheet } from "@expo/react-native-action-sheet";
 import { removePost } from "../lib/posts";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { removeComment } from "../lib/comments";
+import { removeComment, removeSubComment } from "../lib/comments";
 
-export default function useActions({ id, content, postId }) {
+export default function useActions({ id, content, postId, parentId }) {
   const { showActionSheetWithOptions } = useActionSheet();
   const navigation = useNavigation();
 
   const edit = () => {
-    navigation.navigate("Modify", { id, content, postId });
+    navigation.navigate("Modify", { id, content, postId, parentId });
   };
   const remove = () => {
-    if (postId) {
-      removeComment({ postId, commentId: id });
-    } else {
+    if (!postId) {
       removePost(id);
+    } else if (parentId) {
+      removeSubComment({ postId, commentId: parentId, subCommentId: id });
+    } else {
+      removeComment({ postId, commentId: id });
     }
   };
 

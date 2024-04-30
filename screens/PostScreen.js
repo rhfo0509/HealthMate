@@ -33,9 +33,9 @@ function PostScreen() {
       createdAt={item.createdAt}
       content={item.content}
       id={item.id}
-      postId={id}
       user={item.user}
-      isSub={false}
+      postId={id}
+      parentId={null}
     />
   );
 
