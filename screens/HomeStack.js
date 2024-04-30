@@ -2,16 +2,18 @@ import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import MyProfileScreen from "./MyProfileScreen";
 import CalendarScreen from "./CalendarScreen";
+import WeeklyCalendarScreen from "./WeeklyCalendarScreen";
 
 const Stack = createNativeStackNavigator();
 
 function HomeStack() {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="HealthMate ··· 일정" component={CalendarScreen} />
+      <Stack.Screen name="Calendar" component={CalendarScreen} />
       <Stack.Screen
-        name="HealthMate ··· 내 프로필"
-        component={MyProfileScreen}
+        name="WeeklyCalendar"
+        component={WeeklyCalendarScreen}
+        options={{ headerBackVisible: false }}
       />
     </Stack.Navigator>
   );

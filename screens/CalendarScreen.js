@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { useFocusEffect } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { Pressable, Text } from "react-native";
 import CalendarView from "../components/CalendarView";
 import AddScheduleButton from "../components/AddScheduleButton";
 import { useUserContext } from "../contexts/UserContext";
@@ -16,6 +17,7 @@ import {
 import { getTrainerSchedules } from "../lib/schedules";
 
 function CalendarScreen() {
+  const navigation = useNavigation();
   const { user } = useUserContext();
   const firestore = getFirestore();
   const schedulesCollection = collection(firestore, "schedules");
@@ -43,6 +45,21 @@ function CalendarScreen() {
       unsubscribe();
     };
   }, []);
+
+  const onPress = () => {
+    navigation.navigate("WeeklyCalendar");
+  };
+
+  useEffect(() => {
+    navigation.setOptions({
+      title: "월간 일정",
+      headerRight: () => (
+        <Pressable onPress={onPress}>
+          <Text style={{ color: "royalblue" }}>주간 일정 보기</Text>
+        </Pressable>
+      ),
+    });
+  }, [navigation]);
 
   // useFocusEffect(
   //   useCallback(() => {
