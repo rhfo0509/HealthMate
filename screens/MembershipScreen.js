@@ -44,6 +44,22 @@ function MembershipScreen() {
     console.log("회원권 변경");
   };
 
+  const onPressPause = () => {
+    // 회원권에 status라는 속성을 두어
+    // 활성화 상태: active, 중단된 상태: suspended, 만료된 상태: expired로 설정
+    console.log("일시중지");
+  };
+
+  const onPressExtend = () => {
+    // 현재 잔여횟수를 보여주고 연장할 횟수를 입력하도록 모달을 보여줌
+    console.log("횟수연장");
+  };
+
+  const onPressChange = () => {
+    // 현재 요일/시간 체크 및 설정 상황을 보여주고 직접 입력하도록 모달을 보여줌
+    console.log("요일/시간변경");
+  };
+
   const showMembershipDays = () => {
     const daysOrder = ["월", "화", "수", "목", "금", "토", "일"];
 
@@ -81,6 +97,29 @@ function MembershipScreen() {
         <Text style={styles.itemText}>등록요일 및 시간</Text>
         {showMembershipDays()}
       </View>
+      <View style={styles.buttons}>
+        <Pressable
+          style={styles.button}
+          android_ripple={{ color: "#ededed" }}
+          onPress={onPressPause}
+        >
+          <Text>일시중지</Text>
+        </Pressable>
+        <Pressable
+          style={styles.button}
+          android_ripple={{ color: "#ededed" }}
+          onPress={onPressExtend}
+        >
+          <Text>횟수연장</Text>
+        </Pressable>
+        <Pressable
+          style={styles.button}
+          android_ripple={{ color: "#ededed" }}
+          onPress={onPressChange}
+        >
+          <Text>요일/시간변경</Text>
+        </Pressable>
+      </View>
     </View>
   );
 }
@@ -103,6 +142,16 @@ const styles = StyleSheet.create({
   itemText: {
     fontSize: 16,
     marginVertical: 8,
+  },
+  buttons: {
+    flexDirection: "row",
+    alignItems: "flex",
+    justifyContent: "space-around",
+  },
+  button: {
+    backgroundColor: "white",
+    paddingVertical: 16,
+    paddingHorizontal: 24,
   },
 });
 

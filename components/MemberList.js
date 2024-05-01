@@ -11,11 +11,27 @@ import { useUserContext } from "../contexts/UserContext";
 import { removeSchedulesWithMember } from "../lib/schedules";
 import { removeMembershipWithMember } from "../lib/membership";
 
-function MemberList({ members, ListHeaderComponent }) {
+function MemberList({ members, memberships, ListHeaderComponent }) {
   const { user } = useUserContext();
+
+  const membersWithStatus = members.map((member) => {
+    const membership = memberships.find(
+      (membership) => membership.memberId === member.id
+    );
+    if (membership) {
+      return {
+        ...member,
+        status: membership.status,
+        count: membership.count,
+        remaining: membership.remaining,
+      };
+    }
+    return member;
+  });
+
   return (
     <SwipeableFlatList
-      data={members}
+      data={membersWithStatus}
       style={styles.block}
       renderItem={({ item }) => <MemberListItem member={item} />}
       keyExtractor={(member) => member.id}

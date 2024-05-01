@@ -5,7 +5,8 @@ import { useNavigation } from "@react-navigation/native";
 import Avatar from "./Avatar";
 
 function MemberListItem({ member }) {
-  const { displayName, birthDate, gender, photoURL } = member;
+  const { displayName, birthDate, gender, photoURL, status, count, remaining } =
+    member;
   const navigation = useNavigation();
 
   const onPress = () => {
@@ -31,11 +32,14 @@ function MemberListItem({ member }) {
     >
       <View style={{ flexDirection: "row", alignItems: "center" }}>
         <Avatar source={photoURL && { uri: photoURL }} />
-        <View style={{ flex: 1 }}>
-          <Text style={styles.text}>{displayName}</Text>
+        <View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
+          <Text style={styles.text}>{displayName} </Text>
+          <Text>
+            ({calculateAge(birthDate)}/{gender === "Male" ? "남" : "여"})
+          </Text>
         </View>
         <Text style={styles.text}>
-          ({calculateAge(birthDate)}/{gender === "Male" ? "남" : "여"})
+          {status === "active" ? `${remaining} / ${count}회 남음` : ""}
         </Text>
       </View>
     </Pressable>

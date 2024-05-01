@@ -8,12 +8,14 @@ import MemberSearchBar from "../components/MemberSearchBar";
 import { useUserContext } from "../contexts/UserContext";
 import IconRightButton from "../components/IconRightButton";
 import AddMemberButton from "../components/AddMemberButton";
+import { getMemberships } from "../lib/membership";
 
 function MyProfileScreen() {
   const navigation = useNavigation();
   const { user } = useUserContext();
   const [members, setMembers] = useState([]);
   const [filteredMembers, setFilteredMembers] = useState([]);
+  const [memberships, setMemberships] = useState([]);
 
   useEffect(() => {
     navigation.setOptions({
@@ -34,7 +36,8 @@ function MyProfileScreen() {
 
   useEffect(() => {
     getMembersByTrainer(user.id).then(setMembers);
-  }, [members]);
+    getMemberships(user.id).then(setMemberships);
+  }, [user.id]);
 
   return (
     <View style={styles.block}>
@@ -57,6 +60,7 @@ function MyProfileScreen() {
           </>
         }
         members={filteredMembers.length > 0 ? filteredMembers : members}
+        memberships={memberships}
       />
       <AddMemberButton />
     </View>
