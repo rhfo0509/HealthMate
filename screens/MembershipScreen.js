@@ -3,7 +3,12 @@ import { Pressable, StyleSheet, View, Text } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { useUserContext } from "../contexts/UserContext";
 import IconRightButton from "../components/IconRightButton";
-import { getMembership } from "../lib/membership";
+import { getMembership, updateMembership } from "../lib/memberships";
+import {
+  createSchedulesWithMembership,
+  removeSchedulesWithMember,
+} from "../lib/schedules";
+import { format } from "date-fns";
 
 function MembershipScreen() {
   const navigation = useNavigation();
@@ -46,8 +51,22 @@ function MembershipScreen() {
 
   const onPressPause = () => {
     // 회원권에 status라는 속성을 두어
-    // 활성화 상태: active, 중단된 상태: suspended, 만료된 상태: expired로 설정
+    // 활성화 상태: active, 중단된 상태: paused, 만료된 상태: expired로 설정
     console.log("일시중지");
+    updateMembership(membership.id, { status: "paused" });
+    removeSchedulesWithMember(user.id, memberId);
+  };
+
+  const onPressResume = () => {
+    console.log("재개하기");
+    updateMembership(membership.id, {
+      status: "active",
+      startDate: format(new Date(), "yyyy-MM-dd"),
+    }).then(() => {
+      getMembership(user.id, memberId)
+        .then(setMembership)
+        .then(() => createSchedulesWithMembership(membership));
+    });
   };
 
   const onPressExtend = () => {
@@ -101,9 +120,13 @@ function MembershipScreen() {
         <Pressable
           style={styles.button}
           android_ripple={{ color: "#ededed" }}
-          onPress={onPressPause}
+          onPress={
+            membership?.status === "active" ? onPressPause : onPressResume
+          }
         >
-          <Text>일시중지</Text>
+          <Text>
+            {membership?.status === "active" ? "일시중지" : "재개하기"}
+          </Text>
         </Pressable>
         <Pressable
           style={styles.button}

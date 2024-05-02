@@ -8,7 +8,14 @@ import MemberSearchBar from "../components/MemberSearchBar";
 import { useUserContext } from "../contexts/UserContext";
 import IconRightButton from "../components/IconRightButton";
 import AddMemberButton from "../components/AddMemberButton";
-import { getMemberships } from "../lib/membership";
+import {
+  getFirestore,
+  collection,
+  query,
+  where,
+  onSnapshot,
+} from "firebase/firestore";
+import { getMemberships } from "../lib/memberships";
 
 function MyProfileScreen() {
   const navigation = useNavigation();
@@ -16,6 +23,8 @@ function MyProfileScreen() {
   const [members, setMembers] = useState([]);
   const [filteredMembers, setFilteredMembers] = useState([]);
   const [memberships, setMemberships] = useState([]);
+  const firestore = getFirestore();
+  const membershipsCollection = collection(firestore, "memberships");
 
   useEffect(() => {
     navigation.setOptions({
@@ -33,6 +42,21 @@ function MyProfileScreen() {
   //     getMembersByTrainer(user.id).then(setMembers);
   //   }, [user.id])
   // );
+
+  // memberships 컬렉션에 변화 발생시
+  useEffect(() => {
+    const q = query(membershipsCollection, where("trainerId", "==", user.id));
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const memberships = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setMemberships(memberships);
+    });
+    return () => {
+      unsubscribe();
+    };
+  }, []);
 
   useEffect(() => {
     getMembersByTrainer(user.id).then(setMembers);

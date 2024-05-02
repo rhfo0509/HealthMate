@@ -39,7 +39,11 @@ function MemberListItem({ member }) {
           </Text>
         </View>
         <Text style={styles.text}>
-          {status === "active" ? `${remaining} / ${count}회 남음` : ""}
+          {status === "active"
+            ? `${remaining} / ${count}회 남음`
+            : status === "paused"
+            ? "중단됨"
+            : "만료됨"}
         </Text>
       </View>
     </Pressable>
