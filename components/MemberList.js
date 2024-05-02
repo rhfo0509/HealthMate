@@ -9,7 +9,7 @@ import {
 import { removeMemberByTrainer } from "../lib/users";
 import { useUserContext } from "../contexts/UserContext";
 import { removeSchedulesWithMember } from "../lib/schedules";
-import { removeMembershipWithMember } from "../lib/membership";
+import { removeMembershipWithMember } from "../lib/memberships";
 
 function MemberList({ members, memberships, ListHeaderComponent }) {
   const { user } = useUserContext();
