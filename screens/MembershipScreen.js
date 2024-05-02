@@ -26,7 +26,7 @@ function MembershipScreen() {
   const route = useRoute();
   const { user } = useUserContext();
   const [membership, setMembership] = useState({});
-  const [membershipCount, setMembershipCount] = useState(0);
+  const [membershipCount, setMembershipCount] = useState("");
   const [membershipDays, setMembershipDays] = useState({
     월: {
       checked: false,
@@ -138,12 +138,12 @@ function MembershipScreen() {
         ),
       });
     });
-    setMembershipCount(0);
+    setMembershipCount("");
     setShowFirst(false);
   };
 
   const onCloseExtend = () => {
-    setMembershipCount(0);
+    setMembershipCount("");
     setShowFirst(false);
   };
 
