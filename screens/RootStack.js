@@ -2,7 +2,8 @@ import React, { useEffect } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import SignInScreen from "./SignInScreen";
 import WelcomeScreen from "./WelcomeScreen";
-import UploadScreen from "./UploadScreen";
+import UploadPostScreen from "./UploadPostScreen";
+import UploadCommentScreen from "./UploadCommentScreen";
 import ModifyScreen from "./ModifyScreen";
 import { useUserContext } from "../contexts/UserContext";
 import MainTab from "./MainTab";
@@ -44,9 +45,14 @@ function RootStack() {
             options={{ headerShown: false }}
           />
           <Stack.Screen
-            name="Upload"
-            component={UploadScreen}
+            name="UploadPost"
+            component={UploadPostScreen}
             options={{ title: "새 게시글" }}
+          />
+          <Stack.Screen
+            name="UploadComment"
+            component={UploadCommentScreen}
+            options={{ title: "새 댓글" }}
           />
           <Stack.Screen
             name="Modify"

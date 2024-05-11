@@ -20,7 +20,7 @@ import {
 } from "firebase/storage";
 import CameraButton from "../components/CameraButton";
 
-function UploadScreen() {
+function UploadPostScreen() {
   const route = useRoute();
   const navigation = useNavigation();
   const { result } = route.params || {};
@@ -120,4 +120,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default UploadScreen;
+export default UploadPostScreen;

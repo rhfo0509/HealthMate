@@ -19,7 +19,7 @@ function CameraButton({ memberId, postType }) {
     if (result.canceled || !result) {
       return;
     }
-    navigation.navigate("Upload", { result, memberId, postType });
+    navigation.navigate("UploadPost", { result, memberId, postType });
   };
 
   const onLaunchCamera = async () => {

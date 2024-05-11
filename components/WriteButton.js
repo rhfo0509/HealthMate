@@ -6,7 +6,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 function WriteButton({ postType, memberId }) {
   const navigation = useNavigation();
   const onPress = () => {
-    navigation.navigate("Upload", { postType, memberId });
+    navigation.navigate("UploadPost", { postType, memberId });
   };
   return (
     <View style={styles.wrapper}>
