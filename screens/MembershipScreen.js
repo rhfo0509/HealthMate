@@ -271,18 +271,20 @@ function MembershipScreen() {
         {showMembershipDays()}
       </View>
       <View style={styles.buttons}>
-        <Pressable
-          style={styles.button}
-          android_ripple={{ color: "#ededed" }}
-          onPress={
-            membership?.status === "active" ? onPressPause : onPressResume
-          }
-        >
-          <Text>
-            {membership?.status === "active" ? "일시중지" : "재개하기"}
-          </Text>
-        </Pressable>
-        {membership?.status === "active" ? (
+        {membership?.status !== "expired" ? (
+          <Pressable
+            style={styles.button}
+            android_ripple={{ color: "#ededed" }}
+            onPress={
+              membership?.status === "active" ? onPressPause : onPressResume
+            }
+          >
+            <Text>
+              {membership?.status === "active" ? "일시중지" : "재개하기"}
+            </Text>
+          </Pressable>
+        ) : null}
+        {membership?.status !== "paused" ? (
           <Pressable
             style={styles.button}
             android_ripple={{ color: "#ededed" }}
