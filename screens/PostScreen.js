@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, Pressable, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
 import PostCard from "../components/PostCard";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import CommentModal from "../components/CommentModal";
 import CommentCard from "../components/CommentCard";
 import IconRightButton from "../components/IconRightButton";
 import { FlatList } from "react-native-gesture-handler";
@@ -10,7 +9,6 @@ import {
   getFirestore,
   collection,
   query,
-  where,
   onSnapshot,
   orderBy,
 } from "firebase/firestore";
@@ -20,7 +18,6 @@ function PostScreen() {
   const route = useRoute();
   const navigation = useNavigation();
 
-  const [showModal, setShowModal] = useState(false);
   const [comments, setComments] = useState([]);
   const { user, photoURL, content, createdAt, id } = route.params;
   const firestore = getFirestore();
@@ -66,7 +63,7 @@ function PostScreen() {
   );
 
   const onPress = () => {
-    setShowModal(true);
+    navigation.navigate("UploadComment", { postId: id });
   };
 
   return (
@@ -87,11 +84,6 @@ function PostScreen() {
             isDetailMode={true}
           />
         }
-      />
-      <CommentModal
-        showModal={showModal}
-        setShowModal={setShowModal}
-        postId={id}
       />
     </View>
   );

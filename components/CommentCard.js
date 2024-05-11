@@ -1,11 +1,10 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { View, StyleSheet, Text, Image, Pressable } from "react-native";
+import { View, StyleSheet, Text, Pressable } from "react-native";
 import Avatar from "./Avatar";
-import { useNavigation, useNavigationState } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import { useUserContext } from "../contexts/UserContext";
 import { MaterialIcons } from "@expo/vector-icons";
 import useActions from "../hooks/useActions";
-import CommentModal from "../components/CommentModal";
 import { FlatList } from "react-native-gesture-handler";
 import { getSubComments } from "../lib/comments";
 
@@ -17,7 +16,6 @@ function CommentCard({ createdAt, content, id, user, postId, parentId }) {
   );
   const { user: me } = useUserContext();
   const isMyComment = me.id === user.id;
-  const [showModal, setShowModal] = useState(false);
   const [subcomments, setSubcomments] = useState([]);
 
   useEffect(() => {
@@ -25,7 +23,7 @@ function CommentCard({ createdAt, content, id, user, postId, parentId }) {
   }, []);
 
   const onPress = () => {
-    setShowModal(true);
+    navigation.navigate("UploadComment", { postId, commentId: id });
   };
   // postId가 있으면 댓글, 없으면 게시글 / 부모 댓글(parentId)이 있으면 대댓글, 아니라면 댓글
   const { onPressMore } = useActions({ id, content, postId, parentId });
@@ -78,12 +76,6 @@ function CommentCard({ createdAt, content, id, user, postId, parentId }) {
             </View>
           </Pressable>
         }
-      />
-      <CommentModal
-        showModal={showModal}
-        setShowModal={setShowModal}
-        postId={postId}
-        commentId={id}
       />
     </View>
   );
