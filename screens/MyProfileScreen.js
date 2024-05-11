@@ -43,6 +43,23 @@ function MyProfileScreen() {
   //   }, [user.id])
   // );
 
+  // members 컬렉션에 변화 발생시
+  useEffect(() => {
+    const unsubscribe = onSnapshot(
+      collection(firestore, `trainers/${user.id}/members`),
+      (snapshot) => {
+        const members = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setMembers(members);
+      }
+    );
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+
   // memberships 컬렉션에 변화 발생시
   useEffect(() => {
     const q = query(membershipsCollection, where("trainerId", "==", user.id));
