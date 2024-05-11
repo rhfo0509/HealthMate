@@ -18,12 +18,21 @@ import {
 } from "../lib/schedules";
 import { addDays, format } from "date-fns";
 import BorderedInput from "../components/BorderedInput";
+import {
+  getFirestore,
+  collection,
+  query,
+  where,
+  onSnapshot,
+} from "firebase/firestore";
+import { getMemberships } from "../lib/memberships";
 
 function MembershipScreen() {
   const [showFirst, setShowFirst] = useState(false);
   const [showSecond, setShowSecond] = useState(false);
   const navigation = useNavigation();
   const route = useRoute();
+  const { memberId } = route.params;
   const { user } = useUserContext();
   const [membership, setMembership] = useState({});
   const [membershipCount, setMembershipCount] = useState("");
@@ -78,18 +87,37 @@ function MembershipScreen() {
       endMinutes: null,
     },
   });
+  const firestore = getFirestore();
+  const membershipsCollection = collection(firestore, "memberships");
 
-  const { memberId } = route.params;
+  // memberships 컬렉션에 변화 발생시
+  useEffect(() => {
+    const q = query(
+      membershipsCollection,
+      where("trainerId", "==", user.id),
+      where("memberId", "==", memberId)
+    );
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const membership = {
+        id: snapshot.docs[0].id,
+        ...snapshot.docs[0].data(),
+      };
+      setMembership(membership);
+    });
+    return () => {
+      unsubscribe();
+    };
+  }, []);
+
+  useEffect(() => {
+    getMembership(user.id, memberId).then(setMembership);
+  }, [user.id, memberId]);
 
   useEffect(() => {
     navigation.setOptions({
       headerRight: () => <IconRightButton onPress={onSubmit} name="check" />,
     });
   }, [navigation, onSubmit]);
-
-  useEffect(() => {
-    getMembership(user.id, memberId).then(setMembership);
-  }, [user.id, memberId]);
 
   const onSubmit = () => {
     console.log("회원권 변경");
@@ -180,8 +208,9 @@ function MembershipScreen() {
       .then(async () => {
         // TODO: 요일 및 시간은 바로 반영되나 횟수가 실시간으로 반영이 되지 않는 문제 해결하기
         const updatedMembership = await getMembership(user.id, memberId);
-        setMembership(updatedMembership);
-        createSchedulesWithMembership(updatedMembership);
+        createSchedulesWithMembership(updatedMembership).then(() =>
+          setMembership(updatedMembership)
+        );
       });
     setShowSecond(false);
   };
