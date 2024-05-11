@@ -5,8 +5,16 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import CommentModal from "../components/CommentModal";
 import CommentCard from "../components/CommentCard";
 import IconRightButton from "../components/IconRightButton";
-import { getComments } from "../lib/comments";
 import { FlatList } from "react-native-gesture-handler";
+import {
+  getFirestore,
+  collection,
+  query,
+  where,
+  onSnapshot,
+  orderBy,
+} from "firebase/firestore";
+import { getComments } from "../lib/comments";
 
 function PostScreen() {
   const route = useRoute();
@@ -15,6 +23,24 @@ function PostScreen() {
   const [showModal, setShowModal] = useState(false);
   const [comments, setComments] = useState([]);
   const { user, photoURL, content, createdAt, id } = route.params;
+  const firestore = getFirestore();
+  const commentsCollection = collection(firestore, `posts/${id}/comments`);
+
+  // comments 컬렉션에 변화 발생시
+  useEffect(() => {
+    const q = query(commentsCollection, orderBy("createdAt", "asc"));
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const comments = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      console.log(comments);
+      setComments(comments);
+    });
+    return () => {
+      unsubscribe();
+    };
+  }, []);
 
   useEffect(() => {
     getComments(id).then(setComments);
