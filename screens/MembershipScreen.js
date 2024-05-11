@@ -16,7 +16,7 @@ import {
   createSchedulesWithMembership,
   removeSchedulesWithMember,
 } from "../lib/schedules";
-import { addDays, format } from "date-fns";
+import { addDays, format, max } from "date-fns";
 import BorderedInput from "../components/BorderedInput";
 import {
   getFirestore,
@@ -153,15 +153,16 @@ function MembershipScreen() {
 
   const onSaveExtend = () => {
     updateMembership(membership.id, {
+      status: "active",
       count: +membership.count + +membershipCount,
       remaining: +membership.remaining + +membershipCount,
     }).then(() => {
-      // TODO: 횟수가 실시간으로 반영이 되지 않는 문제 해결하기
       createSchedulesWithMembership({
         ...membership,
         remaining: membershipCount,
+        // 현재 날짜와 종료일자 중 더 늦은 날짜를 구함
         startDate: format(
-          addDays(new Date(membership.endDate), 1),
+          max([addDays(new Date(membership.endDate), 1), new Date()]),
           "yyyy-MM-dd"
         ),
       });
@@ -206,7 +207,6 @@ function MembershipScreen() {
         updateMembership(membership.id, { days: formatDays });
       })
       .then(async () => {
-        // TODO: 요일 및 시간은 바로 반영되나 횟수가 실시간으로 반영이 되지 않는 문제 해결하기
         const updatedMembership = await getMembership(user.id, memberId);
         createSchedulesWithMembership(updatedMembership).then(() =>
           setMembership(updatedMembership)
@@ -233,15 +233,12 @@ function MembershipScreen() {
   const showMembershipDays = () => {
     const daysOrder = ["월", "화", "수", "목", "금", "토", "일"];
 
-    // membership.days 객체의 키를 배열로 추출
     const daysKeys = Object.keys(membership?.days || {});
 
-    // daysKeys를 daysOrder의 순서대로 정렬
     const sortedDaysKeys = daysKeys.sort((a, b) => {
       return daysOrder.indexOf(a) - daysOrder.indexOf(b);
     });
 
-    // 정렬된 키를 사용하여 요일 및 시간 출력
     return sortedDaysKeys.map((key) => {
       const value = membership?.days[key];
       return (
