@@ -128,10 +128,10 @@ function MembershipScreen() {
       count: +membership.count + +membershipCount,
       remaining: +membership.remaining + +membershipCount,
     }).then(() => {
-      // TODO: createSchedulesWithMembership를 써야 하는데... startDate가 기준이 아닌 endDate가 기준이 되야 함
+      // TODO: 횟수가 실시간으로 반영이 되지 않는 문제 해결하기
       createSchedulesWithMembership({
         ...membership,
-        count: membershipCount,
+        remaining: membershipCount,
         startDate: format(
           addDays(new Date(membership.endDate), 1),
           "yyyy-MM-dd"
@@ -177,10 +177,11 @@ function MembershipScreen() {
         });
         updateMembership(membership.id, { days: formatDays });
       })
-      .then(() => {
-        getMembership(user.id, memberId)
-          .then(setMembership)
-          .then(() => createSchedulesWithMembership(membership));
+      .then(async () => {
+        // TODO: 요일 및 시간은 바로 반영되나 횟수가 실시간으로 반영이 되지 않는 문제 해결하기
+        const updatedMembership = await getMembership(user.id, memberId);
+        setMembership(updatedMembership);
+        createSchedulesWithMembership(updatedMembership);
       });
     setShowSecond(false);
   };
