@@ -5,6 +5,7 @@ import { useNavigation, useNavigationState } from "@react-navigation/native";
 import { useUserContext } from "../contexts/UserContext";
 import { MaterialIcons } from "@expo/vector-icons";
 import useActions from "../hooks/useActions";
+import VideoView from "./VideoView";
 
 function PostCard({ user, URL, content, createdAt, id, isDetailMode }) {
   const navigation = useNavigation();
@@ -28,6 +29,10 @@ function PostCard({ user, URL, content, createdAt, id, isDetailMode }) {
 
   const { onPressMore } = useActions({ id, content });
 
+  const isVideoURL = (URL) => {
+    return /\.(mp4|mov|avi)$/i.test(URL);
+  };
+
   return (
     <View style={styles.block}>
       {!isDetailMode && (
@@ -49,7 +54,9 @@ function PostCard({ user, URL, content, createdAt, id, isDetailMode }) {
         onPress={onPressPost}
         disabled={isDetailMode}
       >
-        {URL && (
+        {URL && isVideoURL(URL) ? (
+          <Video URL={URL} />
+        ) : (
           <Image
             source={{ uri: URL }}
             style={styles.image}
