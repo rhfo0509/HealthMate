@@ -6,7 +6,7 @@ import * as ImagePicker from "expo-image-picker";
 import { useNavigation } from "@react-navigation/native";
 
 const imagePickerOption = {
-  mediaTypes: ImagePicker.MediaTypeOptions.Images,
+  mediaTypes: ImagePicker.MediaTypeOptions.All,
   maxWidth: 768,
   maxHeight: 768,
 };
@@ -27,18 +27,17 @@ function CameraButton({ memberId, postType }) {
     onPickImage(result);
   };
 
-  const onLaunchImageLibrary = async () => {
+  const onLaunchLibrary = async () => {
     const result = await ImagePicker.launchImageLibraryAsync(imagePickerOption);
     onPickImage(result);
   };
 
   const onPress = () => {
-    const options = ["카메라로 촬영하기", "사진 선택하기", "취소"];
+    const options = ["카메라로 촬영하기", "사진/동영상 선택하기", "취소"];
     const cancelButtonIndex = 2;
 
     showActionSheetWithOptions(
       {
-        title: "사진 업로드",
         options,
         cancelButtonIndex,
       },
@@ -46,7 +45,7 @@ function CameraButton({ memberId, postType }) {
         if (selectedIndex === 0) {
           onLaunchCamera();
         } else if (selectedIndex === 1) {
-          onLaunchImageLibrary();
+          onLaunchLibrary();
         }
       }
     );
