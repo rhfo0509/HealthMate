@@ -6,6 +6,13 @@ import { useUserContext } from "../contexts/UserContext";
 import { MaterialIcons } from "@expo/vector-icons";
 import useActions from "../hooks/useActions";
 import { FlatList } from "react-native-gesture-handler";
+import {
+  getFirestore,
+  collection,
+  query,
+  onSnapshot,
+  orderBy,
+} from "firebase/firestore";
 import { getSubComments } from "../lib/comments";
 
 function CommentCard({ createdAt, content, id, user, postId, parentId }) {
@@ -17,9 +24,33 @@ function CommentCard({ createdAt, content, id, user, postId, parentId }) {
   const { user: me } = useUserContext();
   const isMyComment = me.id === user.id;
   const [subcomments, setSubcomments] = useState([]);
+  const firestore = getFirestore();
+  const subcommentsCollection = collection(
+    firestore,
+    `posts/${postId}/comments/${id}/subcomments`
+  );
+
+  // subcomments 컬렉션에 변화 발생시
+  useEffect(() => {
+    const q = query(subcommentsCollection, orderBy("createdAt", "asc"));
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const subcomments = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setSubcomments(subcomments);
+    });
+    return () => {
+      unsubscribe();
+    };
+  }, []);
 
   useEffect(() => {
-    getSubComments({ postId, commentId: id }).then(setSubcomments);
+    getSubComments({ postId, commentId: id }).then((subcomments) => {
+      if (subcomments.length) {
+        setSubcomments(subcomments);
+      }
+    });
   }, []);
 
   const onPress = () => {
