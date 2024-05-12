@@ -1,6 +1,7 @@
-import React, { useEffect, useState, useCallback } from "react";
-import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import React, { useEffect, useState } from "react";
+import { useNavigation } from "@react-navigation/native";
 import { StyleSheet, View, Text } from "react-native";
+import RNPickerSelect from "react-native-picker-select";
 import { getMembersByTrainer } from "../lib/users";
 import Avatar from "../components/Avatar";
 import MemberList from "../components/MemberList";
@@ -23,6 +24,7 @@ function MyProfileScreen() {
   const [members, setMembers] = useState([]);
   const [filteredMembers, setFilteredMembers] = useState([]);
   const [memberships, setMemberships] = useState([]);
+  const [sortBy, setSortBy] = useState("name");
   const firestore = getFirestore();
   const membershipsCollection = collection(firestore, "memberships");
 
@@ -36,12 +38,6 @@ function MyProfileScreen() {
       ),
     });
   }, [navigation, user]);
-
-  // useFocusEffect(
-  //   useCallback(() => {
-  //     getMembersByTrainer(user.id).then(setMembers);
-  //   }, [user.id])
-  // );
 
   // members 컬렉션에 변화 발생시
   useEffect(() => {
@@ -75,6 +71,28 @@ function MyProfileScreen() {
     };
   }, []);
 
+  // sortBy state에 변화 발생시
+  useEffect(() => {
+    let sortedMembers = [...members];
+    let sortedMemberships = [...memberships];
+
+    if (sortBy === "name") {
+      sortedMembers.sort((a, b) => a.displayName.localeCompare(b.displayName));
+      console.log(sortedMembers);
+      setMembers(sortedMembers);
+    }
+    if (sortBy === "remaining") {
+      sortedMemberships.sort((a, b) => a.remaining - b.remaining);
+      const sortedMemberIds = sortedMemberships.map(
+        (membership) => membership.memberId
+      );
+      const sortedMembersWithStatus = sortedMemberIds.map((memberId) =>
+        members.find((member) => member.id === memberId)
+      );
+      setMembers(sortedMembersWithStatus);
+    }
+  }, [sortBy]);
+
   useEffect(() => {
     getMembersByTrainer(user.id).then(setMembers);
     getMemberships(user.id).then(setMemberships);
@@ -97,6 +115,20 @@ function MyProfileScreen() {
                 members={members}
                 setFilteredMembers={setFilteredMembers}
               />
+              <View style={styles.select}>
+                <RNPickerSelect
+                  value={sortBy}
+                  onValueChange={(value) => setSortBy(value)}
+                  items={[
+                    { label: "이름순", value: "name" },
+                    { label: "잔여횟수순", value: "remaining" },
+                  ]}
+                  placeholder={{
+                    label: "정렬기준 선택",
+                    color: "#ced4da",
+                  }}
+                />
+              </View>
             </View>
           </>
         }
@@ -118,7 +150,7 @@ const styles = StyleSheet.create({
   },
   userInfo: {
     paddingTop: 40,
-    paddingBottom: 40,
+    paddingBottom: 20,
     alignItems: "center",
   },
   username: {
@@ -127,8 +159,11 @@ const styles = StyleSheet.create({
     color: "#424242",
   },
   listHeader: {
-    marginVertical: 10,
+    marginVertical: 5,
     marginHorizontal: 5,
+  },
+  select: {
+    width: 150,
   },
 });
 
