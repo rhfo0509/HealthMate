@@ -46,6 +46,18 @@ function CalendarScreen() {
     };
   }, []);
 
+  // 날짜별 -> 시간별로 일정 정렬
+  useEffect(() => {
+    scheduleList.sort((a, b) => {
+      // 먼저 날짜를 비교하여 오름차순으로 정렬
+      if (a.date < b.date) return -1;
+      if (a.date > b.date) return 1;
+      // 날짜가 동일한 경우 시작시간을 비교하여 오름차순으로 정렬
+      if (a.startTime < b.startTime) return -1;
+      if (a.startTime > b.startTime) return 1;
+    });
+  }, [scheduleList]);
+
   const onPress = () => {
     navigation.navigate("WeeklyCalendar");
   };
