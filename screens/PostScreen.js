@@ -31,7 +31,6 @@ function PostScreen() {
         id: doc.id,
         ...doc.data(),
       }));
-      console.log(comments);
       setComments(comments);
     });
     return () => {
@@ -55,10 +54,10 @@ function PostScreen() {
     <CommentCard
       createdAt={item.createdAt}
       content={item.content}
-      id={item.id}
+      id={item.id} // 댓글 id
       user={item.user}
-      postId={id}
-      parentId={null}
+      postId={id} // 게시글 id
+      parentId={null} // 대댓글이 아니므로 null
     />
   );
 

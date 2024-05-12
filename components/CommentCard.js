@@ -32,10 +32,10 @@ function CommentCard({ createdAt, content, id, user, postId, parentId }) {
     <CommentCard
       createdAt={item.createdAt}
       content={item.content}
-      id={item.id}
+      id={item.id} // 대댓글 id
       user={item.user}
-      postId={postId}
-      parentId={id}
+      postId={postId} // 게시글 id
+      parentId={id} // 댓글 id
     />
   );
 
