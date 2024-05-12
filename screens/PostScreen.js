@@ -19,7 +19,7 @@ function PostScreen() {
   const navigation = useNavigation();
 
   const [comments, setComments] = useState([]);
-  const { user, photoURL, content, createdAt, id } = route.params;
+  const { user, URL, content, createdAt, id } = route.params;
   const firestore = getFirestore();
   const commentsCollection = collection(firestore, `posts/${id}/comments`);
 
@@ -79,7 +79,7 @@ function PostScreen() {
             content={content}
             id={id}
             user={user}
-            photoURL={photoURL}
+            URL={URL}
             isDetailMode={true}
           />
         }

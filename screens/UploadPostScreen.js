@@ -34,23 +34,23 @@ function UploadPostScreen() {
 
   const onSubmit = useCallback(async () => {
     navigation.pop();
-    let photoURL = null;
+    let URL = null;
 
     // 사진 없이 글만 등록한 경우
     if (!result) {
-      createPost({ content, photoURL, user, memberId, postType });
+      createPost({ content, URL, user, memberId, postType });
       return;
     }
 
-    // 사진과 함께 등록한 경우
+    // 사진이나 동영상과 함께 등록한 경우
     const asset = result.assets[0];
     const extension = asset.uri.split(".").pop();
-    const storageRef = ref(storage, `/photo/${user.id}/${v4()}.${extension}`);
+    const storageRef = ref(storage, `/asset/${user.id}/${v4()}.${extension}`);
     const post = await fetch(asset.uri);
     const postBlob = await post.blob();
     await uploadBytesResumable(storageRef, postBlob).then(async (snapshot) => {
-      photoURL = await getDownloadURL(storageRef);
-      createPost({ content, photoURL, user, memberId, postType });
+      URL = await getDownloadURL(storageRef);
+      createPost({ content, URL, user, memberId, postType });
     });
   }, [result, user, content, navigation]);
 

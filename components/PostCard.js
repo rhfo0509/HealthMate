@@ -6,7 +6,7 @@ import { useUserContext } from "../contexts/UserContext";
 import { MaterialIcons } from "@expo/vector-icons";
 import useActions from "../hooks/useActions";
 
-function PostCard({ user, photoURL, content, createdAt, id, isDetailMode }) {
+function PostCard({ user, URL, content, createdAt, id, isDetailMode }) {
   const navigation = useNavigation();
   const date = useMemo(
     () => (createdAt ? new Date(createdAt.seconds * 1000) : new Date()),
@@ -18,7 +18,7 @@ function PostCard({ user, photoURL, content, createdAt, id, isDetailMode }) {
   const onPressPost = () => {
     navigation.navigate("Post", {
       user,
-      photoURL,
+      URL,
       content,
       createdAt,
       id,
@@ -49,9 +49,9 @@ function PostCard({ user, photoURL, content, createdAt, id, isDetailMode }) {
         onPress={onPressPost}
         disabled={isDetailMode}
       >
-        {photoURL && (
+        {URL && (
           <Image
-            source={{ uri: photoURL }}
+            source={{ uri: URL }}
             style={styles.image}
             resizeMethod="resize"
             resizeMode="cover"

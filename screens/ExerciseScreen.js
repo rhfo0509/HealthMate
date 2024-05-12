@@ -96,7 +96,7 @@ const renderItem = ({ item }) => (
     content={item.content}
     id={item.id}
     user={item.user}
-    photoURL={item.photoURL}
+    URL={item.URL}
     isDetailMode={false}
   />
 );
