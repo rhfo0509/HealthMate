@@ -78,7 +78,6 @@ function MyProfileScreen() {
 
     if (sortBy === "name") {
       sortedMembers.sort((a, b) => a.displayName.localeCompare(b.displayName));
-      console.log(sortedMembers);
       setMembers(sortedMembers);
     }
     if (sortBy === "remaining") {
