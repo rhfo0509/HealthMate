@@ -1,7 +1,7 @@
-import React, { useMemo } from "react";
-import { View, StyleSheet, Text, Image, Pressable } from "react-native";
+import React, { useMemo, useState } from "react";
+import { View, StyleSheet, Text, Image, Pressable, Modal } from "react-native";
 import Avatar from "./Avatar";
-import { useNavigation, useNavigationState } from "@react-navigation/native";
+import { useNavigation } from "@react-navigation/native";
 import { useUserContext } from "../contexts/UserContext";
 import { MaterialIcons } from "@expo/vector-icons";
 import useActions from "../hooks/useActions";
@@ -15,6 +15,7 @@ function PostCard({ user, URL, content, createdAt, id, isDetailMode }) {
   );
   const { user: me } = useUserContext();
   const isMyPost = me.id === user.id;
+  const [show, setShow] = useState(false);
 
   const onPressPost = () => {
     navigation.navigate("Post", {
@@ -29,8 +30,12 @@ function PostCard({ user, URL, content, createdAt, id, isDetailMode }) {
 
   const { onPressMore } = useActions({ id, content });
 
+  const onPressImage = () => {
+    setShow(true);
+  };
+
   const isVideoURL = (URL) => {
-    return /\.(mp4|mov|avi)$/i.test(URL);
+    return /\.(mp4|mov|avi)/i.test(URL);
   };
 
   return (
@@ -49,21 +54,39 @@ function PostCard({ user, URL, content, createdAt, id, isDetailMode }) {
           )}
         </View>
       )}
+      {URL && isVideoURL(URL) ? (
+        <VideoView URL={URL} />
+      ) : (
+        <View>
+          <Pressable onPress={onPressImage}>
+            <Image
+              source={{ uri: URL }}
+              style={styles.image}
+              resizeMethod="resize"
+              resizeMode="contain"
+            />
+          </Pressable>
+          <Modal
+            visible={show}
+            animationType="fade"
+            onRequestClose={() => setShow(false)}
+          >
+            <View style={styles.imageViewer}>
+              <Image
+                source={{ uri: URL }}
+                style={{ width: "100%", height: "100%" }}
+                resizeMethod="resize"
+                resizeMode="contain"
+              />
+            </View>
+          </Modal>
+        </View>
+      )}
       <Pressable
         android_ripple={{ color: "#ededed" }}
         onPress={onPressPost}
         disabled={isDetailMode}
       >
-        {URL && isVideoURL(URL) ? (
-          <Video URL={URL} />
-        ) : (
-          <Image
-            source={{ uri: URL }}
-            style={styles.image}
-            resizeMethod="resize"
-            resizeMode="cover"
-          />
-        )}
         <View style={styles.paddingBlock}>
           <Text style={styles.content}>{content}</Text>
           <Text date={date} style={styles.date}>
@@ -100,9 +123,8 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   image: {
-    backgroundColor: "#bdbdbd",
     width: "100%",
-    aspectRatio: 1,
+    aspectRatio: 16 / 9,
     marginBottom: 16,
   },
   content: {
@@ -114,6 +136,9 @@ const styles = StyleSheet.create({
     color: "#757575",
     fontSize: 12,
     lineHeight: 18,
+  },
+  imageViewer: {
+    padding: 16,
   },
 });
 
