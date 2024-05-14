@@ -25,7 +25,6 @@ import {
   where,
   onSnapshot,
 } from "firebase/firestore";
-import { getMemberships } from "../lib/memberships";
 
 function MembershipScreen() {
   const [showFirst, setShowFirst] = useState(false);

@@ -16,7 +16,7 @@ import {
   where,
   onSnapshot,
 } from "firebase/firestore";
-import { getMemberships } from "../lib/memberships";
+import { getMembershipsByTrainer } from "../lib/memberships";
 
 function MyProfileScreen() {
   const navigation = useNavigation();
@@ -94,7 +94,7 @@ function MyProfileScreen() {
 
   useEffect(() => {
     getMembersByTrainer(user.id).then(setMembers);
-    getMemberships(user.id).then(setMemberships);
+    getMembershipsByTrainer(user.id).then(setMemberships);
   }, [user.id]);
 
   return (
