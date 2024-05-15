@@ -16,9 +16,9 @@ import {
 import { getMembershipsByTrainer } from "../lib/memberships";
 
 function TrainerProfile({ user }) {
-  const [members, setMembers] = useState([]);
-  const [filteredMembers, setFilteredMembers] = useState([]);
-  const [memberships, setMemberships] = useState([]);
+  const [memberList, setMemberList] = useState([]);
+  const [filteredMemberList, setFilteredMemberList] = useState([]);
+  const [membershipList, setMembershipList] = useState([]);
   const [sortBy, setSortBy] = useState("name");
   const firestore = getFirestore();
   const membershipsCollection = collection(firestore, "memberships");
@@ -32,7 +32,7 @@ function TrainerProfile({ user }) {
           id: doc.id,
           ...doc.data(),
         }));
-        setMembers(members);
+        setMemberList(members);
       }
     );
     return () => {
@@ -48,7 +48,7 @@ function TrainerProfile({ user }) {
         id: doc.id,
         ...doc.data(),
       }));
-      setMemberships(memberships);
+      setMembershipList(memberships);
     });
     return () => {
       unsubscribe();
@@ -57,12 +57,12 @@ function TrainerProfile({ user }) {
 
   // sortBy state에 변화 발생시
   useEffect(() => {
-    let sortedMembers = [...members];
-    let sortedMemberships = [...memberships];
+    let sortedMembers = [...memberList];
+    let sortedMemberships = [...membershipList];
 
     if (sortBy === "name") {
       sortedMembers.sort((a, b) => a.displayName.localeCompare(b.displayName));
-      setMembers(sortedMembers);
+      setMemberList(sortedMembers);
     }
     if (sortBy === "remaining") {
       sortedMemberships.sort((a, b) => a.remaining - b.remaining);
@@ -70,15 +70,15 @@ function TrainerProfile({ user }) {
         (membership) => membership.memberId
       );
       const sortedMembersWithStatus = sortedMemberIds.map((memberId) =>
-        members.find((member) => member.id === memberId)
+        memberList.find((member) => member.id === memberId)
       );
-      setMembers(sortedMembersWithStatus);
+      setMemberList(sortedMembersWithStatus);
     }
   }, [sortBy]);
 
   useEffect(() => {
-    getMembersByTrainer(user.id).then(setMembers);
-    getMembershipsByTrainer(user.id).then(setMemberships);
+    getMembersByTrainer(user.id).then(setMemberList);
+    getMembershipsByTrainer(user.id).then(setMembershipList);
   }, [user.id]);
 
   return (
@@ -95,8 +95,8 @@ function TrainerProfile({ user }) {
             </View>
             <View style={styles.listHeader}>
               <MemberSearchBar
-                members={members}
-                setFilteredMembers={setFilteredMembers}
+                members={memberList}
+                setFilteredMembers={setFilteredMemberList}
               />
               <View style={styles.select}>
                 <RNPickerSelect
@@ -115,8 +115,10 @@ function TrainerProfile({ user }) {
             </View>
           </>
         }
-        members={filteredMembers.length > 0 ? filteredMembers : members}
-        memberships={memberships}
+        members={
+          filteredMemberList.length > 0 ? filteredMemberList : memberList
+        }
+        memberships={membershipList}
       />
       <AddMemberButton />
     </View>
