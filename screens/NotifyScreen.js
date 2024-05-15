@@ -1,39 +1,48 @@
-import React from "react";
-import { Pressable, StyleSheet, View, Text } from "react-native";
+import React, { useState, useEffect } from "react";
+import { Pressable, StyleSheet, View, FlatList } from "react-native";
 import { useUserContext } from "../contexts/UserContext";
-import { logOut } from "../lib/auth";
+import { getNotifications } from "../lib/notifications";
+import NotificationCard from "../components/NotificationCard";
 
 function NotifyScreen() {
-  const { setUser } = useUserContext();
+  const { user } = useUserContext();
+  const [notifications, setNotifications] = useState([]);
 
-  const onLogout = async () => {
-    await logOut();
-    setUser(null);
-  };
+  useEffect(() => {
+    getNotifications(user.id).then(setNotifications);
+  }, []);
+
   return (
     <View style={styles.block}>
-      <Pressable onPress={onLogout} style={({ pressed }) => [styles.item]}>
-        <Text style={styles.itemText}>로그아웃</Text>
-      </Pressable>
+      <FlatList
+        inverted
+        data={notifications}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id}
+        ItemSeparatorComponent={() => <View style={styles.separator} />}
+      />
     </View>
   );
 }
 
+const renderItem = ({ item }) => (
+  <NotificationCard
+    createdAt={item.createdAt}
+    message={item.message}
+    id={item.id}
+    userId={item.receiverId}
+    data={item.data}
+  />
+);
+
 const styles = StyleSheet.create({
   block: {
     flex: 1,
-    paddingTop: 32,
   },
-  item: {
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
-    borderColor: "#eeeeee",
-    backgroundColor: "white",
-    paddingVertical: 16,
-    paddingHorizontal: 12,
-  },
-  itemText: {
-    fontSize: 16,
+  separator: {
+    backgroundColor: "#e0e0e0",
+    height: 1,
+    width: "100%",
   },
 });
 

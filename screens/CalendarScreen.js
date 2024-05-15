@@ -15,6 +15,7 @@ import {
   // limit,
 } from "firebase/firestore";
 import { getTrainerSchedules } from "../lib/schedules";
+import IconRightButton from "../components/IconRightButton";
 
 function CalendarScreen() {
   const navigation = useNavigation();
@@ -58,17 +59,27 @@ function CalendarScreen() {
     });
   }, [scheduleList]);
 
-  const onPress = () => {
+  const onPressSchedule = () => {
     navigation.navigate("WeeklyCalendar");
+  };
+
+  const onPressNotification = () => {
+    navigation.navigate("Notify");
   };
 
   useEffect(() => {
     navigation.setOptions({
       title: "월간 일정",
       headerRight: () => (
-        <Pressable onPress={onPress}>
-          <Text style={{ color: "royalblue" }}>주간 일정 보기</Text>
-        </Pressable>
+        <>
+          <Pressable onPress={onPressSchedule}>
+            <Text style={{ color: "royalblue" }}>주간 일정 보기</Text>
+          </Pressable>
+          <IconRightButton
+            onPress={onPressNotification}
+            name="notifications-none"
+          />
+        </>
       ),
     });
   }, [navigation]);
