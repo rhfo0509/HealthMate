@@ -3,6 +3,7 @@ import { Pressable, StyleSheet, View, Text, Modal, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 import PagerView from "react-native-pager-view";
+import { MaterialIcons } from "@expo/vector-icons";
 import { useUserContext } from "../contexts/UserContext";
 import Avatar from "../components/Avatar";
 import { getMemberSchedules } from "../lib/schedules";
@@ -211,11 +212,20 @@ function MemberHomeScreen() {
       <View style={styles.title}>
         <Text style={styles.titleText}>나의 회원권</Text>
       </View>
-      <PagerView style={styles.pagerView} initialPage={0}>
-        {membershipList.map((membership, index) => (
-          <MembershipCard membership={membership} key={index} />
-        ))}
-      </PagerView>
+      <View style={{ flex: 1, flexDirection: "row" }}>
+        <View style={{ alignSelf: "center" }}>
+          <MaterialIcons name="chevron-left" size={24} color="black" />
+        </View>
+        <PagerView style={styles.pagerView} initialPage={0}>
+          {membershipList.map((membership, index) => (
+            <MembershipCard membership={membership} key={index} />
+          ))}
+        </PagerView>
+        <View style={{ alignSelf: "center" }}>
+          <MaterialIcons name="chevron-right" size={24} color="black" />
+        </View>
+      </View>
+
       <View style={styles.title}>
         <Text style={styles.titleText}>다가오는 일정</Text>
       </View>
@@ -438,6 +448,8 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    marginTop: 24,
+    marginHorizontal: 24,
   },
   block: {
     flex: 1,
