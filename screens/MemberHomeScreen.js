@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Pressable, StyleSheet, View, Text, Modal, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
+import PagerView from "react-native-pager-view";
 import { useUserContext } from "../contexts/UserContext";
 import Avatar from "../components/Avatar";
 import { getMemberSchedules } from "../lib/schedules";
@@ -12,6 +13,7 @@ import { getUser } from "../lib/users";
 import IconRightButton from "../components/IconRightButton";
 import { TextInput } from "react-native";
 import { createNotification } from "../lib/notifications";
+import MembershipCard from "../components/MembershipCard";
 
 function MemberHomeScreen() {
   const navigation = useNavigation();
@@ -209,44 +211,11 @@ function MemberHomeScreen() {
       <View style={styles.title}>
         <Text style={styles.titleText}>나의 회원권</Text>
       </View>
-      {membershipList.map((membership) => (
-        <View key={membership.id} style={styles.item}>
-          <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <Avatar
-              source={
-                membership.trainer.photoURL && {
-                  uri: membership.trainer.photoURL,
-                }
-              }
-              size={36}
-            />
-            <Text style={{ fontSize: 20 }}>
-              {" "}
-              {membership.trainer.displayName} 트레이너
-            </Text>
-          </View>
-          <View>
-            <Text style={styles.itemText}>
-              기간: {membership.startDate} ~ {membership.endDate}
-            </Text>
-            <Text style={styles.itemText}>
-              세션: {membership.count - membership.remaining + 1}회 /{" "}
-              {membership.count}회
-            </Text>
-            <Text style={styles.itemText}>
-              계약일: {format(membership.createdAt.toDate(), "yyyy-MM-dd")}
-            </Text>
-            <Text style={styles.itemText}>
-              상태:{" "}
-              {membership.status === "active"
-                ? "진행중"
-                : membership.status === "paused"
-                ? "중단됨"
-                : "만료됨"}
-            </Text>
-          </View>
-        </View>
-      ))}
+      <PagerView style={styles.pagerView} initialPage={0}>
+        {membershipList.map((membership, index) => (
+          <MembershipCard membership={membership} key={index} />
+        ))}
+      </PagerView>
       <View style={styles.title}>
         <Text style={styles.titleText}>다가오는 일정</Text>
       </View>
@@ -465,6 +434,11 @@ function MemberHomeScreen() {
 }
 
 const styles = StyleSheet.create({
+  pagerView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
   block: {
     flex: 1,
     justifyContent: "space-between",
