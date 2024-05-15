@@ -6,15 +6,16 @@ import { useUserContext } from "../contexts/UserContext";
 import Avatar from "../components/Avatar";
 import { getMemberSchedules } from "../lib/schedules";
 import { getMembershipsByMember } from "../lib/memberships";
-import { format, isAfter } from "date-fns";
+import { addMinutes, differenceInMinutes, format, isAfter } from "date-fns";
 import { ko } from "date-fns/locale";
 import { getUser } from "../lib/users";
 import IconRightButton from "../components/IconRightButton";
 import { TextInput } from "react-native";
+import { createNotification } from "../lib/notifications";
 
 function MemberHomeScreen() {
   const navigation = useNavigation();
-  const { user, setUser } = useUserContext();
+  const { user } = useUserContext();
   const [scheduleList, setScheduleList] = useState([]);
   const [membershipList, setMembershipList] = useState([]);
   const [showFirst, setShowFirst] = useState([false, false, false]);
@@ -66,7 +67,7 @@ function MemberHomeScreen() {
   }, [navigation]);
 
   const onPress = () => {
-    console.log("onPress");
+    navigation.navigate("Notify");
   };
 
   const onPressFirst = (scheduleIndex) => {
@@ -94,8 +95,30 @@ function MemberHomeScreen() {
     setShowFirst([false, false, false]);
   };
 
-  const onSaveFirst = () => {
-    // date나 time이 null일 때에 대한 추가 처리가 필요
+  const onSaveFirst = (schedule) => {
+    const receiverId = schedule.trainerId;
+    const data = {
+      reason: reason,
+      scheduleId: schedule.id,
+      updatedField: {
+        date: date ? date : schedule.date,
+        startTime: time ? time : schedule.startTime,
+        endTime: time
+          ? format(
+              addMinutes(
+                new Date(schedule.date + "T" + schedule.endTime),
+                differenceInMinutes(
+                  new Date(schedule.date + "T" + time),
+                  new Date(schedule.date + "T" + schedule.startTime)
+                )
+              ),
+              "HH:mm"
+            )
+          : schedule.endTime,
+      },
+    };
+    const message = `${user.displayName}님이 ${schedule.date} ${schedule.startTime} ~ ${schedule.endTime} 에서 ${data.updatedField.date} ${data.updatedField.startTime} ~ ${data.updatedField.endTime} 으로 일정 변경을 신청하였습니다.`;
+    createNotification(receiverId, message, data);
     setReason("");
     setDate(null);
     setTime(null);
@@ -107,8 +130,14 @@ function MemberHomeScreen() {
     setShowSecond([false, false, false]);
   };
 
-  const onSaveSecond = () => {
-    console.log(reason);
+  const onSaveSecond = (schedule) => {
+    const receiverId = schedule.trainerId;
+    const data = {
+      reason: reason,
+      scheduleId: schedule.id,
+    };
+    const message = `${user.displayName}님이 ${schedule.date} ${schedule.startTime} ~ ${schedule.endTime} 일정 삭제를 신청하였습니다.`;
+    createNotification(receiverId, message, data);
     setReason("");
     setShowSecond([false, false, false]);
   };
@@ -303,7 +332,10 @@ function MemberHomeScreen() {
                       right: 10,
                     }}
                   >
-                    <Pressable onPress={onSaveFirst} style={{ padding: 10 }}>
+                    <Pressable
+                      onPress={() => onSaveFirst(schedule)}
+                      style={{ padding: 10 }}
+                    >
                       <Text
                         style={{
                           fontSize: 16,
@@ -349,7 +381,7 @@ function MemberHomeScreen() {
                   <View style={{ flexDirection: "row", alignItems: "center" }}>
                     <TextInput
                       style={styles.input}
-                      placeholder="변경 사유를 입력하세요."
+                      placeholder="취소 사유를 입력하세요."
                       value={reason}
                       onChangeText={setReason}
                     />
@@ -362,7 +394,10 @@ function MemberHomeScreen() {
                       right: 10,
                     }}
                   >
-                    <Pressable onPress={onSaveSecond} style={{ padding: 10 }}>
+                    <Pressable
+                      onPress={() => onSaveSecond(schedule)}
+                      style={{ padding: 10 }}
+                    >
                       <Text
                         style={{
                           fontSize: 16,
