@@ -96,6 +96,7 @@ function MemberHomeScreen() {
   };
 
   const onSaveFirst = (schedule) => {
+    const senderId = schedule.memberId;
     const receiverId = schedule.trainerId;
     const data = {
       reason: reason,
@@ -118,7 +119,7 @@ function MemberHomeScreen() {
       },
     };
     const message = `${user.displayName}님이 ${schedule.date} ${schedule.startTime} ~ ${schedule.endTime} 에서 ${data.updatedField.date} ${data.updatedField.startTime} ~ ${data.updatedField.endTime} 으로 일정 변경을 신청하였습니다.`;
-    createNotification(receiverId, message, data);
+    createNotification({ senderId, receiverId, message, data });
     setReason("");
     setDate(null);
     setTime(null);
@@ -131,13 +132,14 @@ function MemberHomeScreen() {
   };
 
   const onSaveSecond = (schedule) => {
+    const senderId = schedule.memberId;
     const receiverId = schedule.trainerId;
     const data = {
       reason: reason,
       scheduleId: schedule.id,
     };
     const message = `${user.displayName}님이 ${schedule.date} ${schedule.startTime} ~ ${schedule.endTime} 일정 삭제를 신청하였습니다.`;
-    createNotification(receiverId, message, data);
+    createNotification({ senderId, receiverId, message, data });
     setReason("");
     setShowSecond([false, false, false]);
   };
@@ -433,6 +435,7 @@ function MemberHomeScreen() {
 const styles = StyleSheet.create({
   block: {
     flex: 1,
+    justifyContent: "space-between",
   },
   title: {
     backgroundColor: "white",

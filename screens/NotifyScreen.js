@@ -3,10 +3,39 @@ import { Pressable, StyleSheet, View, FlatList } from "react-native";
 import { useUserContext } from "../contexts/UserContext";
 import { getNotifications } from "../lib/notifications";
 import NotificationCard from "../components/NotificationCard";
+import {
+  getFirestore,
+  collection,
+  query,
+  onSnapshot,
+  orderBy,
+  where,
+} from "firebase/firestore";
 
 function NotifyScreen() {
   const { user } = useUserContext();
   const [notifications, setNotifications] = useState([]);
+  const firestore = getFirestore();
+  const notificationsCollection = collection(firestore, "notifications");
+
+  // notifications 컬렉션에 변화 발생시
+  useEffect(() => {
+    const q = query(
+      notificationsCollection,
+      orderBy("createdAt", "desc"),
+      where("receiverId", "==", user.id)
+    );
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const notifications = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setNotifications(notifications);
+    });
+    return () => {
+      unsubscribe();
+    };
+  }, []);
 
   useEffect(() => {
     getNotifications(user.id).then(setNotifications);
@@ -30,8 +59,10 @@ const renderItem = ({ item }) => (
     createdAt={item.createdAt}
     message={item.message}
     id={item.id}
-    userId={item.receiverId}
+    senderId={item.senderId}
+    receiverId={item.receiverId}
     data={item.data}
+    clicked={item.clicked}
   />
 );
 
