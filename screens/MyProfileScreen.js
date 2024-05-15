@@ -20,6 +20,7 @@ function MyProfileScreen() {
 
   useEffect(() => {
     navigation.setOptions({
+      title: "내 프로필",
       headerRight: () => (
         <IconRightButton
           name="settings"
