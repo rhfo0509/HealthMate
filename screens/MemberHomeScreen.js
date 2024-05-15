@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Pressable, StyleSheet, View, Text, Modal } from "react-native";
+import { Pressable, StyleSheet, View, Text, Modal, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 import { useUserContext } from "../contexts/UserContext";
@@ -119,11 +119,27 @@ function MemberHomeScreen() {
       },
     };
     const message = `${user.displayName}님이 ${schedule.date} ${schedule.startTime} ~ ${schedule.endTime} 에서 ${data.updatedField.date} ${data.updatedField.startTime} ~ ${data.updatedField.endTime} 으로 일정 변경을 신청하였습니다.`;
-    createNotification({ senderId, receiverId, message, data });
-    setReason("");
-    setDate(null);
-    setTime(null);
-    setShowFirst([false, false, false]);
+    Alert.alert(
+      null,
+      "정말로 변경 신청하시겠습니까?",
+      [
+        {
+          text: "아니오",
+          style: "cancel",
+        },
+        {
+          text: "네",
+          onPress: () => {
+            createNotification({ senderId, receiverId, message, data });
+            setReason("");
+            setDate(null);
+            setTime(null);
+            setShowFirst([false, false, false]);
+          },
+        },
+      ],
+      { cancelable: true }
+    );
   };
 
   const onCloseSecond = () => {
@@ -138,10 +154,26 @@ function MemberHomeScreen() {
       reason: reason,
       scheduleId: schedule.id,
     };
-    const message = `${user.displayName}님이 ${schedule.date} ${schedule.startTime} ~ ${schedule.endTime} 일정 삭제를 신청하였습니다.`;
-    createNotification({ senderId, receiverId, message, data });
-    setReason("");
-    setShowSecond([false, false, false]);
+    const message = `${user.displayName}님이 ${schedule.date} ${schedule.startTime} ~ ${schedule.endTime} 일정 취소를 신청하였습니다.`;
+    Alert.alert(
+      null,
+      "정말로 취소 신청하시겠습니까?",
+      [
+        {
+          text: "아니오",
+          style: "cancel",
+        },
+        {
+          text: "네",
+          onPress: () => {
+            createNotification({ senderId, receiverId, message, data });
+            setReason("");
+            setShowSecond([false, false, false]);
+          },
+        },
+      ],
+      { cancelable: true }
+    );
   };
 
   const onPressDatePicker = (scheduleIndex) => {
