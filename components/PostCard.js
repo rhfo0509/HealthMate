@@ -64,9 +64,9 @@ function PostCard({ author, URL, content, createdAt, id, isDetailMode }) {
           )}
         </View>
       )}
-      {URL && isVideoURL(URL) ? (
+      {isVideoURL(URL) ? (
         <VideoView URL={URL} />
-      ) : (
+      ) : URL ? (
         <View>
           <Pressable onPress={onPressImage}>
             <Image
@@ -91,7 +91,7 @@ function PostCard({ author, URL, content, createdAt, id, isDetailMode }) {
             </View>
           </Modal>
         </View>
-      )}
+      ) : null}
       <Pressable
         android_ripple={{ color: "#ededed" }}
         onPress={onPressPost}
