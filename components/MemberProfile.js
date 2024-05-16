@@ -182,8 +182,12 @@ function MemberProfile({ user }) {
             </View>
           </Modal>
         </View>
-        <BodyHistoryChart />
+        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+          <Text> (kg) </Text>
+          <Text> (%) </Text>
+        </View>
       </View>
+      <BodyHistoryChart memberId={user.id} />
     </View>
   );
 }
@@ -204,6 +208,7 @@ const styles = StyleSheet.create({
     color: "#424242",
   },
   chartInfo: {
+    width: "100%",
     borderTopWidth: 1,
     borderTopColor: "#ededed",
     alignSelf: "center",

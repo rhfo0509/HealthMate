@@ -1,48 +1,116 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { View } from "react-native";
 import { LineChart } from "react-native-gifted-charts";
+import {
+  getFirestore,
+  collection,
+  query,
+  onSnapshot,
+  orderBy,
+  where,
+} from "firebase/firestore";
+import { getBodyHistories } from "../lib/bodyHistory";
+import { format } from "date-fns";
 
-function BodyHistoryChart() {
-  const lineData = [
-    { value: 0, dataPointText: "0" },
-    { value: 10, dataPointText: "10" },
-    { value: 8, dataPointText: "8" },
-    { value: 58, dataPointText: "58" },
-    { value: 56, dataPointText: "56" },
-    { value: 78, dataPointText: "78" },
-    { value: 74, dataPointText: "74" },
-    { value: 98, dataPointText: "98" },
-  ];
+function BodyHistoryChart({ memberId }) {
+  const firestore = getFirestore();
+  const bodyHistoriesCollection = collection(firestore, "bodyHistories");
+  // const [bodyHistoryList, setBodyHistoryList] = useState([]);
+  const [weightData, setWeightData] = useState([]);
+  const [SMMData, setSMMData] = useState([]);
+  const [PBFData, setPBFData] = useState([]);
 
-  const lineData2 = [
-    { value: 0, dataPointText: "0" },
-    { value: 20, dataPointText: "20" },
-    { value: 18, dataPointText: "18" },
-    { value: 40, dataPointText: "40" },
-    { value: 36, dataPointText: "36" },
-    { value: 60, dataPointText: "60" },
-    { value: 54, dataPointText: "54" },
-    { value: 85, dataPointText: "85" },
-  ];
+  // bodyHistories 컬렉션에 변화 발생시
+  useEffect(() => {
+    const q = query(
+      bodyHistoriesCollection,
+      orderBy("date", "asc"),
+      where("memberId", "==", memberId)
+    );
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const bodyHistories = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+
+      const weights = bodyHistories.map((history) => ({
+        value: parseFloat(history.weight),
+        dataPointText: history.weight,
+        label: format(history.date.toDate(), "M/d"),
+      }));
+      const SMMs = bodyHistories.map((history) => ({
+        value: parseFloat(history.SMM),
+        dataPointText: history.SMM,
+        label: format(history.date.toDate(), "M/d"),
+      }));
+      const PBFs = bodyHistories.map((history) => ({
+        value: parseFloat(history.PBF),
+        dataPointText: history.PBF,
+        label: format(history.date.toDate(), "M/d"),
+      }));
+
+      setWeightData(weights);
+      setSMMData(SMMs);
+      setPBFData(PBFs);
+
+      return () => {
+        unsubscribe();
+      };
+    });
+  }, []);
+
+  useEffect(() => {
+    getBodyHistories(memberId).then((bodyHistories) => {
+      const weights = bodyHistories.map((history) => ({
+        value: parseFloat(history.weight),
+        dataPointText: history.weight,
+        label: format(history.date.toDate(), "M/d"),
+      }));
+      const SMMs = bodyHistories.map((history) => ({
+        value: parseFloat(history.SMM),
+        dataPointText: history.SMM,
+        label: format(history.date.toDate(), "M/d"),
+      }));
+      const PBFs = bodyHistories.map((history) => ({
+        value: parseFloat(history.PBF),
+        dataPointText: history.PBF,
+        label: format(history.date.toDate(), "M/d"),
+      }));
+
+      setWeightData(weights);
+      setSMMData(SMMs);
+      setPBFData(PBFs);
+    });
+  }, []);
 
   return (
     <LineChart
-      data={lineData}
-      data2={lineData2}
-      height={250}
+      data={weightData}
+      data2={SMMData}
+      height={300}
+      width={310}
+      adjustToWidth
       showVerticalLines
-      spacing={44}
-      initialSpacing={0}
-      color1="skyblue"
-      color2="orange"
-      textColor1="green"
-      dataPointsHeight={6}
-      dataPointsWidth={6}
-      dataPointsColor1="blue"
-      dataPointsColor2="red"
-      textShiftY={-2}
-      textShiftX={-5}
-      textFontSize={13}
+      endSpacing={20}
+      color1="red"
+      color2="yellow"
+      dataPointsColor1="red"
+      dataPointsColor2="yellow"
+      textShiftY={-4}
+      textShiftX={-6}
+      textFontSize={12}
+      isAnimated
+      noOfSections={5}
+      secondaryData={PBFData}
+      secondaryLineConfig={{ color: "blue", dataPointsColor: "blue" }}
+      secondaryYAxis={{
+        maxValue: 50,
+        noOfSections: 5,
+        showFractionalValues: true,
+        roundToDigits: 0,
+        yAxisColor: "blue",
+        yAxisIndicesColor: "blue",
+      }}
     />
   );
 }
