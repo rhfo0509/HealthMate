@@ -45,7 +45,7 @@ function UploadPostScreen() {
     // 사진이나 동영상과 함께 등록한 경우
     const asset = result.assets[0];
     const extension = asset.uri.split(".").pop();
-    const storageRef = ref(storage, `/asset/${user.id}/${v4()}.${extension}`);
+    const storageRef = ref(storage, `/asset/${author.id}/${v4()}.${extension}`);
     const post = await fetch(asset.uri);
     const postBlob = await post.blob();
     await uploadBytesResumable(storageRef, postBlob).then(async () => {
