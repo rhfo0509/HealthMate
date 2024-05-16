@@ -32,6 +32,27 @@ function UploadPostScreen() {
   const { user: author } = useUserContext();
   const storage = getStorage();
 
+  const onSubmit = useCallback(async () => {
+    navigation.pop();
+    let URL = null;
+
+    // 사진 없이 글만 등록한 경우
+    if (!result) {
+      createPost({ author, URL, content, relatedUserId, postType });
+      return;
+    }
+
+    // 사진이나 동영상과 함께 등록한 경우
+    const asset = result.assets[0];
+    const extension = asset.uri.split(".").pop();
+    const storageRef = ref(storage, `/asset/${user.id}/${v4()}.${extension}`);
+    const post = await fetch(asset.uri);
+    const postBlob = await post.blob();
+    await uploadBytesResumable(storageRef, postBlob).then(async () => {
+      URL = await getDownloadURL(storageRef);
+      createPost({ author, URL, content, relatedUserId, postType });
+    });
+  }, [result, author, content, navigation]);
   useEffect(() => {
     const didShow = Keyboard.addListener("keyboardDidShow", () => {
       setIsKeyboardOpen(true);
@@ -59,28 +80,6 @@ function UploadPostScreen() {
       headerRight: () => <IconRightButton onPress={onSubmit} name="send" />,
     });
   }, [navigation, onSubmit]);
-
-  const onSubmit = useCallback(async () => {
-    navigation.pop();
-    let URL = null;
-
-    // 사진 없이 글만 등록한 경우
-    if (!result) {
-      createPost({ content, URL, author, relatedUserId, postType });
-      return;
-    }
-
-    // 사진이나 동영상과 함께 등록한 경우
-    const asset = result.assets[0];
-    const extension = asset.uri.split(".").pop();
-    const storageRef = ref(storage, `/asset/${user.id}/${v4()}.${extension}`);
-    const post = await fetch(asset.uri);
-    const postBlob = await post.blob();
-    await uploadBytesResumable(storageRef, postBlob).then(async () => {
-      URL = await getDownloadURL(storageRef);
-      createPost({ content, URL, author, relatedUserId, postType });
-    });
-  }, [result, author, content, navigation]);
 
   return (
     <View style={styles.block}>
