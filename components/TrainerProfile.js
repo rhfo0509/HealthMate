@@ -91,7 +91,9 @@ function TrainerProfile({ user }) {
                 source={user.photoURL && { uri: user.photoURL }}
                 size={128}
               />
-              <Text style={styles.username}>{user.displayName} 트레이너</Text>
+              <Text style={styles.username}>
+                {user.displayName} 트레이너님 환영합니다!
+              </Text>
             </View>
             <View style={styles.listHeader}>
               <MemberSearchBar
