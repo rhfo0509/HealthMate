@@ -9,7 +9,7 @@ import MemberProfile from "../components/MemberProfile";
 function MyProfileScreen() {
   const navigation = useNavigation();
   const { user } = useUserContext();
-  const [role, setRole] = useState(false);
+  const [role, setRole] = useState("");
 
   useEffect(() => {
     (async () => {

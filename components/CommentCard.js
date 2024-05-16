@@ -14,15 +14,17 @@ import {
   orderBy,
 } from "firebase/firestore";
 import { getSubComments } from "../lib/comments";
+import { getRole } from "../lib/users";
 
-function CommentCard({ createdAt, content, id, user, postId, parentId }) {
+function CommentCard({ createdAt, content, id, author, postId, parentId }) {
   const navigation = useNavigation();
   const date = useMemo(
     () => (createdAt ? new Date(createdAt.seconds * 1000) : new Date()),
     [createdAt]
   );
-  const { user: me } = useUserContext();
-  const isMyComment = me.id === user.id;
+  const { user } = useUserContext();
+  const isMyComment = user.id === author.id;
+  const [role, setRole] = useState("");
   const [subcomments, setSubcomments] = useState([]);
   const firestore = getFirestore();
   const subcommentsCollection = collection(
@@ -53,6 +55,13 @@ function CommentCard({ createdAt, content, id, user, postId, parentId }) {
     });
   }, []);
 
+  useEffect(() => {
+    (async () => {
+      const result = await getRole(author.id);
+      setRole(result);
+    })();
+  }, [author.id]);
+
   const onPress = () => {
     navigation.navigate("UploadComment", { postId, commentId: id });
   };
@@ -64,7 +73,7 @@ function CommentCard({ createdAt, content, id, user, postId, parentId }) {
       createdAt={item.createdAt}
       content={item.content}
       id={item.id} // 대댓글 id
-      user={item.user}
+      author={item.author}
       postId={postId} // 게시글 id
       parentId={id} // 댓글 id
     />
@@ -87,10 +96,10 @@ function CommentCard({ createdAt, content, id, user, postId, parentId }) {
           >
             <View style={[styles.head, styles.paddingBlock]}>
               <View style={styles.profile}>
-                <Avatar source={user.photoURL && { uri: user.photoURL }} />
-                {/* TODO: 일단 트레이너 기준으로 화면을 설계하였기 때문에 "트레이너"로 설정, 후에 회원 기준 화면을 설계할 때 분기처리하기 */}
+                <Avatar source={author.photoURL && { uri: author.photoURL }} />
                 <Text style={styles.displayName}>
-                  {user.displayName} 트레이너
+                  {author.displayName}{" "}
+                  {role === "trainer" ? "트레이너" : "회원"}
                 </Text>
               </View>
               {isMyComment && (

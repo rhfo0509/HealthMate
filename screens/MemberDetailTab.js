@@ -1,29 +1,44 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useRoute, useNavigation } from "@react-navigation/native";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import DietScreen from "./DietScreen";
 import ExerciseScreen from "./ExerciseScreen";
 import { View, StyleSheet } from "react-native";
 import IconRightButton from "../components/IconRightButton";
+import { getRole } from "../lib/users";
 
 const Tab = createMaterialTopTabNavigator();
 
 function MemberDetailTab() {
   const route = useRoute();
   const navigation = useNavigation();
-  const { member } = route.params;
+  const { relatedUser } = route.params;
+  const [role, setRole] = useState("");
+
+  useEffect(() => {
+    (async () => {
+      const result = await getRole(relatedUser.id);
+      setRole(result);
+    })();
+  }, [relatedUser.id]);
+
   useEffect(() => {
     navigation.setOptions({
-      // TODO: 일단 트레이너 기준으로 화면을 설계하였기 때문에 "회원"으로 설정, 후에 회원 기준 화면을 설계할 때 분기처리하기
-      title: `${member.displayName} 회원`,
-      headerRight: () => (
-        <IconRightButton
-          name="remember-me"
-          onPress={() => navigation.push("Membership", { memberId: member.id })}
-        />
-      ),
+      title:
+        role === "trainer"
+          ? `${relatedUser.displayName} 회원`
+          : `${relatedUser.displayName} 트레이너`,
+      headerRight: () =>
+        role === "trainer" ? (
+          <IconRightButton
+            name="remember-me"
+            onPress={() =>
+              navigation.push("Membership", { memberId: relatedUser.id })
+            }
+          />
+        ) : null,
     });
-  }, [navigation, member]);
+  }, [navigation, relatedUser]);
 
   return (
     <View style={styles.block}>
@@ -40,13 +55,16 @@ function MemberDetailTab() {
           options={{
             tabBarLabel: "식단일지",
           }}
-          initialParams={{ memberId: member.id, postType: "Diet" }}
+          initialParams={{ relatedUserId: relatedUser.id, postType: "Diet" }}
         />
         <Tab.Screen
           name="Exercise"
           component={ExerciseScreen}
           options={{ tabBarLabel: "운동일지" }}
-          initialParams={{ memberId: member.id, postType: "Exercise" }}
+          initialParams={{
+            relatedUserId: relatedUser.id,
+            postType: "Exercise",
+          }}
         />
       </Tab.Navigator>
     </View>

@@ -3,10 +3,10 @@ import { useNavigation } from "@react-navigation/native";
 import { Pressable, StyleSheet, View } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 
-function WriteButton({ postType, memberId }) {
+function WriteButton({ postType, relatedUserId }) {
   const navigation = useNavigation();
   const onPress = () => {
-    navigation.navigate("UploadPost", { postType, memberId });
+    navigation.navigate("UploadPost", { postType, relatedUserId });
   };
   return (
     <View style={styles.wrapper}>

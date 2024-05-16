@@ -10,20 +10,20 @@ function UploadCommentScreen() {
   const navigation = useNavigation();
   const { postId, commentId } = route.params;
   const [content, setContent] = useState("");
-  const { user } = useUserContext();
+  const { user: author } = useUserContext();
 
   const onSubmit = useCallback(async () => {
     navigation.pop();
 
     // 댓글을 등록한 경우
     if (!commentId) {
-      createComment({ content, user, postId });
+      createComment({ content, author, postId });
       return;
     }
 
     // 대댓글을 등록한 경우
-    createSubComment({ content, user, postId, commentId });
-  }, [postId, commentId, user, content, navigation]);
+    createSubComment({ content, author, postId, commentId });
+  }, [postId, commentId, author, content, navigation]);
 
   useEffect(() => {
     navigation.setOptions({

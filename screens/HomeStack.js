@@ -5,12 +5,13 @@ import CalendarScreen from "./CalendarScreen";
 import WeeklyCalendarScreen from "./WeeklyCalendarScreen";
 import { getRole } from "../lib/users";
 import MemberHomeScreen from "./MemberHomeScreen";
+import MemberDetailTab from "./MemberDetailTab";
 
 const Stack = createNativeStackNavigator();
 
 function HomeStack() {
   const { user } = useUserContext();
-  const [role, setRole] = useState(false);
+  const [role, setRole] = useState("");
 
   useEffect(() => {
     (async () => {
@@ -31,7 +32,10 @@ function HomeStack() {
           />
         </>
       ) : (
-        <Stack.Screen name="MemberHome" component={MemberHomeScreen} />
+        <>
+          <Stack.Screen name="MemberHome" component={MemberHomeScreen} />
+          <Stack.Screen name="MemberDetail" component={MemberDetailTab} />
+        </>
       )}
     </Stack.Navigator>
   );

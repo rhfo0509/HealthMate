@@ -1,11 +1,24 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Pressable } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import { format } from "date-fns";
 import Avatar from "./Avatar";
 
 function MembershipCard({ membership }) {
+  const navigation = useNavigation();
+
+  const onPress = () => {
+    navigation.navigate("MemberDetail", {
+      relatedUser: membership.trainer,
+    });
+  };
   return (
-    <View key={membership.id} style={styles.item}>
+    <Pressable
+      key={membership.id}
+      style={styles.item}
+      android_ripple={{ color: "#ededed" }}
+      onPress={onPress}
+    >
       <View style={{ flexDirection: "row", alignItems: "center" }}>
         <Avatar
           source={
@@ -40,7 +53,7 @@ function MembershipCard({ membership }) {
             : "만료됨"}
         </Text>
       </View>
-    </View>
+    </Pressable>
   );
 }
 

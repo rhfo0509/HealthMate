@@ -24,35 +24,13 @@ function UploadPostScreen() {
   const route = useRoute();
   const navigation = useNavigation();
   const { result } = route.params || {};
-  const { memberId, postType } = route.params || "";
+  const { relatedUserId, postType } = route.params || "";
   const { width } = useWindowDimensions();
   const animation = useRef(new Animated.Value(width)).current;
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
   const [content, setContent] = useState("");
-  const { user } = useUserContext();
+  const { user: author } = useUserContext();
   const storage = getStorage();
-
-  const onSubmit = useCallback(async () => {
-    navigation.pop();
-    let URL = null;
-
-    // 사진 없이 글만 등록한 경우
-    if (!result) {
-      createPost({ content, URL, user, memberId, postType });
-      return;
-    }
-
-    // 사진이나 동영상과 함께 등록한 경우
-    const asset = result.assets[0];
-    const extension = asset.uri.split(".").pop();
-    const storageRef = ref(storage, `/asset/${user.id}/${v4()}.${extension}`);
-    const post = await fetch(asset.uri);
-    const postBlob = await post.blob();
-    await uploadBytesResumable(storageRef, postBlob).then(async (snapshot) => {
-      URL = await getDownloadURL(storageRef);
-      createPost({ content, URL, user, memberId, postType });
-    });
-  }, [result, user, content, navigation]);
 
   useEffect(() => {
     const didShow = Keyboard.addListener("keyboardDidShow", () => {
@@ -82,6 +60,28 @@ function UploadPostScreen() {
     });
   }, [navigation, onSubmit]);
 
+  const onSubmit = useCallback(async () => {
+    navigation.pop();
+    let URL = null;
+
+    // 사진 없이 글만 등록한 경우
+    if (!result) {
+      createPost({ content, URL, author, relatedUserId, postType });
+      return;
+    }
+
+    // 사진이나 동영상과 함께 등록한 경우
+    const asset = result.assets[0];
+    const extension = asset.uri.split(".").pop();
+    const storageRef = ref(storage, `/asset/${user.id}/${v4()}.${extension}`);
+    const post = await fetch(asset.uri);
+    const postBlob = await post.blob();
+    await uploadBytesResumable(storageRef, postBlob).then(async () => {
+      URL = await getDownloadURL(storageRef);
+      createPost({ content, URL, author, relatedUserId, postType });
+    });
+  }, [result, author, content, navigation]);
+
   return (
     <View style={styles.block}>
       {result && (
@@ -94,12 +94,12 @@ function UploadPostScreen() {
       <TextInput
         style={styles.input}
         multiline={true}
-        placeholder="이 사진에 대한 설명을 입력하세요..."
+        placeholder="게시글을 작성해주세요."
         textAlignVertical="top"
         value={content}
         onChangeText={setContent}
       />
-      <CameraButton memberId={memberId} postType={postType} />
+      <CameraButton relatedUserId={relatedUserId} postType={postType} />
     </View>
   );
 }

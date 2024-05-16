@@ -19,7 +19,7 @@ function PostScreen() {
   const navigation = useNavigation();
 
   const [comments, setComments] = useState([]);
-  const { user, URL, content, createdAt, id } = route.params;
+  const { author, URL, content, createdAt, id } = route.params;
   const firestore = getFirestore();
   const commentsCollection = collection(firestore, `posts/${id}/comments`);
 
@@ -55,7 +55,7 @@ function PostScreen() {
       createdAt={item.createdAt}
       content={item.content}
       id={item.id} // 댓글 id
-      user={item.user}
+      author={item.author}
       postId={id} // 게시글 id
       parentId={null} // 대댓글이 아니므로 null
     />
@@ -78,7 +78,7 @@ function PostScreen() {
             createdAt={createdAt}
             content={content}
             id={id}
-            user={user}
+            author={author}
             URL={URL}
             isDetailMode={true}
           />

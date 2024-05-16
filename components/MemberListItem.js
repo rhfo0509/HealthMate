@@ -5,13 +5,21 @@ import { useNavigation } from "@react-navigation/native";
 import Avatar from "./Avatar";
 
 function MemberListItem({ member }) {
-  const { displayName, birthDate, gender, photoURL, status, count, remaining } =
-    member;
+  const {
+    id,
+    displayName,
+    birthDate,
+    gender,
+    photoURL,
+    status,
+    count,
+    remaining,
+  } = member;
   const navigation = useNavigation();
 
   const onPress = () => {
     navigation.navigate("MemberDetail", {
-      member,
+      relatedUser: member,
     });
   };
 
