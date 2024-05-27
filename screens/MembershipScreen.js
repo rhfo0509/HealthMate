@@ -6,6 +6,7 @@ import {
   Text,
   Modal,
   TextInput,
+  Alert,
 } from "react-native";
 import { CheckBox } from "react-native-elements";
 import { useNavigation, useRoute } from "@react-navigation/native";
@@ -17,7 +18,6 @@ import {
   removeSchedulesWithMember,
 } from "../lib/schedules";
 import { addDays, format, max } from "date-fns";
-import BorderedInput from "../components/BorderedInput";
 import {
   getFirestore,
   collection,
@@ -112,37 +112,57 @@ function MembershipScreen() {
     getMembership(user.id, memberId).then(setMembership);
   }, [user.id, memberId]);
 
-  useEffect(() => {
-    navigation.setOptions({
-      headerRight: () => <IconRightButton onPress={onSubmit} name="check" />,
-    });
-  }, [navigation, onSubmit]);
-
-  const onSubmit = () => {
-    console.log("회원권 변경");
-  };
-
   const onPressPause = () => {
     // 회원권에 status라는 속성을 두어
     // 활성화 상태: active, 중단된 상태: paused, 만료된 상태: expired로 설정
-    console.log("일시중지");
-    updateMembership(membership.id, { status: "paused" }).then(() => {
-      getMembership(user.id, memberId)
-        .then(setMembership)
-        .then(() => removeSchedulesWithMember(user.id, memberId));
-    });
+    Alert.alert(
+      null,
+      "정말로 중단하시겠습니까?",
+      [
+        {
+          text: "아니오",
+          style: "cancel",
+        },
+        {
+          text: "네",
+          onPress: () => {
+            updateMembership(membership.id, { status: "paused" }).then(() => {
+              getMembership(user.id, memberId)
+                .then(setMembership)
+                .then(() => removeSchedulesWithMember(user.id, memberId));
+            });
+          },
+        },
+      ],
+      { cancelable: true }
+    );
   };
 
   const onPressResume = () => {
-    console.log("재개하기");
-    updateMembership(membership.id, {
-      status: "active",
-      startDate: format(new Date(), "yyyy-MM-dd"),
-    }).then(() => {
-      getMembership(user.id, memberId)
-        .then(setMembership)
-        .then(() => createSchedulesWithMembership(membership));
-    });
+    Alert.alert(
+      null,
+      "정말로 재개하시겠습니까?",
+      [
+        {
+          text: "아니오",
+          style: "cancel",
+        },
+        {
+          text: "네",
+          onPress: () => {
+            updateMembership(membership.id, {
+              status: "active",
+              startDate: format(new Date(), "yyyy-MM-dd"),
+            }).then(() => {
+              getMembership(user.id, memberId)
+                .then(setMembership)
+                .then(() => createSchedulesWithMembership(membership));
+            });
+          },
+        },
+      ],
+      { cancelable: true }
+    );
   };
 
   const onPressExtend = () => {
@@ -151,23 +171,39 @@ function MembershipScreen() {
   };
 
   const onSaveExtend = () => {
-    updateMembership(membership.id, {
-      status: "active",
-      count: +membership.count + +membershipCount,
-      remaining: +membership.remaining + +membershipCount,
-    }).then(() => {
-      createSchedulesWithMembership({
-        ...membership,
-        remaining: membershipCount,
-        // 현재 날짜와 종료일자 중 더 늦은 날짜를 구함
-        startDate: format(
-          max([addDays(new Date(membership.endDate), 1), new Date()]),
-          "yyyy-MM-dd"
-        ),
-      });
-    });
-    setMembershipCount("");
-    setShowFirst(false);
+    Alert.alert(
+      null,
+      "정말로 연장하시겠습니까?",
+      [
+        {
+          text: "아니오",
+          style: "cancel",
+        },
+        {
+          text: "네",
+          onPress: () => {
+            updateMembership(membership.id, {
+              status: "active",
+              count: +membership.count + +membershipCount,
+              remaining: +membership.remaining + +membershipCount,
+            }).then(() => {
+              createSchedulesWithMembership({
+                ...membership,
+                remaining: membershipCount,
+                // 현재 날짜와 종료일자 중 더 늦은 날짜를 구함
+                startDate: format(
+                  max([addDays(new Date(membership.endDate), 1), new Date()]),
+                  "yyyy-MM-dd"
+                ),
+              });
+            });
+            setMembershipCount("");
+            setShowFirst(false);
+          },
+        },
+      ],
+      { cancelable: true }
+    );
   };
 
   const onCloseExtend = () => {
@@ -192,26 +228,45 @@ function MembershipScreen() {
   };
 
   const onSaveChange = () => {
-    removeSchedulesWithMember(user.id, memberId)
-      .then(() => {
-        const formatDays = {};
-        Object.entries(membershipDays).forEach(([day, data]) => {
-          if (data.checked) {
-            formatDays[day] = {
-              startTime: `${data.startHours}:${data.startMinutes}`,
-              endTime: `${data.endHours}:${data.endMinutes}`,
-            };
-          }
-        });
-        updateMembership(membership.id, { days: formatDays });
-      })
-      .then(async () => {
-        const updatedMembership = await getMembership(user.id, memberId);
-        createSchedulesWithMembership(updatedMembership).then(() =>
-          setMembership(updatedMembership)
-        );
-      });
-    setShowSecond(false);
+    Alert.alert(
+      null,
+      "정말로 변경하시겠습니까?",
+      [
+        {
+          text: "아니오",
+          style: "cancel",
+        },
+        {
+          text: "네",
+          onPress: () => {
+            removeSchedulesWithMember(user.id, memberId)
+              .then(() => {
+                const formatDays = {};
+                Object.entries(membershipDays).forEach(([day, data]) => {
+                  if (data.checked) {
+                    formatDays[day] = {
+                      startTime: `${data.startHours}:${data.startMinutes}`,
+                      endTime: `${data.endHours}:${data.endMinutes}`,
+                    };
+                  }
+                });
+                updateMembership(membership.id, { days: formatDays });
+              })
+              .then(async () => {
+                const updatedMembership = await getMembership(
+                  user.id,
+                  memberId
+                );
+                createSchedulesWithMembership(updatedMembership).then(() =>
+                  setMembership(updatedMembership)
+                );
+              });
+            setShowSecond(false);
+          },
+        },
+      ],
+      { cancelable: true }
+    );
   };
 
   const onCloseChange = () => {
@@ -297,22 +352,19 @@ function MembershipScreen() {
         >
           <View style={styles.modalContainer}>
             <View style={styles.modalContent}>
-              <View
-                style={{
-                  position: "absolute",
-                  top: 15,
-                  left: 22,
-                }}
-              >
-                <Text style={{ fontSize: 24 }}>횟수연장</Text>
+              <View>
+                <Text style={{ fontSize: 16, fontWeight: "500" }}>
+                  연장할 횟수를 입력해주세요.
+                </Text>
               </View>
               <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <BorderedInput
-                  placeholder="연장할 횟수를 입력하세요."
+                <TextInput
+                  style={{ borderBottomWidth: 1, marginRight: 5 }}
                   value={membershipCount}
                   onChangeText={setMembershipCount}
                   keyboardType="number-pad"
                 />
+                <Text> 회</Text>
               </View>
               <View
                 style={{
@@ -323,10 +375,26 @@ function MembershipScreen() {
                 }}
               >
                 <Pressable onPress={onSaveExtend} style={{ padding: 10 }}>
-                  <Text style={{ fontSize: 16, fontWeight: "bold" }}>등록</Text>
+                  <Text
+                    style={{
+                      fontSize: 16,
+                      fontWeight: "500",
+                      color: "#64B5F6",
+                    }}
+                  >
+                    등록
+                  </Text>
                 </Pressable>
                 <Pressable onPress={onCloseExtend} style={{ padding: 10 }}>
-                  <Text style={{ fontSize: 16, fontWeight: "bold" }}>취소</Text>
+                  <Text
+                    style={{
+                      fontSize: 16,
+                      fontWeight: "500",
+                      color: "#E57373",
+                    }}
+                  >
+                    취소
+                  </Text>
                 </Pressable>
               </View>
             </View>
@@ -349,14 +417,10 @@ function MembershipScreen() {
         >
           <View style={styles.modalContainer}>
             <View style={styles.modalContent}>
-              <View
-                style={{
-                  position: "absolute",
-                  top: 15,
-                  left: 22,
-                }}
-              >
-                <Text style={{ fontSize: 24 }}>회원 스케줄 입력</Text>
+              <View>
+                <Text style={{ fontSize: 16, fontWeight: "500" }}>
+                  변경할 스케줄을 입력해주세요.
+                </Text>
               </View>
               <View>
                 <View>
@@ -480,10 +544,26 @@ function MembershipScreen() {
                 }}
               >
                 <Pressable onPress={onSaveChange} style={{ padding: 10 }}>
-                  <Text style={{ fontSize: 16, fontWeight: "bold" }}>등록</Text>
+                  <Text
+                    style={{
+                      fontSize: 16,
+                      fontWeight: "500",
+                      color: "#64B5F6",
+                    }}
+                  >
+                    등록
+                  </Text>
                 </Pressable>
                 <Pressable onPress={onCloseChange} style={{ padding: 10 }}>
-                  <Text style={{ fontSize: 16, fontWeight: "bold" }}>취소</Text>
+                  <Text
+                    style={{
+                      fontSize: 16,
+                      fontWeight: "500",
+                      color: "#E57373",
+                    }}
+                  >
+                    취소
+                  </Text>
                 </Pressable>
               </View>
             </View>
@@ -532,7 +612,8 @@ const styles = StyleSheet.create({
   modalContent: {
     backgroundColor: "white",
     paddingHorizontal: 20,
-    paddingVertical: 60,
+    paddingTop: 30,
+    paddingBottom: 50,
     borderRadius: 10,
     width: "80%",
     alignItems: "center",
