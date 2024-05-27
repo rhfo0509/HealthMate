@@ -18,6 +18,7 @@ function MemberProfile({ user }) {
   const [show, setShow] = useState(false);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [date, setDate] = useState(null);
+  const [mode, setMode] = useState("weight");
   const [weight, setWeight] = useState("");
   const [SMM, setSMM] = useState(""); // 골격근량
   const [PBF, setPBF] = useState(""); // 체지방률
@@ -66,27 +67,46 @@ function MemberProfile({ user }) {
         </Text>
       </View>
       <View style={styles.chartInfo}>
-        <View style={styles.chartTitle}>
-          <Text style={styles.chartTitleText}>신체 변화 그래프</Text>
-        </View>
         <View
           style={{
             flexDirection: "row",
             justifyContent: "space-around",
             alignItems: "center",
-            marginBottom: 10,
+            marginVertical: 10,
           }}
         >
-          <View>
-            <Text style={styles.chartText}>
-              🔴 체중 / 🟡 골격근량 / 🔵 체지방률
-            </Text>
+          <View style={{ flexDirection: "row", marginBottom: 10 }}>
+            <Pressable
+              style={styles.button}
+              onPress={() => setMode("weight")}
+              android_ripple={{ color: "white" }}
+            >
+              <Text>체중</Text>
+            </Pressable>
+            <Pressable
+              style={styles.button}
+              onPress={() => setMode("SMM")}
+              android_ripple={{ color: "white" }}
+            >
+              <Text>골격근량</Text>
+            </Pressable>
+            <Pressable
+              style={styles.button}
+              onPress={() => setMode("PBF")}
+              android_ripple={{ color: "white" }}
+            >
+              <Text>체지방률</Text>
+            </Pressable>
+            <Pressable
+              style={styles.button}
+              onPress={onPress}
+              android_ripple={{ color: "white" }}
+            >
+              <Text>
+                <MaterialIcons name="add" size={24} color="black" />
+              </Text>
+            </Pressable>
           </View>
-          <Pressable onPress={onPress} android_ripple={{ color: "#ededed" }}>
-            <Text style={styles.chartText}>
-              <MaterialIcons name="add" size={24} color="black" />
-            </Text>
-          </Pressable>
           <Modal
             visible={show}
             animationType="fade"
@@ -182,12 +202,8 @@ function MemberProfile({ user }) {
             </View>
           </Modal>
         </View>
-        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-          <Text> (kg) </Text>
-          <Text> (%) </Text>
-        </View>
       </View>
-      <BodyHistoryChart memberId={user.id} />
+      <BodyHistoryChart memberId={user.id} mode={mode} />
     </View>
   );
 }
@@ -221,8 +237,11 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     fontSize: 24,
   },
-  chartText: {
-    fontSize: 16,
+  button: {
+    padding: 20,
+    backgroundColor: "#ededed",
+    marginHorizontal: 10,
+    borderRadius: 10,
   },
   input: {
     width: "50%",
