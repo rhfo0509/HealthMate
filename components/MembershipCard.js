@@ -1,15 +1,25 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, Pressable } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { format } from "date-fns";
 import Avatar from "./Avatar";
+import { getRole } from "../lib/users";
 
 function MembershipCard({ membership }) {
   const navigation = useNavigation();
+  const [role, setRole] = useState("");
+
+  useEffect(() => {
+    (async () => {
+      const result = await getRole(membership.trainer.id);
+      setRole(result);
+    })();
+  }, []);
 
   const onPress = () => {
     navigation.navigate("MemberDetail", {
       relatedUser: membership.trainer,
+      role,
     });
   };
   return (

@@ -1,35 +1,26 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { useRoute, useNavigation } from "@react-navigation/native";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import DietScreen from "./DietScreen";
 import ExerciseScreen from "./ExerciseScreen";
 import { View, StyleSheet } from "react-native";
 import IconRightButton from "../components/IconRightButton";
-import { getRole } from "../lib/users";
 
 const Tab = createMaterialTopTabNavigator();
 
 function MemberDetailTab() {
   const route = useRoute();
   const navigation = useNavigation();
-  const { relatedUser } = route.params;
-  const [role, setRole] = useState("");
-
-  useEffect(() => {
-    (async () => {
-      const result = await getRole(relatedUser.id);
-      setRole(result);
-    })();
-  }, [relatedUser.id]);
+  const { relatedUser, role } = route.params;
 
   useEffect(() => {
     navigation.setOptions({
       title:
-        role === "trainer"
+        role === "member"
           ? `${relatedUser.displayName} 회원`
           : `${relatedUser.displayName} 트레이너`,
       headerRight: () =>
-        role === "trainer" ? (
+        role === "member" ? (
           <IconRightButton
             name="remember-me"
             onPress={() =>

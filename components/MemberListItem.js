@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { differenceInYears, parse } from "date-fns";
 import { useNavigation } from "@react-navigation/native";
 import Avatar from "./Avatar";
+import { getRole } from "../lib/users";
 
 function MemberListItem({ member }) {
   const {
@@ -16,10 +17,19 @@ function MemberListItem({ member }) {
     remaining,
   } = member;
   const navigation = useNavigation();
+  const [role, setRole] = useState("");
+
+  useEffect(() => {
+    (async () => {
+      const result = await getRole(member.id);
+      setRole(result);
+    })();
+  }, []);
 
   const onPress = () => {
     navigation.navigate("MemberDetail", {
       relatedUser: member,
+      role,
     });
   };
 
