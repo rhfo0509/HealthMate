@@ -93,6 +93,8 @@ const renderItem = ({ item }) => (
     author={item.author}
     URL={item.URL}
     isDetailMode={false}
+    postType={item.postType}
+    dietType={item.dietType}
   />
 );
 

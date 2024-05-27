@@ -7,6 +7,7 @@ import {
   Animated,
   Keyboard,
 } from "react-native";
+import { ButtonGroup } from "react-native-elements";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import IconRightButton from "../components/IconRightButton";
 import { v4 } from "uuid";
@@ -28,9 +29,12 @@ function UploadPostScreen() {
   const { width } = useWindowDimensions();
   const animation = useRef(new Animated.Value(width)).current;
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
+  const [selectedIndex, setSelectedIndex] = useState(0);
   const [content, setContent] = useState("");
   const { user: author } = useUserContext();
   const storage = getStorage();
+
+  const buttons = ["아침", "점심", "저녁", "간식"];
 
   const onSubmit = useCallback(async () => {
     navigation.pop();
@@ -38,7 +42,18 @@ function UploadPostScreen() {
 
     // 사진 없이 글만 등록한 경우
     if (!result) {
-      createPost({ author, URL, content, relatedUserId, postType });
+      if (postType === "Diet") {
+        createPost({
+          author,
+          URL,
+          content,
+          relatedUserId,
+          postType,
+          dietType: buttons[selectedIndex],
+        });
+      } else {
+        createPost({ author, URL, content, relatedUserId, postType });
+      }
       return;
     }
 
@@ -50,7 +65,18 @@ function UploadPostScreen() {
     const postBlob = await post.blob();
     await uploadBytesResumable(storageRef, postBlob).then(async () => {
       URL = await getDownloadURL(storageRef);
-      createPost({ author, URL, content, relatedUserId, postType });
+      if (postType === "Diet") {
+        createPost({
+          author,
+          URL,
+          content,
+          relatedUserId,
+          postType,
+          dietType: buttons[selectedIndex],
+        });
+      } else {
+        createPost({ author, URL, content, relatedUserId, postType });
+      }
     });
   }, [result, author, content, navigation]);
   useEffect(() => {
@@ -83,6 +109,13 @@ function UploadPostScreen() {
 
   return (
     <View style={styles.block}>
+      {postType === "Diet" && (
+        <ButtonGroup
+          onPress={setSelectedIndex}
+          selectedIndex={selectedIndex}
+          buttons={buttons}
+        />
+      )}
       {result && (
         <Animated.Image
           source={{ uri: result.assets[0]?.uri }}

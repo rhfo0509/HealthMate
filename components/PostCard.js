@@ -8,7 +8,16 @@ import useActions from "../hooks/useActions";
 import VideoView from "./VideoView";
 import { getRole } from "../lib/users";
 
-function PostCard({ author, URL, content, createdAt, id, isDetailMode }) {
+function PostCard({
+  author,
+  URL,
+  content,
+  createdAt,
+  id,
+  isDetailMode,
+  postType,
+  dietType,
+}) {
   const navigation = useNavigation();
   const date = useMemo(
     () => (createdAt ? new Date(createdAt.seconds * 1000) : new Date()),
@@ -26,15 +35,12 @@ function PostCard({ author, URL, content, createdAt, id, isDetailMode }) {
       content,
       createdAt,
       id,
+      dietType,
       isDetailMode: true,
     });
   };
 
   const { onPressMore } = useActions({ id, content });
-
-  const onPressImage = () => {
-    setShow(true);
-  };
 
   const isVideoURL = (URL) => {
     return /\.(mp4|mov|avi)/i.test(URL);
@@ -49,71 +55,93 @@ function PostCard({ author, URL, content, createdAt, id, isDetailMode }) {
 
   return (
     <View style={styles.block}>
-      {!isDetailMode && (
-        <View style={[styles.head, styles.paddingBlock]}>
-          <View style={styles.profile}>
-            <Avatar source={author.photoURL && { uri: author.photoURL }} />
-            <Text style={styles.displayName}>
-              {author.displayName} {role === "trainer" ? "트레이너" : "회원"}
-            </Text>
-          </View>
-          {isMyPost && (
-            <Pressable hitSlop={8} onPress={onPressMore}>
-              <MaterialIcons name="more-vert" size={20} />
-            </Pressable>
-          )}
+      <View style={[styles.head, styles.paddingBlock]}>
+        <View style={styles.profile}>
+          <Avatar source={author.photoURL && { uri: author.photoURL }} />
+          <Text style={styles.displayName}>
+            {author.displayName} {role === "trainer" ? "트레이너" : "회원"}
+          </Text>
         </View>
-      )}
-      {isVideoURL(URL) ? (
-        <VideoView URL={URL} />
-      ) : URL ? (
-        <View>
-          <Pressable onPress={onPressImage}>
-            <Image
-              source={{ uri: URL }}
-              style={styles.image}
-              resizeMethod="resize"
-              resizeMode="contain"
-            />
+        {isMyPost && (
+          <Pressable hitSlop={8} onPress={onPressMore}>
+            <MaterialIcons name="more-vert" size={20} />
           </Pressable>
-          <Modal
-            visible={show}
-            animationType="fade"
-            onRequestClose={() => setShow(false)}
-          >
-            <View style={styles.imageViewer}>
-              <Image
-                source={{ uri: URL }}
-                style={{ width: "100%", height: "100%" }}
-                resizeMethod="resize"
-                resizeMode="contain"
-              />
-            </View>
-          </Modal>
-        </View>
-      ) : null}
+        )}
+      </View>
       <Pressable
-        android_ripple={{ color: "#ededed" }}
+        style={
+          !isDetailMode && {
+            flexDirection: "row",
+          }
+        }
         onPress={onPressPost}
         disabled={isDetailMode}
       >
-        <View style={styles.paddingBlock}>
-          <Text style={styles.content}>{content}</Text>
-          <Text date={date} style={styles.date}>
-            {date.toLocaleString()}
+        {isVideoURL(URL) ? (
+          <VideoView URL={URL} />
+        ) : URL ? (
+          <View>
+            <Pressable onPress={() => setShow(true)} disabled={!isDetailMode}>
+              <Image
+                source={{ uri: URL }}
+                style={[
+                  styles.image,
+                  isDetailMode && {
+                    width: "100%",
+                    aspectRatio: "16 / 9",
+                    marginLeft: 0,
+                  },
+                ]}
+              />
+            </Pressable>
+            <Modal
+              visible={show}
+              animationType="fade"
+              onRequestClose={() => setShow(false)}
+            >
+              <View style={styles.imageViewer}>
+                <Image
+                  source={{ uri: URL }}
+                  style={{ width: "100%", height: "100%" }}
+                  resizeMethod="resize"
+                  resizeMode="contain"
+                />
+              </View>
+            </Modal>
+          </View>
+        ) : null}
+        <View style={[styles.paddingBlock]}>
+          {postType === "Diet" && (
+            <View
+              style={{
+                paddingVertical: 5,
+                paddingHorizontal: 50,
+                backgroundColor: "skyblue",
+                borderRadius: 5,
+                alignSelf: "center",
+              }}
+            >
+              <Text style={{ color: "white" }}>{dietType}</Text>
+            </View>
+          )}
+          <Text style={styles.content} numberOfLines={5} ellipsizeMode="tail">
+            {content}
           </Text>
         </View>
       </Pressable>
+      <View style={styles.paddingBlock}>
+        <Text style={styles.date}>{date.toLocaleString()}</Text>
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   block: {
-    paddingTop: 16,
-    paddingBottom: 16,
+    paddingVertical: 16,
   },
   paddingBlock: {
+    flex: 1,
     paddingHorizontal: 16,
   },
   head: {
@@ -133,8 +161,9 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   image: {
-    width: "100%",
-    aspectRatio: 16 / 9,
+    width: 150,
+    aspectRatio: 1 / 1,
+    marginLeft: 16,
     marginBottom: 16,
   },
   content: {
