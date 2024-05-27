@@ -116,7 +116,7 @@ function PostCard({
               style={{
                 paddingVertical: 5,
                 paddingHorizontal: 50,
-                backgroundColor: "skyblue",
+                backgroundColor: "royalblue",
                 borderRadius: 5,
                 alignSelf: "center",
               }}
