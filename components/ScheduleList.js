@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View, Alert } from "react-native";
+import { StyleSheet, Alert } from "react-native";
 import { useUserContext } from "../contexts/UserContext";
 import ScheduleListItem from "./ScheduleListItem";
 import {

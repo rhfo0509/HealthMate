@@ -1,5 +1,3 @@
-// User가 Trainer인 경우에만 버튼 활성화
-
 import React, { useState } from "react";
 import {
   View,
@@ -13,39 +11,13 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { useUserContext } from "../contexts/UserContext";
 import { addMemberToTrainer } from "../lib/users";
 import BorderedInput from "./BorderedInput";
-import RNDateTimePicker from "@react-native-community/datetimepicker";
 import { CheckBox } from "react-native-elements";
-import { format } from "date-fns";
 
 function AddMemberButton() {
   const [showFirst, setShowFirst] = useState(false);
   const [showSecond, setShowSecond] = useState(false);
-  const [showDatePicker, setShowDatePicker] = useState(false);
-  const [showStartTimePicker, setShowStartTimePicker] = useState(false);
-  const [showEndTimePicker, setShowEndTimePicker] = useState(false);
-  // const [memberId, setMemberId] = useState("");
   const [memberName, setMemberName] = useState("");
   const [memberPhoneNumber, setMemberPhoneNumber] = useState("");
-  // const [firstModalInfo, setFirstModalInfo] = useState({
-  //   memberName: "",
-  //   memberPhoneNumber: "",
-  //   startYear: null,
-  //   startMonth: null,
-  //   startDay: null,
-  //   count: 0,
-  // });
-  // const [secondModalInfo, setSecondModalInfo] = useState({
-  //   days: {
-  //     월: { checked: false, startHours: null, startMinutes: null, endHours: null, endMinutes: null },
-  //     화: { checked: false, startHours: null, startMinutes: null, endHours: null, endMinutes: null },
-  //     수: { checked: false, startHours: null, startMinutes: null, endHours: null, endMinutes: null },
-  //     목: { checked: false, startHours: null, startMinutes: null, endHours: null, endMinutes: null },
-  //     금: { checked: false, startHours: null, startMinutes: null, endHours: null, endMinutes: null },
-  //     토: { checked: false, startHours: null, startMinutes: null, endHours: null, endMinutes: null },
-  //     일: { checked: false, startHours: null, startMinutes: null, endHours: null, endMinutes: null },
-  //   },
-  // });
-
   const [membershipInfo, setMembershipInfo] = useState({
     startYear: null,
     startMonth: null,

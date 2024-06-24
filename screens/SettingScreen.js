@@ -1,18 +1,18 @@
 import React from "react";
 import { Pressable, StyleSheet, View, Text } from "react-native";
-import { useUserContext } from '../contexts/UserContext';
-import { logOut } from '../lib/auth';
+import { useUserContext } from "../contexts/UserContext";
+import { logOut } from "../lib/auth";
 
 function SettingScreen() {
-  const {setUser} = useUserContext();
+  const { setUser } = useUserContext();
 
   const onLogout = async () => {
     await logOut();
     setUser(null);
-  }
+  };
   return (
     <View style={styles.block}>
-      <Pressable onPress={onLogout} style={({ pressed }) => [styles.item]}>
+      <Pressable onPress={onLogout} style={styles.item}>
         <Text style={styles.itemText}>로그아웃</Text>
       </Pressable>
     </View>

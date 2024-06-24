@@ -1,19 +1,14 @@
-import React, { useEffect, useState, useCallback } from "react";
-import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import React, { useEffect, useState } from "react";
+import { useNavigation } from "@react-navigation/native";
 import { Pressable, Text, StyleSheet } from "react-native";
 import WeekView from "react-native-week-view";
-import CalendarView from "../components/CalendarView";
-import AddScheduleButton from "../components/AddScheduleButton";
 import { useUserContext } from "../contexts/UserContext";
-import { format } from "date-fns";
-import ScheduleList from "../components/ScheduleList";
 import {
   getFirestore,
   collection,
   query,
   where,
   onSnapshot,
-  // limit,
 } from "firebase/firestore";
 import { getTrainerSchedules } from "../lib/schedules";
 import { getMembersByTrainer } from "../lib/users";
@@ -61,20 +56,6 @@ function WeeklyCalendarScreen() {
       ),
     });
   }, [navigation]);
-
-  // useFocusEffect(
-  //   useCallback(() => {
-  //     const q = query(schedulesCollection, where("trainerId", "==", user.id));
-  //     const unsubscribe = onSnapshot(q, (snapshot) => {
-  //       unsubscribe();
-  //       const schedules = snapshot.docs.map((doc) => ({
-  //         id: doc.id,
-  //         ...doc.data(),
-  //       }));
-  //       setScheduleList(schedules);
-  //     });
-  //   }, [user.id])
-  // );
 
   const combineDateAndTime = (dateStr, timeStr) => {
     const date = new Date(dateStr);

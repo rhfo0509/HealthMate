@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Pressable, StyleSheet, View, FlatList } from "react-native";
+import { StyleSheet, View, FlatList } from "react-native";
 import { useUserContext } from "../contexts/UserContext";
 import { getNotifications } from "../lib/notifications";
 import NotificationCard from "../components/NotificationCard";

@@ -20,7 +20,6 @@ function DietScreen() {
   const route = useRoute();
   const { relatedUserId, postType } = route.params;
   const { user: author } = useUserContext();
-  const [role, setRole] = useState("");
   const firestore = getFirestore();
   const postsCollection = collection(firestore, "posts");
   const [posts, setPosts] = useState([]);

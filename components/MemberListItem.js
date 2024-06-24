@@ -44,7 +44,7 @@ function MemberListItem({ member }) {
 
   return (
     <Pressable
-      style={({ pressed }) => [styles.block]}
+      style={styles.block}
       android_ripple={{ color: "#ededed" }}
       onPress={onPress}
     >

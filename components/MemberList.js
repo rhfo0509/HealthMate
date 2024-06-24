@@ -1,5 +1,5 @@
 import React from "react";
-import { Alert, FlatList, StyleSheet, View } from "react-native";
+import { Alert, StyleSheet } from "react-native";
 import MemberListItem from "./MemberListItem";
 import {
   SwipeableFlatList,

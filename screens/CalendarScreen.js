@@ -1,5 +1,5 @@
-import React, { useEffect, useState, useCallback } from "react";
-import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import React, { useEffect, useState } from "react";
+import { useNavigation } from "@react-navigation/native";
 import { Pressable, Text } from "react-native";
 import CalendarView from "../components/CalendarView";
 import AddScheduleButton from "../components/AddScheduleButton";
@@ -12,7 +12,6 @@ import {
   query,
   where,
   onSnapshot,
-  // limit,
 } from "firebase/firestore";
 import { getTrainerSchedules } from "../lib/schedules";
 import IconRightButton from "../components/IconRightButton";
@@ -83,20 +82,6 @@ function CalendarScreen() {
       ),
     });
   }, [navigation]);
-
-  // useFocusEffect(
-  //   useCallback(() => {
-  //     const q = query(schedulesCollection, where("trainerId", "==", user.id));
-  //     const unsubscribe = onSnapshot(q, (snapshot) => {
-  //       unsubscribe();
-  //       const schedules = snapshot.docs.map((doc) => ({
-  //         id: doc.id,
-  //         ...doc.data(),
-  //       }));
-  //       setScheduleList(schedules);
-  //     });
-  //   }, [user.id])
-  // );
 
   const markedDates = scheduleList.reduce((acc, cur) => {
     acc[cur.date] = { marked: true };

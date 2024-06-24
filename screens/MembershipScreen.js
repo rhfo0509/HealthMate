@@ -9,9 +9,8 @@ import {
   Alert,
 } from "react-native";
 import { CheckBox } from "react-native-elements";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { useRoute } from "@react-navigation/native";
 import { useUserContext } from "../contexts/UserContext";
-import IconRightButton from "../components/IconRightButton";
 import { getMembership, updateMembership } from "../lib/memberships";
 import {
   createSchedulesWithMembership,
@@ -29,7 +28,6 @@ import {
 function MembershipScreen() {
   const [showFirst, setShowFirst] = useState(false);
   const [showSecond, setShowSecond] = useState(false);
-  const navigation = useNavigation();
   const route = useRoute();
   const { memberId } = route.params;
   const { user } = useUserContext();

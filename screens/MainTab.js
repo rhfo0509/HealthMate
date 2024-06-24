@@ -3,9 +3,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import HomeStack from "./HomeStack";
 import MyProfileStack from "./MyProfileStack";
 import { MaterialIcons } from "@expo/vector-icons";
-import CameraButton from "../components/CameraButton";
 import { StyleSheet, View } from "react-native";
-import AddMemberButton from "../components/AddMemberButton";
 
 const Tab = createBottomTabNavigator();
 
