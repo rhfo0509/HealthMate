@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import {
   View,
   Pressable,
@@ -20,6 +20,12 @@ function MemberModal({
   membershipInfo,
   setMembershipInfo,
 }) {
+  const phoneNumberRef = useRef();
+  const yearRef = useRef();
+  const monthRef = useRef();
+  const dayRef = useRef();
+  const countRef = useRef();
+
   return (
     <Modal visible={visible} animationType="fade" transparent={true}>
       <View style={styles.container}>
@@ -29,18 +35,24 @@ function MemberModal({
             placeholder="이름"
             value={memberName}
             onChangeText={setMemberName}
+            returnKeyType="next"
+            onSubmitEditing={() => phoneNumberRef.current.focus()}
           />
           <BorderedInput
             placeholder="전화번호 (숫자만 입력)"
             value={memberPhoneNumber}
             onChangeText={setMemberPhoneNumber}
             keyboardType="number-pad"
+            returnKeyType="next"
+            ref={phoneNumberRef}
+            onSubmitEditing={() => yearRef.current.focus()}
           />
           <View style={styles.inputGroup}>
             <Text>시작일자</Text>
             <TextInput
               style={styles.input}
               placeholder="년"
+              maxLength={4}
               value={membershipInfo.startYear}
               onChangeText={(text) =>
                 setMembershipInfo((prevInfo) => ({
@@ -49,11 +61,14 @@ function MemberModal({
                 }))
               }
               keyboardType="numeric"
-              maxLength={4}
+              returnKeyType="next"
+              ref={yearRef}
+              onSubmitEditing={() => monthRef.current.focus()}
             />
             <TextInput
               style={styles.input}
               placeholder="월"
+              maxLength={2}
               value={membershipInfo.startMonth}
               onChangeText={(text) =>
                 setMembershipInfo((prevInfo) => ({
@@ -62,11 +77,14 @@ function MemberModal({
                 }))
               }
               keyboardType="numeric"
-              maxLength={2}
+              returnKeyType="next"
+              ref={monthRef}
+              onSubmitEditing={() => dayRef.current.focus()}
             />
             <TextInput
               style={styles.input}
               placeholder="일"
+              maxLength={2}
               value={membershipInfo.startDay}
               onChangeText={(text) =>
                 setMembershipInfo((prevInfo) => ({
@@ -75,14 +93,15 @@ function MemberModal({
                 }))
               }
               keyboardType="numeric"
-              maxLength={2}
+              returnKeyType="next"
+              ref={dayRef}
+              onSubmitEditing={() => countRef.current.focus()}
             />
           </View>
           <View style={{ flexDirection: "row", alignItems: "center" }}>
             <Text>횟수</Text>
             <TextInput
               style={styles.input}
-              keyboardType="numeric"
               maxLength={2}
               onChangeText={(text) => {
                 setMembershipInfo((prevInfo) => ({
@@ -90,17 +109,13 @@ function MemberModal({
                   count: text,
                 }));
               }}
+              keyboardType="numeric"
+              returnKeyType="done"
+              ref={countRef}
             />
             <Text>회</Text>
           </View>
-          <View
-            style={{
-              flexDirection: "row",
-              position: "absolute",
-              bottom: 10,
-              right: 10,
-            }}
-          >
+          <View style={styles.buttonGroup}>
             <Pressable onPress={onPressNext} style={[{ padding: 10 }]}>
               <Text style={[styles.text, { color: "#64B5F6" }]}>다음</Text>
             </Pressable>
@@ -127,6 +142,12 @@ const styles = StyleSheet.create({
   inputGroup: {
     flexDirection: "row",
     alignItems: "center",
+  },
+  buttonGroup: {
+    flexDirection: "row",
+    position: "absolute",
+    bottom: 10,
+    right: 10,
   },
   text: {
     fontSize: 16,

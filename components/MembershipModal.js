@@ -42,9 +42,8 @@ function MembershipModal({
                   />
                   <View style={styles.input}>
                     <TextInput
-                      keyboardType="numeric"
-                      maxLength={2}
                       editable={data.checked}
+                      maxLength={2}
                       onChangeText={(text) => {
                         setMembershipInfo((prevInfo) => ({
                           ...prevInfo,
@@ -57,12 +56,13 @@ function MembershipModal({
                           },
                         }));
                       }}
+                      keyboardType="numeric"
+                      returnKeyType="next"
                     />
                     <Text style={{ marginRight: 5 }}> : </Text>
                     <TextInput
-                      keyboardType="numeric"
-                      maxLength={2}
                       editable={data.checked}
+                      maxLength={2}
                       onChangeText={(text) => {
                         setMembershipInfo((prevInfo) => ({
                           ...prevInfo,
@@ -75,14 +75,15 @@ function MembershipModal({
                           },
                         }));
                       }}
+                      keyboardType="numeric"
+                      returnKeyType="next"
                     />
                   </View>
                   <Text style={{ marginRight: 10 }}>~</Text>
                   <View style={styles.input}>
                     <TextInput
-                      keyboardType="numeric"
-                      maxLength={2}
                       editable={data.checked}
+                      maxLength={2}
                       onChangeText={(text) => {
                         setMembershipInfo((prevInfo) => ({
                           ...prevInfo,
@@ -95,12 +96,13 @@ function MembershipModal({
                           },
                         }));
                       }}
+                      keyboardType="numeric"
+                      returnKeyType="next"
                     />
                     <Text style={{ marginRight: 5 }}> : </Text>
                     <TextInput
-                      keyboardType="numeric"
-                      maxLength={2}
                       editable={data.checked}
+                      maxLength={2}
                       onChangeText={(text) => {
                         setMembershipInfo((prevInfo) => ({
                           ...prevInfo,
@@ -113,6 +115,8 @@ function MembershipModal({
                           },
                         }));
                       }}
+                      keyboardType="numeric"
+                      returnKeyType="done"
                     />
                   </View>
                 </View>
