@@ -18,25 +18,13 @@ function MembershipModal({
 }) {
   return (
     <Modal visible={visible} animationType="fade" transparent={true}>
-      <View style={styles.modalContainer}>
-        <View style={styles.modalContent}>
-          <View
-            style={{
-              position: "absolute",
-              top: 15,
-              left: 22,
-            }}
-          >
-            <Text style={{ fontSize: 24 }}>회원 스케줄 입력</Text>
-          </View>
+      <View style={styles.container}>
+        <View style={styles.content}>
           <View>
             <View>
               {Object.entries(membershipInfo.days).map(([day, data]) => (
-                <View
-                  key={day}
-                  style={{ flexDirection: "row", alignItems: "center" }}
-                >
-                  <Text>{day}</Text>
+                <View key={day} style={styles.inputGroup}>
+                  <Text style={[styles.text, { top: -3 }]}>{day}</Text>
                   <CheckBox
                     checked={data.checked}
                     onPress={() => {
@@ -52,18 +40,7 @@ function MembershipModal({
                       }));
                     }}
                   />
-                  <View
-                    style={{
-                      borderWidth: 1,
-                      borderRadius: 2,
-                      paddingHorizontal: 10,
-                      marginRight: 10,
-                      height: 24,
-                      width: 72,
-                      flexDirection: "row",
-                      alignItems: "center",
-                    }}
-                  >
+                  <View style={styles.input}>
                     <TextInput
                       keyboardType="numeric"
                       maxLength={2}
@@ -101,18 +78,7 @@ function MembershipModal({
                     />
                   </View>
                   <Text style={{ marginRight: 10 }}>~</Text>
-                  <View
-                    style={{
-                      borderWidth: 1,
-                      borderRadius: 2,
-                      paddingHorizontal: 10,
-                      marginRight: 10,
-                      height: 24,
-                      width: 72,
-                      flexDirection: "row",
-                      alignItems: "center",
-                    }}
-                  >
+                  <View style={styles.input}>
                     <TextInput
                       keyboardType="numeric"
                       maxLength={2}
@@ -153,19 +119,12 @@ function MembershipModal({
               ))}
             </View>
           </View>
-          <View
-            style={{
-              flexDirection: "row",
-              position: "absolute",
-              bottom: 10,
-              right: 10,
-            }}
-          >
+          <View style={styles.buttonGroup}>
             <Pressable onPress={onPressSave} style={{ padding: 10 }}>
-              <Text style={{ fontSize: 16, fontWeight: "bold" }}>등록</Text>
+              <Text style={[styles.text, { color: "#64B5F6" }]}>등록</Text>
             </Pressable>
             <Pressable onPress={onPressClose} style={{ padding: 10 }}>
-              <Text style={{ fontSize: 16, fontWeight: "bold" }}>취소</Text>
+              <Text style={[styles.text, { color: "#E57373" }]}>취소</Text>
             </Pressable>
           </View>
         </View>
@@ -176,24 +135,42 @@ function MembershipModal({
 
 const styles = StyleSheet.create({
   input: {
-    width: "24%",
     borderWidth: 1,
-    borderColor: "#bdbdbd",
-    padding: 10,
-    borderRadius: 5,
-    marginHorizontal: 7,
-    marginVertical: 15,
+    borderRadius: 2,
+    paddingHorizontal: 10,
+    marginRight: 10,
+    height: 24,
+    width: 72,
+    flexDirection: "row",
+    alignItems: "center",
   },
-  modalContainer: {
+  inputGroup: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginVertical: -5,
+  },
+  text: {
+    fontSize: 16,
+    fontWeight: "500",
+    color: "black",
+  },
+  buttonGroup: {
+    flexDirection: "row",
+    position: "absolute",
+    bottom: 10,
+    right: 10,
+  },
+  container: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
-  modalContent: {
+  content: {
     backgroundColor: "white",
     paddingHorizontal: 20,
-    paddingVertical: 60,
+    paddingTop: 30,
+    paddingBottom: 50,
     borderRadius: 10,
     width: "80%",
     alignItems: "center",
