@@ -1,19 +1,15 @@
 import React, { useState } from "react";
-import {
-  View,
-  Pressable,
-  StyleSheet,
-  Modal,
-  Text,
-  TextInput,
-} from "react-native";
-import { MaterialIcons } from "@expo/vector-icons";
+import { View, Pressable, StyleSheet } from "react-native";
 import { useUserContext } from "../contexts/UserContext";
+import { MaterialIcons } from "@expo/vector-icons";
+
 import { addMemberToTrainer } from "../lib/users";
-import BorderedInput from "./BorderedInput";
-import { CheckBox } from "react-native-elements";
+
+import MemberModal from "./MemberModal";
+import MembershipModal from "./MembershipModal";
 
 function AddMemberButton() {
+  const { user: trainer } = useUserContext();
   const [showFirst, setShowFirst] = useState(false);
   const [showSecond, setShowSecond] = useState(false);
   const [memberName, setMemberName] = useState("");
@@ -75,10 +71,13 @@ function AddMemberButton() {
       },
     },
   });
-  const { user: trainer } = useUserContext();
 
-  const handleSave = () => {
-    console.log(trainer.id, memberName, memberPhoneNumber);
+  const onPressNext = () => {
+    setShowFirst(false);
+    setShowSecond(true);
+  };
+
+  const onPressSave = () => {
     addMemberToTrainer(trainer.id, {
       name: memberName,
       phoneNumber: memberPhoneNumber,
@@ -146,12 +145,7 @@ function AddMemberButton() {
     setShowSecond(false);
   };
 
-  const handleNext = () => {
-    setShowFirst(false);
-    setShowSecond(true);
-  };
-
-  const handleClose = () => {
+  const onPressClose = () => {
     setMemberName("");
     setMemberPhoneNumber("");
     setMembershipInfo({
@@ -220,275 +214,24 @@ function AddMemberButton() {
       <Pressable style={styles.circle} onPress={() => setShowFirst(true)}>
         <MaterialIcons name="person-add" size={24} color="white" />
       </Pressable>
-      <Modal
+      <MemberModal
         visible={showFirst}
-        animationType="fade"
-        transparent={true}
-        onRequestClose={handleClose}
-      >
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <View
-              style={{
-                position: "absolute",
-                top: 15,
-                left: 22,
-              }}
-            >
-              <Text style={{ fontSize: 24 }}>회원 및 회원권 등록</Text>
-            </View>
-            <BorderedInput
-              hasMarginBottom
-              placeholder="이름"
-              value={memberName}
-              onChangeText={setMemberName}
-            />
-            <BorderedInput
-              placeholder="전화번호 (숫자만 입력)"
-              value={memberPhoneNumber}
-              onChangeText={setMemberPhoneNumber}
-              keyboardType="number-pad"
-            />
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
-            >
-              <Text>시작일자</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="년"
-                value={membershipInfo.startYear}
-                onChangeText={(text) =>
-                  setMembershipInfo((prevInfo) => ({
-                    ...prevInfo,
-                    startYear: text,
-                  }))
-                }
-                keyboardType="numeric"
-                maxLength={4}
-              />
-              <TextInput
-                style={styles.input}
-                placeholder="월"
-                value={membershipInfo.startMonth}
-                onChangeText={(text) =>
-                  setMembershipInfo((prevInfo) => ({
-                    ...prevInfo,
-                    startMonth: text,
-                  }))
-                }
-                keyboardType="numeric"
-                maxLength={2}
-              />
-              <TextInput
-                style={styles.input}
-                placeholder="일"
-                value={membershipInfo.startDay}
-                onChangeText={(text) =>
-                  setMembershipInfo((prevInfo) => ({
-                    ...prevInfo,
-                    startDay: text,
-                  }))
-                }
-                keyboardType="numeric"
-                maxLength={2}
-              />
-            </View>
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
-              <Text>횟수</Text>
-              <TextInput
-                style={styles.input}
-                keyboardType="numeric"
-                maxLength={2}
-                onChangeText={(text) => {
-                  setMembershipInfo((prevInfo) => ({
-                    ...prevInfo,
-                    count: text,
-                  }));
-                }}
-              />
-              <Text>회</Text>
-            </View>
-            <View
-              style={{
-                flexDirection: "row",
-                position: "absolute",
-                bottom: 10,
-                right: 10,
-              }}
-            >
-              <Pressable onPress={handleNext} style={{ padding: 10 }}>
-                <Text style={{ fontSize: 16, fontWeight: "bold" }}>다음</Text>
-              </Pressable>
-              <Pressable onPress={handleClose} style={{ padding: 10 }}>
-                <Text style={{ fontSize: 16, fontWeight: "bold" }}>취소</Text>
-              </Pressable>
-            </View>
-          </View>
-        </View>
-      </Modal>
-      <Modal
+        onPressNext={onPressNext}
+        onPressClose={onPressClose}
+        memberName={memberName}
+        setMemberName={setMemberName}
+        memberPhoneNumber={memberPhoneNumber}
+        setMemberPhoneNumber={setMemberPhoneNumber}
+        membershipInfo={membershipInfo}
+        setMembershipInfo={setMembershipInfo}
+      />
+      <MembershipModal
         visible={showSecond}
-        animationType="fade"
-        transparent={true}
-        onRequestClose={handleClose}
-      >
-        <View style={styles.modalContainer}>
-          <View style={styles.modalContent}>
-            <View
-              style={{
-                position: "absolute",
-                top: 15,
-                left: 22,
-              }}
-            >
-              <Text style={{ fontSize: 24 }}>회원 스케줄 입력</Text>
-            </View>
-            <View>
-              <View>
-                {Object.entries(membershipInfo.days).map(([day, data]) => (
-                  <View
-                    key={day}
-                    style={{ flexDirection: "row", alignItems: "center" }}
-                  >
-                    <Text>{day}</Text>
-                    <CheckBox
-                      checked={data.checked}
-                      onPress={() => {
-                        setMembershipInfo((prevInfo) => ({
-                          ...prevInfo,
-                          days: {
-                            ...prevInfo.days,
-                            [day]: {
-                              ...prevInfo.days[day],
-                              checked: !data.checked,
-                            },
-                          },
-                        }));
-                      }}
-                    />
-                    <View
-                      style={{
-                        borderWidth: 1,
-                        borderRadius: 2,
-                        paddingHorizontal: 10,
-                        marginRight: 10,
-                        height: 24,
-                        width: 72,
-                        flexDirection: "row",
-                        alignItems: "center",
-                      }}
-                    >
-                      <TextInput
-                        keyboardType="numeric"
-                        maxLength={2}
-                        editable={data.checked}
-                        onChangeText={(text) => {
-                          setMembershipInfo((prevInfo) => ({
-                            ...prevInfo,
-                            days: {
-                              ...prevInfo.days,
-                              [day]: {
-                                ...prevInfo.days[day],
-                                startHours: text,
-                              },
-                            },
-                          }));
-                        }}
-                      />
-                      <Text style={{ marginRight: 5 }}> : </Text>
-                      <TextInput
-                        keyboardType="numeric"
-                        maxLength={2}
-                        editable={data.checked}
-                        onChangeText={(text) => {
-                          setMembershipInfo((prevInfo) => ({
-                            ...prevInfo,
-                            days: {
-                              ...prevInfo.days,
-                              [day]: {
-                                ...prevInfo.days[day],
-                                startMinutes: text,
-                              },
-                            },
-                          }));
-                        }}
-                      />
-                    </View>
-                    <Text style={{ marginRight: 10 }}>~</Text>
-                    <View
-                      style={{
-                        borderWidth: 1,
-                        borderRadius: 2,
-                        paddingHorizontal: 10,
-                        marginRight: 10,
-                        height: 24,
-                        width: 72,
-                        flexDirection: "row",
-                        alignItems: "center",
-                      }}
-                    >
-                      <TextInput
-                        keyboardType="numeric"
-                        maxLength={2}
-                        editable={data.checked}
-                        onChangeText={(text) => {
-                          setMembershipInfo((prevInfo) => ({
-                            ...prevInfo,
-                            days: {
-                              ...prevInfo.days,
-                              [day]: {
-                                ...prevInfo.days[day],
-                                endHours: text,
-                              },
-                            },
-                          }));
-                        }}
-                      />
-                      <Text style={{ marginRight: 5 }}> : </Text>
-                      <TextInput
-                        keyboardType="numeric"
-                        maxLength={2}
-                        editable={data.checked}
-                        onChangeText={(text) => {
-                          setMembershipInfo((prevInfo) => ({
-                            ...prevInfo,
-                            days: {
-                              ...prevInfo.days,
-                              [day]: {
-                                ...prevInfo.days[day],
-                                endMinutes: text,
-                              },
-                            },
-                          }));
-                        }}
-                      />
-                    </View>
-                  </View>
-                ))}
-              </View>
-            </View>
-            <View
-              style={{
-                flexDirection: "row",
-                position: "absolute",
-                bottom: 10,
-                right: 10,
-              }}
-            >
-              <Pressable onPress={handleSave} style={{ padding: 10 }}>
-                <Text style={{ fontSize: 16, fontWeight: "bold" }}>등록</Text>
-              </Pressable>
-              <Pressable onPress={handleClose} style={{ padding: 10 }}>
-                <Text style={{ fontSize: 16, fontWeight: "bold" }}>취소</Text>
-              </Pressable>
-            </View>
-          </View>
-        </View>
-      </Modal>
+        onPressSave={onPressSave}
+        onPressClose={onPressClose}
+        membershipInfo={membershipInfo}
+        setMembershipInfo={setMembershipInfo}
+      />
     </View>
   );
 }
@@ -510,29 +253,6 @@ const styles = StyleSheet.create({
     width: 54,
     alignItems: "center",
     justifyContent: "center",
-  },
-  input: {
-    width: "24%",
-    borderWidth: 1,
-    borderColor: "#bdbdbd",
-    padding: 10,
-    borderRadius: 5,
-    marginHorizontal: 7,
-    marginVertical: 15,
-  },
-  modalContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-  },
-  modalContent: {
-    backgroundColor: "white",
-    paddingHorizontal: 20,
-    paddingVertical: 60,
-    borderRadius: 10,
-    width: "80%",
-    alignItems: "center",
   },
 });
 
