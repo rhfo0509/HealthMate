@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, View, Pressable, Text, Platform } from "react-native";
 
-function CustomButton({ onPress, title, hasMarginBottom, theme }) {
+function CustomButton({ onPress, title, hasMarginBottom, theme = "primary" }) {
   const isPrimary = theme === "primary";
   return (
     <View style={[styles.block, hasMarginBottom && styles.margin]}>
@@ -28,10 +28,6 @@ function CustomButton({ onPress, title, hasMarginBottom, theme }) {
     </View>
   );
 }
-
-CustomButton.defaultProps = {
-  theme: "primary",
-};
 
 const styles = StyleSheet.create({
   overflow: {

@@ -1,10 +1,10 @@
-import React from 'react';
-import {Image} from 'react-native';
+import React from "react";
+import { Image } from "react-native";
 
-function Avatar({source, size, style}) {
+function Avatar({ source, size = 32, style }) {
   return (
     <Image
-      source={source || require('../assets/user.png')}
+      source={source || require("../assets/user.png")}
       resizeMode="cover"
       style={[
         style,
@@ -17,8 +17,5 @@ function Avatar({source, size, style}) {
     />
   );
 }
-Avatar.defaultProps = {
-  size: 32,
-};
 
 export default Avatar;
