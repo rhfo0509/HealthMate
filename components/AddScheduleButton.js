@@ -32,14 +32,14 @@ function AddScheduleButton({ selectedDate }) {
     });
 
     setShowModal(false);
-    setSelectedMemberId("");
+    setMemberId("");
     setDate(null);
     setStartTime(null);
     setEndTime(null);
   };
 
   const onPressClose = () => {
-    setSelectedMemberId("");
+    setMemberId("");
     setDate(null);
     setStartTime(null);
     setEndTime(null);
@@ -49,7 +49,7 @@ function AddScheduleButton({ selectedDate }) {
   return (
     <View style={styles.wrapper}>
       <Pressable style={styles.circle} onPress={() => setShowModal(true)}>
-        <MaterialIcons name="event" size={24} color="white" />
+        <MaterialIcons name="add" size={24} color="white" />
       </Pressable>
       <ScheduleModal
         visible={showModal}
@@ -87,33 +87,6 @@ const styles = StyleSheet.create({
     width: 54,
     alignItems: "center",
     justifyContent: "center",
-  },
-  modalContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)", // 반투명 배경
-  },
-  modalContent: {
-    backgroundColor: "white",
-    paddingHorizontal: 20,
-    paddingVertical: 50,
-    borderRadius: 10,
-    width: "80%",
-    alignItems: "center",
-  },
-  label: {
-    fontSize: 16,
-    fontWeight: "bold",
-    marginBottom: 5,
-  },
-  input: {
-    width: "100%",
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 5,
-    padding: 10,
-    marginBottom: 15,
   },
 });
 
