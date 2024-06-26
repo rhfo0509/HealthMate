@@ -40,7 +40,12 @@ function ScheduleModal({
   };
 
   return (
-    <Modal animationType="fade" transparent={true} visible={visible}>
+    <Modal
+      animationType="fade"
+      transparent={true}
+      visible={visible}
+      onRequestClose={onPressClose}
+    >
       <View style={styles.container}>
         <View style={styles.content}>
           <RNPickerSelect

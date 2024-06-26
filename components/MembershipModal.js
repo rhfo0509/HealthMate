@@ -17,7 +17,12 @@ function MembershipModal({
   setMembershipInfo,
 }) {
   return (
-    <Modal visible={visible} animationType="fade" transparent={true}>
+    <Modal
+      visible={visible}
+      animationType="fade"
+      transparent={true}
+      onRequestClose={onPressClose}
+    >
       <View style={styles.container}>
         <View style={styles.content}>
           <View>
