@@ -2,12 +2,12 @@ import React from "react";
 import { View, Text, FlatList, StyleSheet } from "react-native";
 import { format } from "date-fns";
 
-function BodyHistory({ bodyHistoryData }) {
+function BodyHistory({ bodyData }) {
   const renderItem = ({ item, index }) => {
     let weightDiff = 0;
     let SMMDiff = 0;
     let PBFDiff = 0;
-    const previousItem = bodyHistoryData[index + 1];
+    const previousItem = bodyData[index + 1];
 
     if (previousItem) {
       weightDiff = parseFloat(item.weight) - parseFloat(previousItem.weight);
@@ -53,7 +53,7 @@ function BodyHistory({ bodyHistoryData }) {
   return (
     <FlatList
       style={{ marginTop: 20 }}
-      data={bodyHistoryData}
+      data={bodyData}
       renderItem={renderItem}
       keyExtractor={(item) => item.id}
       ItemSeparatorComponent={() => <View style={styles.separator} />}

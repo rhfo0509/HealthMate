@@ -18,41 +18,41 @@ import BodyHistory from "./BodyHistory";
 
 function MemberProfile({ user }) {
   const firestore = getFirestore();
-  const bodyHistoriesCollection = collection(firestore, "bodyHistories");
+  const bodyDataCollection = collection(firestore, "bodyData");
   const [show, setShow] = useState(false);
   const [mode, setMode] = useState("weight");
   const [weightData, setWeightData] = useState([]);
   const [SMMData, setSMMData] = useState([]);
   const [PBFData, setPBFData] = useState([]);
-  const [bodyHistoryData, setBodyHistoryData] = useState([]);
+  const [bodyData, setBodyData] = useState([]);
 
-  // bodyHistories 컬렉션에 변화 발생시 실행
-  // 처음 렌더링 시에도 실행되므로 getBodyHistories를 할 필요가 X
+  // bodyData 컬렉션에 변화 발생시 실행
+  // 처음 렌더링 시에도 실행되므로 getBodyData를 할 필요가 X
   useEffect(() => {
     const q = query(
-      bodyHistoriesCollection,
+      bodyDataCollection,
       orderBy("date", "asc"),
       where("memberId", "==", user.id)
     );
     const unsubscribe = onSnapshot(q, (snapshot) => {
-      const bodyHistories = snapshot.docs.map((doc) => ({
+      const bodyData = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       }));
 
-      setBodyHistoryData([...bodyHistories].reverse());
+      setBodyData([...bodyData].reverse());
 
-      const weights = bodyHistories.map((history) => ({
+      const weights = bodyData.map((history) => ({
         value: parseFloat(history.weight),
         dataPointText: history.weight,
         label: format(history.date.toDate(), "M/d"),
       }));
-      const SMMs = bodyHistories.map((history) => ({
+      const SMMs = bodyData.map((history) => ({
         value: parseFloat(history.SMM),
         dataPointText: history.SMM,
         label: format(history.date.toDate(), "M/d"),
       }));
-      const PBFs = bodyHistories.map((history) => ({
+      const PBFs = bodyData.map((history) => ({
         value: parseFloat(history.PBF),
         dataPointText: history.PBF,
         label: format(history.date.toDate(), "M/d"),
@@ -86,7 +86,7 @@ function MemberProfile({ user }) {
         SMMData={SMMData}
         PBFData={PBFData}
       />
-      <BodyHistory bodyHistoryData={bodyHistoryData} />
+      <BodyHistory bodyData={bodyData} />
     </View>
   );
 }

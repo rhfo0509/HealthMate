@@ -10,7 +10,7 @@ import {
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 import { format } from "date-fns";
 
-import { createBodyHistory } from "../lib/bodyHistory";
+import { createBodyData } from "../lib/bodyData";
 
 function BodyDataModal({ memberId, show, setShow }) {
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -27,7 +27,7 @@ function BodyDataModal({ memberId, show, setShow }) {
   };
 
   const onSave = () => {
-    createBodyHistory({
+    createBodyData({
       memberId,
       date: date ? date : new Date(),
       bodyData,
