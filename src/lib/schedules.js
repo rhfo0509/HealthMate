@@ -12,7 +12,7 @@ import {
   doc,
   writeBatch,
 } from "firebase/firestore";
-import { initFirebase } from "../firebaseConfig";
+import { initFirebase } from "../../firebaseConfig";
 import { format, subDays } from "date-fns";
 import { decreaseMembershipCount, updateMembership } from "./memberships";
 

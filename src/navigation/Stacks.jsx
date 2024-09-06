@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useUserContext } from "../contexts/UserContext";
-import CalendarScreen from "./CalendarScreen";
-import WeeklyCalendarScreen from "./WeeklyCalendarScreen";
+import CalendarScreen from "../screens/CalendarScreen";
+import WeeklyCalendarScreen from "../screens/WeeklyCalendarScreen";
 import { getRole } from "../lib/users";
-import MemberHomeScreen from "./MemberHomeScreen";
+import MemberHomeScreen from "../screens/MemberHomeScreen";
+import MyProfileScreen from "../screens/MyProfileScreen";
 import MemberDetailTab from "./MemberDetailTab";
 
 const Stack = createNativeStackNavigator();
 
+// HomeStack
 function HomeStack() {
   const { user } = useUserContext();
   const [role, setRole] = useState("");
@@ -41,4 +43,14 @@ function HomeStack() {
   );
 }
 
-export default HomeStack;
+// MyProfileStack
+function MyProfileStack() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name="MyProfile" component={MyProfileScreen} />
+      <Stack.Screen name="MemberDetail" component={MemberDetailTab} />
+    </Stack.Navigator>
+  );
+}
+
+export { HomeStack, MyProfileStack };

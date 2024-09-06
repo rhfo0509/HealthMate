@@ -11,7 +11,7 @@ import {
   updateDoc,
   doc,
 } from "firebase/firestore";
-import { initFirebase } from "../firebaseConfig";
+import { initFirebase } from "../../firebaseConfig";
 
 initFirebase();
 

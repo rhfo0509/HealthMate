@@ -5,7 +5,7 @@ import {
   onAuthStateChanged,
   signOut,
 } from "firebase/auth";
-import { initFirebase } from "../firebaseConfig";
+import { initFirebase } from "../../firebaseConfig";
 
 initFirebase();
 

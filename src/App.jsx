@@ -1,6 +1,6 @@
 import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
-import RootStack from "./screens/RootStack";
+import Root from "./navigation/Root";
 import { UserContextProvider } from "./contexts/UserContext";
 import { ActionSheetProvider } from "@expo/react-native-action-sheet";
 import "react-native-get-random-values";
@@ -12,7 +12,7 @@ function App() {
       <ActionSheetProvider>
         <UserContextProvider>
           <NavigationContainer>
-            <RootStack />
+            <Root />
           </NavigationContainer>
         </UserContextProvider>
       </ActionSheetProvider>
