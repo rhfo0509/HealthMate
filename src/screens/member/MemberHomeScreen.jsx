@@ -4,17 +4,17 @@ import { useNavigation } from "@react-navigation/native";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 import PagerView from "react-native-pager-view";
 import { MaterialIcons } from "@expo/vector-icons";
-import { useUserContext } from "../contexts/UserContext";
-import Avatar from "../components/Avatar";
-import { getMemberSchedules } from "../lib/schedules";
-import { getMembershipsByMember } from "../lib/memberships";
+import { useUserContext } from "../../contexts/UserContext";
+import Avatar from "../../components/Avatar";
+import { getMemberSchedules } from "../../lib/schedules";
+import { getMembershipsByMember } from "../../lib/memberships";
 import { addMinutes, differenceInMinutes, format, isAfter } from "date-fns";
 import { ko } from "date-fns/locale";
-import { getUser } from "../lib/users";
-import IconRightButton from "../components/IconRightButton";
+import { getUser } from "../../lib/users";
+import IconRightButton from "../../components/IconRightButton";
 import { TextInput } from "react-native";
-import { createNotification } from "../lib/notifications";
-import MembershipCard from "../components/MembershipCard";
+import { createNotification } from "../../lib/notifications";
+import MembershipCard from "../../components/MembershipCard";
 
 function MemberHomeScreen() {
   const navigation = useNavigation();

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { Pressable, Text, StyleSheet } from "react-native";
 import WeekView from "react-native-week-view";
-import { useUserContext } from "../contexts/UserContext";
+import { useUserContext } from "../../contexts/UserContext";
 import {
   getFirestore,
   collection,
@@ -10,8 +10,8 @@ import {
   where,
   onSnapshot,
 } from "firebase/firestore";
-import { getTrainerSchedules } from "../lib/schedules";
-import { getMembersByTrainer } from "../lib/users";
+import { getTrainerSchedules } from "../../lib/schedules";
+import { getMembersByTrainer } from "../../lib/users";
 
 function WeeklyCalendarScreen() {
   const navigation = useNavigation();

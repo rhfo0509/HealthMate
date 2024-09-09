@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useUserContext } from "../contexts/UserContext";
-import CalendarScreen from "../screens/CalendarScreen";
-import WeeklyCalendarScreen from "../screens/WeeklyCalendarScreen";
+import CalendarScreen from "../screens/trainer/CalendarScreen";
+import WeeklyCalendarScreen from "../screens/trainer/WeeklyCalendarScreen";
 import { getRole } from "../lib/users";
-import MemberHomeScreen from "../screens/MemberHomeScreen";
+import MemberHomeScreen from "../screens/member/MemberHomeScreen";
 import MyProfileScreen from "../screens/MyProfileScreen";
 import MemberDetailTab from "./MemberDetailTab";
 

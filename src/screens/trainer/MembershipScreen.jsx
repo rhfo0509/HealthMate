@@ -10,12 +10,12 @@ import {
 } from "react-native";
 import { CheckBox } from "react-native-elements";
 import { useRoute } from "@react-navigation/native";
-import { useUserContext } from "../contexts/UserContext";
-import { getMembership, updateMembership } from "../lib/memberships";
+import { useUserContext } from "../../contexts/UserContext";
+import { getMembership, updateMembership } from "../../lib/memberships";
 import {
   createSchedulesWithMembership,
   removeSchedulesWithMember,
-} from "../lib/schedules";
+} from "../../lib/schedules";
 import { addDays, format, max } from "date-fns";
 import {
   getFirestore,

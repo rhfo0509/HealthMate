@@ -11,7 +11,7 @@ import { getUser } from "../lib/users";
 import { subscribeAuth } from "../lib/auth";
 import SettingScreen from "../screens/SettingScreen";
 import PostScreen from "../screens/PostScreen";
-import MembershipScreen from "../screens/MembershipScreen";
+import MembershipScreen from "../screens/trainer/MembershipScreen";
 import NotifyScreen from "../screens/NotifyScreen";
 
 const Stack = createNativeStackNavigator();

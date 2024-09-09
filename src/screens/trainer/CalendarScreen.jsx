@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { Pressable, Text } from "react-native";
-import CalendarView from "../components/CalendarView";
-import AddScheduleButton from "../components/AddScheduleButton";
-import { useUserContext } from "../contexts/UserContext";
+import CalendarView from "../../components/CalendarView";
+import AddScheduleButton from "../../components/AddScheduleButton";
+import { useUserContext } from "../../contexts/UserContext";
 import { format } from "date-fns";
-import ScheduleList from "../components/ScheduleList";
+import ScheduleList from "../../components/ScheduleList";
 import {
   getFirestore,
   collection,
@@ -13,8 +13,8 @@ import {
   where,
   onSnapshot,
 } from "firebase/firestore";
-import { getTrainerSchedules } from "../lib/schedules";
-import IconRightButton from "../components/IconRightButton";
+import { getTrainerSchedules } from "../../lib/schedules";
+import IconRightButton from "../../components/IconRightButton";
 
 function CalendarScreen() {
   const navigation = useNavigation();
@@ -58,24 +58,22 @@ function CalendarScreen() {
     });
   }, [scheduleList]);
 
-  const onPressSchedule = () => {
-    navigation.navigate("WeeklyCalendar");
-  };
-
-  const onPressNotification = () => {
-    navigation.navigate("Notify");
-  };
-
   useEffect(() => {
     navigation.setOptions({
       title: "월간 일정",
       headerRight: () => (
         <>
-          <Pressable onPress={onPressSchedule}>
+          <Pressable
+            onPress={() => {
+              navigation.navigate("WeeklyCalendar");
+            }}
+          >
             <Text style={{ color: "royalblue" }}>주간 일정 보기</Text>
           </Pressable>
           <IconRightButton
-            onPress={onPressNotification}
+            onPress={() => {
+              navigation.navigate("Notify");
+            }}
             name="notifications-none"
           />
         </>
