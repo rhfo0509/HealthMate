@@ -53,7 +53,7 @@ function DietScreen() {
 
   const markedDates = posts?.map((post) => {
     const date = post.createdAt?.toDate();
-    return { date, lines: [{ color: "royalblue", selectedColor: "crimson" }] };
+    return { date, dots: [{ color: "royalblue", selectedColor: "royalblue" }] };
   });
 
   const filteredPosts = posts.filter((post) => {
@@ -73,7 +73,7 @@ function DietScreen() {
         onSelectDate={setSelectedDate}
       />
       <FlatList
-        style={{ marginTop: 100, backgroundColor: "white" }}
+        style={{ backgroundColor: "white" }}
         data={filteredPosts}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
