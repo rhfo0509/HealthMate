@@ -1,12 +1,10 @@
 import {
   getFirestore,
   collection,
-  getDocs,
-  query,
-  where,
-  orderBy,
   addDoc,
   Timestamp,
+  deleteDoc,
+  doc,
 } from "firebase/firestore";
 import { initFirebase } from "../../firebaseConfig";
 
@@ -23,4 +21,8 @@ export async function createBodyData({ memberId, date, bodyData }) {
     SMM: bodyData.SMM,
     PBF: bodyData.PBF,
   });
+}
+
+export async function removeBodyData(id) {
+  await deleteDoc(doc(bodyDataCollection, id));
 }
