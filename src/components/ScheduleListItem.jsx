@@ -10,13 +10,13 @@ import Avatar from "./Avatar";
 function ScheduleListItem({ schedule }) {
   const [show, setShow] = useState(null);
   const [member, setMember] = useState(null);
-  const { id, date, startTime, endTime, memberId, trainerId } = schedule;
+  const { id, date, startTime, endTime, memberId } = schedule;
   const parsedDate = parse(date, "yyyy-MM-dd", new Date());
 
   // 오늘 날짜인지 확인
   const today = isToday(parsedDate);
 
-  // 오늘 날짜면 남은 시간 표시, 진행중이면 진행중이라고 표시
+  // 오늘 날짜면 남은 시간 표시, 진행 중이면 진행 중이라고 표시
   function formatDate(startTime, endTime) {
     const [startHours, startMinutes] = startTime.split(":").map(Number);
     const [endHours, endMinutes] = endTime.split(":").map(Number);
@@ -37,7 +37,7 @@ function ScheduleListItem({ schedule }) {
     }
 
     return formatDistance(startDate.getTime(), now, {
-      addSuffix: "true",
+      addSuffix: true,
       locale: ko,
     });
   }
@@ -103,24 +103,40 @@ function ScheduleListItem({ schedule }) {
   };
 
   return (
-    <View
-      style={[styles.block, { flexDirection: "row", alignItems: "center" }]}
-    >
-      <Avatar source={member?.photoURL && { uri: member?.photoURL }} />
-      <View style={{ flexDirection: "row" }}>
-        <Text style={[styles.text, { width: 60 }]}>{member?.displayName}</Text>
-        <Pressable onPress={() => handlePress("date")}>
-          <Text style={styles.text}>{date}</Text>
-        </Pressable>
-        <Pressable onPress={() => handlePress("startTime")}>
-          <Text style={styles.text}>{startTime}</Text>
-        </Pressable>
-        <Text style={styles.text}>~</Text>
-        <Pressable onPress={() => handlePress("endTime")}>
-          <Text style={styles.text}>{endTime}</Text>
-        </Pressable>
+    <View style={styles.block}>
+      <View style={styles.leftContainer}>
+        <Avatar
+          source={member?.photoURL && { uri: member?.photoURL }}
+          size={48}
+        />
+      </View>
+      <View style={styles.infoContainer}>
+        <Text style={styles.memberName}>{member?.displayName}</Text>
+        <View style={styles.scheduleContainer}>
+          <Pressable
+            onPress={() => handlePress("date")}
+            style={styles.dateContainer}
+          >
+            <Text style={styles.dateText}>{date}</Text>
+          </Pressable>
+          <Pressable
+            onPress={() => handlePress("startTime")}
+            style={styles.timeContainer}
+          >
+            <Text style={styles.timeText}>{startTime}</Text>
+          </Pressable>
+          <Text style={styles.separator}>~</Text>
+          <Pressable
+            onPress={() => handlePress("endTime")}
+            style={styles.timeContainer}
+          >
+            <Text style={styles.timeText}>{endTime}</Text>
+          </Pressable>
+        </View>
         {today && (
-          <Text style={styles.text}>··· {formatDate(startTime, endTime)}</Text>
+          <Text style={styles.statusText}>
+            ··· {formatDate(startTime, endTime)}
+          </Text>
         )}
       </View>
       {renderPicker()}
@@ -130,16 +146,64 @@ function ScheduleListItem({ schedule }) {
 
 const styles = StyleSheet.create({
   block: {
-    backgroundColor: "white",
-    paddingHorizontal: 16,
-    paddingVertical: 16,
-    borderRadius: 20,
-    marginBottom: 5,
+    backgroundColor: "#fff",
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 16,
+    borderRadius: 12,
+    marginBottom: 10,
+    shadowColor: "#000",
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 8,
+    elevation: 2,
   },
-  text: {
-    color: "#37474f",
+  leftContainer: {
+    marginRight: 16,
+  },
+  infoContainer: {
+    flex: 1,
+  },
+  memberName: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#333",
+  },
+  scheduleContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 4,
+  },
+  dateContainer: {
+    backgroundColor: "#f0f4f8",
+    borderRadius: 8,
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+    marginRight: 8,
+  },
+  dateText: {
     fontSize: 14,
-    paddingLeft: 4,
+    color: "#555",
+  },
+  timeContainer: {
+    backgroundColor: "#e0f7fa",
+    borderRadius: 8,
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+  },
+  timeText: {
+    fontSize: 14,
+    color: "#00796b",
+  },
+  separator: {
+    fontSize: 14,
+    color: "#00796b",
+    paddingHorizontal: 8,
+  },
+  statusText: {
+    marginTop: 4,
+    fontSize: 12,
+    color: "#00796b",
   },
 });
 

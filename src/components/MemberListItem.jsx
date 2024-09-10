@@ -48,21 +48,23 @@ function MemberListItem({ member }) {
       android_ripple={{ color: "#ededed" }}
       onPress={onPress}
     >
-      <View style={{ flexDirection: "row", alignItems: "center" }}>
-        <Avatar source={photoURL && { uri: photoURL }} />
-        <View style={{ flex: 1, flexDirection: "row", alignItems: "center" }}>
-          <Text style={styles.text}>{displayName} </Text>
-          <Text>
-            ({calculateAge(birthDate)}/{gender === "Male" ? "남" : "여"})
+      <View style={styles.content}>
+        <Avatar source={photoURL && { uri: photoURL }} size={56} />
+        <View style={styles.infoContainer}>
+          <Text style={styles.nameText}>{displayName}</Text>
+          <Text style={styles.subText}>
+            {calculateAge(birthDate)}세 / {gender === "Male" ? "남" : "여"}
           </Text>
         </View>
-        <Text style={styles.text}>
-          {status === "active"
-            ? `${remaining} / ${count}회 남음`
-            : status === "paused"
-            ? "중단됨"
-            : "만료됨"}
-        </Text>
+        <View style={styles.statusContainer}>
+          <Text style={styles.statusText}>
+            {status === "active"
+              ? `${remaining} / ${count}회 남음`
+              : status === "paused"
+              ? "중단됨"
+              : "만료됨"}
+          </Text>
+        </View>
       </View>
     </Pressable>
   );
@@ -71,15 +73,43 @@ function MemberListItem({ member }) {
 const styles = StyleSheet.create({
   block: {
     backgroundColor: "white",
-    paddingHorizontal: 16,
-    paddingVertical: 16,
-    borderRadius: 20,
-    marginBottom: 5,
+    padding: 16,
+    borderRadius: 12,
+    marginBottom: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 2,
   },
-  text: {
+  content: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  infoContainer: {
+    flex: 1,
+    marginLeft: 16,
+  },
+  nameText: {
+    fontSize: 18,
+    fontWeight: "bold",
     color: "#37474f",
-    fontSize: 16,
-    paddingLeft: 8,
+  },
+  subText: {
+    fontSize: 14,
+    color: "#757575",
+    marginTop: 4,
+  },
+  statusContainer: {
+    backgroundColor: "#f0f4f8",
+    paddingHorizontal: 10,
+    paddingVertical: 5,
+    borderRadius: 8,
+  },
+  statusText: {
+    fontSize: 14,
+    fontWeight: "600",
+    color: "#00796b",
   },
 });
 
