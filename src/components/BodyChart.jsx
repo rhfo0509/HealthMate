@@ -9,6 +9,8 @@ function BodyChart({ mode, weightData, SMMData, PBFData }) {
       width={340}
       thickness={3}
       endSpacing={20}
+      spacing={70}
+      scrollToEnd
       adjustToWidth
       showVerticalLines
       color1={mode == "weight" ? "red" : mode == "SMM" ? "blue" : "orange"}

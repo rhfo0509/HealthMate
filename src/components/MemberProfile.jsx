@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, ActivityIndicator } from "react-native";
 import {
   getFirestore,
   collection,
@@ -25,15 +25,15 @@ function MemberProfile({ user }) {
   const [SMMData, setSMMData] = useState([]);
   const [PBFData, setPBFData] = useState([]);
   const [bodyData, setBodyData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true); // 로딩 상태 관리
 
-  // bodyData 컬렉션에 변화 발생시 실행
-  // 처음 렌더링 시에도 실행되므로 getBodyData를 할 필요가 X
   useEffect(() => {
     const q = query(
       bodyDataCollection,
       orderBy("date", "asc"),
       where("memberId", "==", user.id)
     );
+
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const bodyData = snapshot.docs.map((doc) => ({
         id: doc.id,
@@ -62,11 +62,13 @@ function MemberProfile({ user }) {
       setSMMData(SMMs);
       setPBFData(PBFs);
 
-      return () => {
-        unsubscribe();
-      };
+      setIsLoading(false); // 데이터가 다 불러와졌을 때 로딩 상태 해제
     });
-  }, []);
+
+    return () => {
+      unsubscribe();
+    };
+  }, [user.id]); // user.id 의존성 추가
 
   return (
     <View style={styles.block}>
@@ -76,17 +78,35 @@ function MemberProfile({ user }) {
           {user.displayName} 회원님 환영합니다!
         </Text>
       </View>
+
       <View style={styles.chartInfo}>
         <BodyChartButtons setMode={setMode} setShow={setShow} />
         <BodyDataModal memberId={user.id} show={show} setShow={setShow} />
       </View>
-      <BodyChart
-        mode={mode}
-        weightData={weightData}
-        SMMData={SMMData}
-        PBFData={PBFData}
-      />
-      <BodyHistory bodyData={bodyData} />
+
+      {/* 로딩 상태일 때 ActivityIndicator 표시 */}
+      {isLoading ? (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#64B5F6" />
+        </View>
+      ) : bodyData.length === 0 ? (
+        <View style={styles.noDataContainer}>
+          <Text style={styles.noDataText}>
+            체성분 데이터가 존재하지 않습니다. 상단의 [ + ] 버튼을 눌러 자신의
+            체성분을 등록하세요!
+          </Text>
+        </View>
+      ) : (
+        <>
+          <BodyChart
+            mode={mode}
+            weightData={weightData}
+            SMMData={SMMData}
+            PBFData={PBFData}
+          />
+          <BodyHistory bodyData={bodyData} />
+        </>
+      )}
     </View>
   );
 }
@@ -111,6 +131,21 @@ const styles = StyleSheet.create({
     borderTopColor: "#ededed",
     flexDirection: "row",
     justifyContent: "space-around",
+    alignItems: "center",
+  },
+  noDataContainer: {
+    flex: 1,
+    marginHorizontal: 60,
+    justifyContent: "center",
+  },
+  noDataText: {
+    fontSize: 20,
+    color: "#757575",
+    textAlign: "center",
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
     alignItems: "center",
   },
 });
