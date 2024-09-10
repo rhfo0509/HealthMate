@@ -56,17 +56,17 @@ function Root() {
           <Stack.Screen
             name="DietPost"
             component={DietPostScreen}
-            options={{ title: "새 게시글" }}
+            options={{ title: "오늘의 식단기록" }}
           />
           <Stack.Screen
             name="ExercisePost"
             component={ExercisePostScreen}
-            options={{ title: "새 게시글" }}
+            options={{ title: "오늘의 운동기록" }}
           />
           <Stack.Screen
             name="Comment"
             component={CommentScreen}
-            options={{ title: "새 댓글" }}
+            options={{ title: "댓글 작성" }}
           />
           <Stack.Screen
             name="Modify"
