@@ -80,7 +80,7 @@ function CommentCard({ createdAt, content, id, author, postId, parentId }) {
   );
 
   return (
-    <View style={styles.block}>
+    <View style={styles.card}>
       <FlatList
         style={{ backgroundColor: "white" }}
         data={subcomments}
@@ -89,26 +89,28 @@ function CommentCard({ createdAt, content, id, author, postId, parentId }) {
         ItemSeparatorComponent={() => <View style={styles.separator} />}
         ListHeaderComponent={
           <Pressable
-            style={[styles.block, parentId ? styles.sub : null]}
+            style={[styles.cardContent, parentId ? styles.sub : null]}
             android_ripple={{ color: "#ededed" }}
             onPress={onPress}
             disabled={parentId ? true : false}
           >
-            <View style={[styles.head, styles.paddingBlock]}>
+            <View style={styles.header}>
               <View style={styles.profile}>
                 <Avatar source={author.photoURL && { uri: author.photoURL }} />
-                <Text style={styles.displayName}>
-                  {author.displayName}{" "}
-                  {role === "trainer" ? "트레이너" : "회원"}
-                </Text>
+                <View style={styles.profileInfo}>
+                  <Text style={styles.displayName}>{author.displayName}</Text>
+                  <Text style={styles.role}>
+                    {role === "trainer" ? "트레이너" : "회원"}
+                  </Text>
+                </View>
               </View>
               {isMyComment && (
                 <Pressable hitSlop={8} onPress={onPressMore}>
-                  <MaterialIcons name="more-vert" size={20} />
+                  <MaterialIcons name="more-vert" size={20} color="#757575" />
                 </Pressable>
               )}
             </View>
-            <View style={styles.paddingBlock}>
+            <View style={styles.contentContainer}>
               <Text style={styles.content}>{content}</Text>
               <Text date={date} style={styles.date}>
                 {date.toLocaleString()}
@@ -122,51 +124,67 @@ function CommentCard({ createdAt, content, id, author, postId, parentId }) {
 }
 
 const styles = StyleSheet.create({
-  block: {
-    paddingVertical: 8,
+  card: {
+    backgroundColor: "#fff",
+    borderRadius: 12,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 2,
+    marginVertical: 8,
+    marginHorizontal: 16,
+    overflow: "hidden",
+  },
+  cardContent: {
+    paddingVertical: 12,
+    paddingHorizontal: 16,
   },
   separator: {
     backgroundColor: "#e0e0e0",
     height: 1,
     width: "100%",
   },
-  paddingBlock: {
-    paddingHorizontal: 16,
-  },
-  head: {
+  header: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    marginBottom: 16,
+    marginBottom: 12,
   },
   profile: {
     flexDirection: "row",
     alignItems: "center",
   },
-  displayName: {
-    lineHeight: 24,
-    fontSize: 16,
-    marginLeft: 8,
-    fontWeight: "bold",
+  profileInfo: {
+    marginLeft: 12,
   },
-  image: {
-    backgroundColor: "#bdbdbd",
-    width: "100%",
-    aspectRatio: 1,
-    marginBottom: 16,
+  displayName: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#333",
+  },
+  role: {
+    color: "#757575",
+    fontSize: 14,
+  },
+  contentContainer: {
+    marginTop: 8,
   },
   content: {
     fontSize: 16,
+    color: "#333",
     lineHeight: 24,
     marginBottom: 8,
   },
   date: {
-    color: "#757575",
     fontSize: 12,
-    lineHeight: 18,
+    color: "#757575",
   },
   sub: {
-    paddingLeft: 30,
+    paddingLeft: 20,
+    backgroundColor: "#f9f9f9",
+    borderLeftWidth: 4,
+    borderLeftColor: "#e0e0e0",
   },
 });
 
