@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useRoute } from "@react-navigation/native";
-import { StyleSheet, View, FlatList } from "react-native";
+import { StyleSheet, View, FlatList, ActivityIndicator } from "react-native";
 import CalendarHeader from "../components/CalendarHeader";
 import WriteButton from "../components/WriteButton";
 import PostCard from "../components/PostCard";
@@ -24,11 +24,23 @@ function DietScreen() {
   const postsCollection = collection(firestore, "posts");
   const [posts, setPosts] = useState([]);
   const [selectedDate, setSelectedDate] = useState(new Date());
+  const [isLoading, setIsLoading] = useState(true); // 로딩 상태 추가
 
   // 최초로 DietScreen 접근 시
   useEffect(() => {
-    getPosts(author.id, relatedUserId, postType).then(setPosts);
-  }, []);
+    const fetchData = async () => {
+      try {
+        const posts = await getPosts(author.id, relatedUserId, postType);
+        setPosts(posts);
+      } catch (error) {
+        console.error("Error fetching posts:", error);
+      } finally {
+        setIsLoading(false); // 데이터를 불러온 후 로딩 상태 해제
+      }
+    };
+
+    fetchData();
+  }, [author.id, relatedUserId, postType]);
 
   // posts 컬렉션에 변화 발생시
   useEffect(() => {
@@ -49,7 +61,7 @@ function DietScreen() {
     return () => {
       unsubscribe();
     };
-  }, []);
+  }, [author.id, relatedUserId, postType]);
 
   const markedDates = posts?.map((post) => {
     const date = post.createdAt?.toDate();
@@ -64,6 +76,14 @@ function DietScreen() {
       format(selectedDate, "yyyy-MM-dd")
     );
   });
+
+  if (isLoading) {
+    return (
+      <View style={styles.loader}>
+        <ActivityIndicator size="large" color="royalblue" />
+      </View>
+    );
+  }
 
   return (
     <View style={styles.block}>
@@ -105,6 +125,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#e0e0e0",
     height: 1,
     width: "100%",
+  },
+  loader: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   },
 });
 
