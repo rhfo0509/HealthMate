@@ -71,7 +71,10 @@ function PostCard({
         )}
       </View>
       <Pressable
-        style={styles.contentContainer}
+        style={[
+          styles.contentContainer,
+          isDetailMode && { flexDirection: "column" },
+        ]}
         onPress={onPressPost}
         disabled={isDetailMode}
       >
@@ -104,16 +107,13 @@ function PostCard({
             </Modal>
           </View>
         ) : null}
-        <View style={styles.textContainer}>
-          {postType === "Diet" && (
-            <View style={styles.dietBadge}>
-              <Text style={styles.dietText}>{dietType}</Text>
-            </View>
-          )}
+        <View
+          style={[styles.textContainer, isDetailMode && { paddingLeft: 16 }]}
+        >
           <Text
             style={styles.contentText}
-            numberOfLines={7}
-            ellipsizeMode="tail"
+            numberOfLines={isDetailMode ? undefined : 7}
+            ellipsizeMode={isDetailMode ? undefined : "tail"}
           >
             {content}
           </Text>
@@ -181,19 +181,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#333",
     lineHeight: 24,
-  },
-  dietBadge: {
-    backgroundColor: "#1f6feb",
-    borderRadius: 5,
-    paddingVertical: 4,
-    paddingHorizontal: 8,
-    alignSelf: "flex-start",
-    marginBottom: 8,
-  },
-  dietText: {
-    color: "#fff",
-    fontWeight: "bold",
-    fontSize: 14,
   },
   footer: {
     paddingHorizontal: 16,
