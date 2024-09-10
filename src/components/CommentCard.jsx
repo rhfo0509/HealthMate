@@ -1,5 +1,11 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { View, StyleSheet, Text, Pressable } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Text,
+  Pressable,
+  ActivityIndicator,
+} from "react-native";
 import Avatar from "./Avatar";
 import { useNavigation } from "@react-navigation/native";
 import { useUserContext } from "../contexts/UserContext";
@@ -25,6 +31,7 @@ function CommentCard({ createdAt, content, id, author, postId, parentId }) {
   const { user } = useUserContext();
   const isMyComment = user.id === author.id;
   const [role, setRole] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
   const [subcomments, setSubcomments] = useState([]);
   const firestore = getFirestore();
   const subcommentsCollection = collection(
@@ -56,26 +63,29 @@ function CommentCard({ createdAt, content, id, author, postId, parentId }) {
   }, []);
 
   useEffect(() => {
-    (async () => {
+    const fetchRole = async () => {
+      setIsLoading(true);
       const result = await getRole(author.id);
       setRole(result);
-    })();
+      setIsLoading(false);
+    };
+
+    fetchRole();
   }, [author.id]);
 
   const onPress = () => {
-    navigation.navigate("UploadComment", { postId, commentId: id });
+    navigation.navigate("Comment", { postId, commentId: id });
   };
-  // postId가 있으면 댓글, 없으면 게시글 / 부모 댓글(parentId)이 있으면 대댓글, 아니라면 댓글
   const { onPressMore } = useActions({ id, content, postId, parentId });
 
   const renderItem = ({ item }) => (
     <CommentCard
       createdAt={item.createdAt}
       content={item.content}
-      id={item.id} // 대댓글 id
+      id={item.id}
       author={item.author}
-      postId={postId} // 게시글 id
-      parentId={id} // 댓글 id
+      postId={postId}
+      parentId={id}
     />
   );
 
@@ -99,9 +109,13 @@ function CommentCard({ createdAt, content, id, author, postId, parentId }) {
                 <Avatar source={author.photoURL && { uri: author.photoURL }} />
                 <View style={styles.profileInfo}>
                   <Text style={styles.displayName}>{author.displayName}</Text>
-                  <Text style={styles.role}>
-                    {role === "trainer" ? "트레이너" : "회원"}
-                  </Text>
+                  {isLoading ? (
+                    <ActivityIndicator size="small" color="#757575" />
+                  ) : (
+                    <Text style={styles.role}>
+                      {role === "trainer" ? "트레이너" : "회원"}
+                    </Text>
+                  )}
                 </View>
               </View>
               {isMyComment && (

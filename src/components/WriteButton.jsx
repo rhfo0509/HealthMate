@@ -5,9 +5,15 @@ import { MaterialIcons } from "@expo/vector-icons";
 
 function WriteButton({ postType, relatedUserId }) {
   const navigation = useNavigation();
+
   const onPress = () => {
-    navigation.navigate("UploadPost", { postType, relatedUserId });
+    if (postType === "Diet") {
+      navigation.navigate("DietPost", { postType, relatedUserId });
+    } else if (postType === "Exercise") {
+      navigation.navigate("ExercisePost", { postType, relatedUserId });
+    }
   };
+
   return (
     <View style={styles.wrapper}>
       <Pressable style={styles.circle} onPress={onPress}>

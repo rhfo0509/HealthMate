@@ -62,7 +62,7 @@ function PostScreen() {
   );
 
   const onPress = () => {
-    navigation.navigate("UploadComment", { postId: id });
+    navigation.navigate("Comment", { postId: id });
   };
 
   return (

@@ -23,7 +23,7 @@ import CameraButton from "../components/CameraButton";
 import ProgressBar from "../components/ProgressBar";
 import IconRightButton from "../components/IconRightButton";
 
-function UploadPostScreen() {
+function DietPostScreen() {
   const { width } = useWindowDimensions();
   const { result } = useRoute().params || {};
   const { relatedUserId, postType } = useRoute().params || {};
@@ -73,11 +73,8 @@ function UploadPostScreen() {
       content,
       relatedUserId,
       postType,
+      dietType: buttons[selectedIndex],
     };
-
-    if (postType === "Diet") {
-      newPost.dietType = buttons[selectedIndex];
-    }
 
     await createPost(newPost);
     setIsUploading(false);
@@ -143,13 +140,11 @@ function UploadPostScreen() {
 
   return (
     <View style={styles.container}>
-      {postType === "Diet" && (
-        <ButtonGroup
-          onPress={setSelectedIndex}
-          selectedIndex={selectedIndex}
-          buttons={buttons}
-        />
-      )}
+      <ButtonGroup
+        onPress={setSelectedIndex}
+        selectedIndex={selectedIndex}
+        buttons={buttons}
+      />
       {result && (
         <Animated.Image
           source={{ uri: result.assets[0]?.uri }}
@@ -195,4 +190,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default UploadPostScreen;
+export default DietPostScreen;

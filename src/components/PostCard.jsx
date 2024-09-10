@@ -1,5 +1,13 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { View, StyleSheet, Text, Image, Pressable, Modal } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Text,
+  Image,
+  Pressable,
+  Modal,
+  ActivityIndicator,
+} from "react-native";
 import Avatar from "./Avatar";
 import { useNavigation } from "@react-navigation/native";
 import { useUserContext } from "../contexts/UserContext";
@@ -15,7 +23,6 @@ function PostCard({
   createdAt,
   id,
   isDetailMode,
-  postType,
   dietType,
 }) {
   const navigation = useNavigation();
@@ -27,6 +34,7 @@ function PostCard({
   const { user } = useUserContext();
   const isMyPost = user.id === author.id;
   const [role, setRole] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
   const [show, setShow] = useState(false);
 
   const onPressPost = () => {
@@ -46,10 +54,14 @@ function PostCard({
   const isVideo = (URL) => /\.(mp4|mov|avi)/i.test(URL);
 
   useEffect(() => {
-    (async () => {
+    const fetchRole = async () => {
+      setIsLoading(true);
       const result = await getRole(author.id);
       setRole(result);
-    })();
+      setIsLoading(false);
+    };
+
+    fetchRole();
   }, [author.id]);
 
   return (
@@ -59,9 +71,13 @@ function PostCard({
           <Avatar source={author.photoURL && { uri: author.photoURL }} />
           <View style={styles.profileInfo}>
             <Text style={styles.displayName}>{author.displayName}</Text>
-            <Text style={styles.role}>
-              {role === "trainer" ? "트레이너" : "회원"}
-            </Text>
+            {isLoading ? (
+              <ActivityIndicator size="small" color="#757575" />
+            ) : (
+              <Text style={styles.role}>
+                {role === "trainer" ? "트레이너" : "회원"}
+              </Text>
+            )}
           </View>
         </View>
         {isMyPost && (

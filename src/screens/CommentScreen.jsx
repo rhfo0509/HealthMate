@@ -5,7 +5,7 @@ import IconRightButton from "../components/IconRightButton";
 import { useUserContext } from "../contexts/UserContext";
 import { createComment, createSubComment } from "../lib/comments";
 
-function UploadCommentScreen() {
+function CommentScreen() {
   const route = useRoute();
   const navigation = useNavigation();
   const { postId, commentId } = route.params;
@@ -58,4 +58,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default UploadCommentScreen;
+export default CommentScreen;

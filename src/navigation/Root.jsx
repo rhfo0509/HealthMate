@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { ActivityIndicator, View, StyleSheet } from "react-native";
-import SignInScreen from "../screens/SignInScreen";
-import WelcomeScreen from "../screens/WelcomeScreen";
-import UploadPostScreen from "../screens/UploadPostScreen";
-import UploadCommentScreen from "../screens/UploadCommentScreen";
-import ModifyScreen from "../screens/ModifyScreen";
 import { useUserContext } from "../contexts/UserContext";
-import MainTab from "./MainTab";
 import { getUser } from "../lib/users";
 import { subscribeAuth } from "../lib/auth";
+import MainTab from "./MainTab";
+
+// Screens
+import SignInScreen from "../screens/SignInScreen";
+import WelcomeScreen from "../screens/WelcomeScreen";
+import DietPostScreen from "../screens/DietPostScreen";
+import ExercisePostScreen from "../screens/ExercisePostScreen";
+import CommentScreen from "../screens/CommentScreen";
+import ModifyScreen from "../screens/ModifyScreen";
 import SettingScreen from "../screens/SettingScreen";
 import PostScreen from "../screens/PostScreen";
 import MembershipScreen from "../screens/trainer/MembershipScreen";
@@ -19,17 +22,15 @@ const Stack = createNativeStackNavigator();
 
 function Root() {
   const { user, setUser } = useUserContext();
-  const [loading, setLoading] = useState(true); // 로딩 상태 추가
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const unsubscribe = subscribeAuth(async (currentUser) => {
       if (currentUser) {
         const profile = await getUser(currentUser.uid);
-        if (profile) {
-          setUser(profile);
-        }
+        if (profile) setUser(profile);
       }
-      setLoading(false); // 인증 상태 확인 후 로딩 상태 해제
+      setLoading(false);
     });
     return () => unsubscribe();
   }, [setUser]);
@@ -45,6 +46,7 @@ function Root() {
   return (
     <Stack.Navigator>
       {user ? (
+        // 로그인 상태인 경우
         <>
           <Stack.Screen
             name="Tabs"
@@ -52,13 +54,18 @@ function Root() {
             options={{ headerShown: false }}
           />
           <Stack.Screen
-            name="UploadPost"
-            component={UploadPostScreen}
+            name="DietPost"
+            component={DietPostScreen}
             options={{ title: "새 게시글" }}
           />
           <Stack.Screen
-            name="UploadComment"
-            component={UploadCommentScreen}
+            name="ExercisePost"
+            component={ExercisePostScreen}
+            options={{ title: "새 게시글" }}
+          />
+          <Stack.Screen
+            name="Comment"
+            component={CommentScreen}
             options={{ title: "새 댓글" }}
           />
           <Stack.Screen
@@ -88,6 +95,7 @@ function Root() {
           />
         </>
       ) : (
+        // 비로그인 상태인 경우
         <>
           <Stack.Screen
             name="SignIn"
