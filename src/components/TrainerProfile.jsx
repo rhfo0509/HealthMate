@@ -89,7 +89,7 @@ function TrainerProfile({ user }) {
             <View style={styles.userInfo}>
               <Avatar
                 source={user.photoURL && { uri: user.photoURL }}
-                size={128}
+                size={48}
               />
               <Text style={styles.username}>
                 {user.displayName} 트레이너님 환영합니다!
@@ -132,14 +132,15 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   userInfo: {
-    paddingTop: 40,
-    paddingBottom: 20,
+    flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 24,
   },
   username: {
-    marginTop: 8,
-    fontSize: 24,
-    color: "#424242",
+    fontSize: 20,
+    color: "#333",
+    marginLeft: 12,
   },
   listHeader: {
     marginVertical: 5,

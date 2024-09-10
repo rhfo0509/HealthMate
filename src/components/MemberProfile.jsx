@@ -62,18 +62,18 @@ function MemberProfile({ user }) {
       setSMMData(SMMs);
       setPBFData(PBFs);
 
-      setIsLoading(false); // 데이터가 다 불러와졌을 때 로딩 상태 해제
+      setIsLoading(false); // 데이터 로딩 후 로딩 상태 해제
     });
 
     return () => {
       unsubscribe();
     };
-  }, [user.id]); // user.id 의존성 추가
+  }, [user.id]);
 
   return (
     <View style={styles.block}>
       <View style={styles.userInfo}>
-        <Avatar source={user.photoURL && { uri: user.photoURL }} size={128} />
+        <Avatar source={user.photoURL && { uri: user.photoURL }} size={64} />
         <Text style={styles.username}>
           {user.displayName} 회원님 환영합니다!
         </Text>
@@ -84,7 +84,6 @@ function MemberProfile({ user }) {
         <BodyDataModal memberId={user.id} show={show} setShow={setShow} />
       </View>
 
-      {/* 로딩 상태일 때 ActivityIndicator 표시 */}
       {isLoading ? (
         <View style={styles.loadingContainer}>
           <ActivityIndicator size="large" color="#64B5F6" />
@@ -117,14 +116,15 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   userInfo: {
-    paddingTop: 40,
-    paddingBottom: 20,
+    flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center",
+    paddingVertical: 20,
   },
   username: {
-    marginTop: 8,
-    fontSize: 24,
+    fontSize: 18,
     color: "#424242",
+    marginLeft: 12,
   },
   chartInfo: {
     borderTopWidth: 1,
