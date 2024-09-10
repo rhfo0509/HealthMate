@@ -9,35 +9,61 @@ function BodyChartButtons({ setMode, setShow }) {
     { text: "체지방률", mode: "PBF" },
   ];
   return (
-    <View style={{ flexDirection: "row", marginVertical: 10 }}>
+    <View style={styles.container}>
       {buttons.map((button) => (
         <Pressable
           key={button.mode}
-          style={styles.button}
+          style={({ pressed }) => [
+            styles.button,
+            pressed && styles.pressedButton,
+          ]}
           onPress={() => setMode(button.mode)}
         >
-          <Text>{button.text}</Text>
+          <Text style={styles.buttonText}>{button.text}</Text>
         </Pressable>
       ))}
       <Pressable
-        style={styles.button}
+        style={({ pressed }) => [
+          styles.button,
+          styles.addButton,
+          pressed && styles.pressedButton,
+        ]}
         onPress={() => setShow(true)}
         android_ripple={{ color: "white" }}
       >
-        <Text>
-          <MaterialIcons name="add" size={24} color="black" />
-        </Text>
+        <MaterialIcons name="add" size={24} color="white" />
       </Pressable>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flexDirection: "row",
+    justifyContent: "center",
+    marginVertical: 10,
+  },
   button: {
-    padding: 20,
-    backgroundColor: "#ededed",
-    marginHorizontal: 10,
-    borderRadius: 10,
+    paddingVertical: 10,
+    paddingHorizontal: 15,
+    backgroundColor: "#f0f0f0",
+    marginHorizontal: 5,
+    borderRadius: 8,
+    justifyContent: "center",
+    alignItems: "center",
+    elevation: 2, // For subtle shadow
+  },
+  pressedButton: {
+    backgroundColor: "#e0e0e0",
+  },
+  buttonText: {
+    fontSize: 14,
+    color: "#333",
+    fontWeight: "500",
+  },
+  addButton: {
+    backgroundColor: "#64B5F6",
+    paddingHorizontal: 10,
   },
 });
 
