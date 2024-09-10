@@ -3,13 +3,13 @@ import {
   StyleSheet,
   View,
   TextInput,
+  Text,
   useWindowDimensions,
   Animated,
   Keyboard,
 } from "react-native";
 import { ButtonGroup } from "react-native-elements";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import IconRightButton from "../components/IconRightButton";
 import { v4 } from "uuid";
 import { createPost } from "../lib/posts";
 import { useUserContext } from "../contexts/UserContext";
@@ -20,75 +20,99 @@ import {
   uploadBytesResumable,
 } from "firebase/storage";
 import CameraButton from "../components/CameraButton";
+import ProgressBar from "../components/ProgressBar";
+import IconRightButton from "../components/IconRightButton";
 
 function UploadPostScreen() {
-  const route = useRoute();
-  const navigation = useNavigation();
-  const { result } = route.params || {};
-  const { relatedUserId, postType } = route.params || "";
   const { width } = useWindowDimensions();
+  const { result } = useRoute().params || {};
+  const { relatedUserId, postType } = useRoute().params || {};
+  const { user: author } = useUserContext();
+  const navigation = useNavigation();
+
   const animation = useRef(new Animated.Value(width)).current;
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
-  const [selectedIndex, setSelectedIndex] = useState(0);
   const [content, setContent] = useState("");
-  const { user: author } = useUserContext();
-  const storage = getStorage();
-
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [progress, setProgress] = useState(0);
+  const [isUploading, setIsUploading] = useState(false);
   const buttons = ["아침", "점심", "저녁", "간식"];
 
-  const onSubmit = useCallback(async () => {
-    navigation.pop();
-    let URL = null;
-
-    // 사진 없이 글만 등록한 경우
-    if (!result) {
-      if (postType === "Diet") {
-        createPost({
-          author,
-          URL,
-          content,
-          relatedUserId,
-          postType,
-          dietType: buttons[selectedIndex],
-        });
-      } else {
-        createPost({ author, URL, content, relatedUserId, postType });
-      }
-      return;
-    }
-
-    // 사진이나 동영상과 함께 등록한 경우
-    const asset = result.assets[0];
-    const extension = asset.uri.split(".").pop();
-    const storageRef = ref(storage, `/asset/${author.id}/${v4()}.${extension}`);
+  // 업로드 중 처리
+  const handleUpload = async (asset, storageRef) => {
     const post = await fetch(asset.uri);
     const postBlob = await post.blob();
-    await uploadBytesResumable(storageRef, postBlob).then(async () => {
-      URL = await getDownloadURL(storageRef);
-      if (postType === "Diet") {
-        createPost({
-          author,
-          URL,
-          content,
-          relatedUserId,
-          postType,
-          dietType: buttons[selectedIndex],
-        });
-      } else {
-        createPost({ author, URL, content, relatedUserId, postType });
-      }
+    const uploadTask = uploadBytesResumable(storageRef, postBlob);
+
+    return new Promise((resolve, reject) => {
+      uploadTask.on(
+        "state_changed",
+        (snapshot) => {
+          const progress =
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          setProgress(progress);
+        },
+        (error) => {
+          console.error(error);
+          setIsUploading(false);
+          reject(error);
+        },
+        async () => {
+          const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+          resolve(downloadURL);
+        }
+      );
     });
-  }, [result, author, content, navigation]);
+  };
+
+  // 포스트 생성
+  const handleCreatePost = async (URL) => {
+    const newPost = {
+      author,
+      URL,
+      content,
+      relatedUserId,
+      postType,
+    };
+
+    if (postType === "Diet") {
+      newPost.dietType = buttons[selectedIndex];
+    }
+
+    await createPost(newPost);
+    setIsUploading(false);
+    navigation.pop();
+  };
+
+  // 제출 처리
+  const onSubmit = useCallback(async () => {
+    setIsUploading(true);
+
+    let URL = null;
+    if (result) {
+      const asset = result.assets[0];
+      const extension = asset.uri.split(".").pop();
+      const storageRef = ref(
+        getStorage(),
+        `/asset/${author.id}/${v4()}.${extension}`
+      );
+      URL = await handleUpload(asset, storageRef);
+    }
+
+    await handleCreatePost(URL);
+  }, [result, author, content, selectedIndex]);
+
+  // 키보드 이벤트 처리
   useEffect(() => {
-    const didShow = Keyboard.addListener("keyboardDidShow", () => {
-      setIsKeyboardOpen(true);
-    });
-    const didHide = Keyboard.addListener("keyboardDidHide", () => {
-      setIsKeyboardOpen(false);
-    });
+    const showListener = Keyboard.addListener("keyboardDidShow", () =>
+      setIsKeyboardOpen(true)
+    );
+    const hideListener = Keyboard.addListener("keyboardDidHide", () =>
+      setIsKeyboardOpen(false)
+    );
     return () => {
-      didShow.remove();
-      didHide.remove();
+      showListener.remove();
+      hideListener.remove();
     };
   }, []);
 
@@ -97,18 +121,28 @@ function UploadPostScreen() {
       toValue: isKeyboardOpen ? 0 : width,
       useNativeDriver: false,
       duration: 150,
-      delay: 100,
     }).start();
-  }, [isKeyboardOpen, width, animation]);
+  }, [isKeyboardOpen, width]);
 
   useEffect(() => {
     navigation.setOptions({
-      headerRight: () => <IconRightButton onPress={onSubmit} name="send" />,
+      headerRight: () =>
+        isUploading ? null : <IconRightButton onPress={onSubmit} name="send" />,
     });
-  }, [navigation, onSubmit]);
+  }, [navigation, onSubmit, isUploading]);
+
+  // 업로드 중 화면
+  if (isUploading) {
+    return (
+      <View style={styles.uploadingContainer}>
+        <ProgressBar totalStep={100} currStep={progress} />
+        <Text style={styles.uploadingText}>업로드 중입니다...</Text>
+      </View>
+    );
+  }
 
   return (
-    <View style={styles.block}>
+    <View style={styles.container}>
       {postType === "Diet" && (
         <ButtonGroup
           onPress={setSelectedIndex}
@@ -125,7 +159,7 @@ function UploadPostScreen() {
       )}
       <TextInput
         style={styles.input}
-        multiline={true}
+        multiline
         placeholder="게시글을 작성해주세요."
         textAlignVertical="top"
         value={content}
@@ -137,7 +171,7 @@ function UploadPostScreen() {
 }
 
 const styles = StyleSheet.create({
-  block: {
+  container: {
     flex: 1,
   },
   image: {
@@ -145,10 +179,19 @@ const styles = StyleSheet.create({
   },
   input: {
     paddingHorizontal: 16,
-    paddingTop: 16,
-    paddingBottom: 16,
+    paddingVertical: 16,
     flex: 1,
     fontSize: 16,
+  },
+  uploadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  uploadingText: {
+    marginTop: 10,
+    fontSize: 18,
+    color: "#333",
   },
 });
 

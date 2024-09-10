@@ -3,7 +3,7 @@ import { useRoute } from "@react-navigation/native";
 import {
   StyleSheet,
   View,
-  FlatList,
+  ScrollView,
   ActivityIndicator,
   Text,
 } from "react-native";
@@ -30,9 +30,9 @@ function DietScreen() {
   const postsCollection = collection(firestore, "posts");
   const [posts, setPosts] = useState([]);
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [isLoading, setIsLoading] = useState(true); // 로딩 상태 추가
+  const [isLoading, setIsLoading] = useState(true);
 
-  // 최초로 DietScreen 접근 시
+  // 최초로 DietScreen 접근 시 데이터 가져오기
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -41,14 +41,14 @@ function DietScreen() {
       } catch (error) {
         console.error("Error fetching posts:", error);
       } finally {
-        setIsLoading(false); // 데이터를 불러온 후 로딩 상태 해제
+        setIsLoading(false);
       }
     };
 
     fetchData();
   }, [author.id, relatedUserId, postType]);
 
-  // posts 컬렉션에 변화 발생시
+  // posts 컬렉션에 변화 발생시 실시간 업데이트
   useEffect(() => {
     const q = query(
       postsCollection,
@@ -69,19 +69,13 @@ function DietScreen() {
     };
   }, [author.id, relatedUserId, postType]);
 
-  const markedDates = posts?.map((post) => {
-    const date = post.createdAt?.toDate();
-    return { date, dots: [{ color: "royalblue", selectedColor: "royalblue" }] };
-  });
-
-  const filteredPosts = posts.filter((post) => {
-    if (!post.createdAt?.toDate()) return false;
-
-    return isSameDay(
-      format(post.createdAt?.toDate(), "yyyy-MM-dd"),
-      format(selectedDate, "yyyy-MM-dd")
+  // 각 식사 섹션별로 포스트를 필터링
+  const filterPostsByDietType = (dietType) =>
+    posts.filter(
+      (post) =>
+        post.dietType === dietType &&
+        isSameDay(post.createdAt?.toDate(), selectedDate)
     );
-  });
 
   if (isLoading) {
     return (
@@ -94,63 +88,66 @@ function DietScreen() {
   return (
     <View style={styles.block}>
       <CalendarHeader
-        markedDates={markedDates}
+        markedDates={posts.map((post) => ({
+          date: post.createdAt?.toDate(),
+          dots: [{ color: "royalblue", selectedColor: "royalblue" }],
+        }))}
         selectedDate={selectedDate}
         onSelectDate={setSelectedDate}
       />
-      {filteredPosts.length === 0 ? (
-        <View style={styles.noPostsContainer}>
-          <Text style={styles.noPostsText}>작성된 글이 없습니다.</Text>
-        </View>
-      ) : (
-        <FlatList
-          style={{ backgroundColor: "white" }}
-          data={filteredPosts}
-          renderItem={renderItem}
-          keyExtractor={(item) => item.id}
-          ItemSeparatorComponent={() => <View style={styles.separator} />}
-        />
-      )}
+      <ScrollView>
+        {["아침", "점심", "저녁", "간식"].map((DietType) => (
+          <View key={DietType} style={styles.dietSection}>
+            <Text style={styles.dietText}>{DietType}</Text>
+            {filterPostsByDietType(DietType).length > 0 ? (
+              filterPostsByDietType(DietType).map((post) => (
+                <PostCard
+                  key={post.id}
+                  createdAt={post.createdAt}
+                  content={post.content}
+                  id={post.id}
+                  author={post.author}
+                  URL={post.URL}
+                  isDetailMode={false}
+                  postType={post.postType}
+                  dietType={post.dietType}
+                />
+              ))
+            ) : (
+              <Text style={styles.noPostsText}>작성된 글이 없습니다.</Text>
+            )}
+          </View>
+        ))}
+      </ScrollView>
       <WriteButton postType={postType} relatedUserId={relatedUserId} />
     </View>
   );
 }
 
-const renderItem = ({ item }) => (
-  <PostCard
-    createdAt={item.createdAt}
-    content={item.content}
-    id={item.id}
-    author={item.author}
-    URL={item.URL}
-    isDetailMode={false}
-    postType={item.postType}
-    dietType={item.dietType}
-  />
-);
-
 const styles = StyleSheet.create({
   block: {
     flex: 1,
-  },
-  separator: {
-    backgroundColor: "#e0e0e0",
-    height: 1,
-    width: "100%",
+    backgroundColor: "#fff",
   },
   loader: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
   },
-  noPostsContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+  dietSection: {
+    marginVertical: 10,
+  },
+  dietText: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#333",
+    marginLeft: 16,
   },
   noPostsText: {
-    fontSize: 18,
+    fontSize: 16,
     color: "#757575",
+    textAlign: "center",
+    marginTop: 10,
   },
 });
 

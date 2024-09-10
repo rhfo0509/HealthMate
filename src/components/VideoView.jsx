@@ -1,8 +1,8 @@
-import { useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { useWindowDimensions } from "react-native";
 import { Video, ResizeMode } from "expo-av";
 
-function VideoView({ URL }) {
+function VideoView({ URL, isDetailMode }) {
   const video = useRef(null);
   const [status, setStatus] = useState({});
   const { width } = useWindowDimensions();
@@ -12,14 +12,15 @@ function VideoView({ URL }) {
       ref={video}
       style={{
         alignSelf: "center",
-        width: width,
-        height: (width / 16) * 9,
+        width: isDetailMode ? width : 180, // isDetailMode에 따른 스타일 지정
+        height: isDetailMode ? (width / 16) * 9 : 180, // 이미지 스타일 동일하게
+        marginLeft: isDetailMode ? 0 : 16,
         marginBottom: 16,
       }}
       source={{
         uri: URL,
       }}
-      useNativeControls={true}
+      useNativeControls={isDetailMode}
       isLooping={false}
       resizeMode={ResizeMode.CONTAIN}
       onPlaybackStatusUpdate={(status) => setStatus(() => status)}

@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Pressable, StyleSheet } from "react-native";
+import { View, Pressable, StyleSheet, Alert } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useActionSheet } from "@expo/react-native-action-sheet";
 import * as ImagePicker from "expo-image-picker";
@@ -19,6 +19,16 @@ function CameraButton({ relatedUserId, postType }) {
     if (result.canceled || !result) {
       return;
     }
+
+    const asset = result.assets[0];
+    console.log(asset.duration / 1000);
+    if (asset.type === "video" && asset.duration / 1000 > 60) {
+      Alert.alert("알림", "60초 이내의 동영상만 업로드할 수 있습니다.", [
+        { text: "확인" },
+      ]);
+      return;
+    }
+
     navigation.navigate("UploadPost", { result, relatedUserId, postType });
   };
 
@@ -50,6 +60,7 @@ function CameraButton({ relatedUserId, postType }) {
       }
     );
   };
+
   return (
     <View style={styles.wrapper}>
       <Pressable style={styles.circle} onPress={onPress}>
