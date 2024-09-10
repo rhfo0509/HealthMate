@@ -31,8 +31,8 @@ function HomeStack() {
 
   if (isLoading) {
     return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#64B5F6" />
+      <View style={styles.loader}>
+        <ActivityIndicator size="large" color="royalblue" />
       </View>
     );
   }
@@ -68,10 +68,11 @@ function MyProfileStack() {
 }
 
 const styles = StyleSheet.create({
-  loadingContainer: {
+  loader: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "#fff",
   },
 });
 

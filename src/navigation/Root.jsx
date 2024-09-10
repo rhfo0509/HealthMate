@@ -1,5 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { ActivityIndicator, View, StyleSheet } from "react-native";
 import SignInScreen from "../screens/SignInScreen";
 import WelcomeScreen from "../screens/WelcomeScreen";
 import UploadPostScreen from "../screens/UploadPostScreen";
@@ -18,15 +19,28 @@ const Stack = createNativeStackNavigator();
 
 function Root() {
   const { user, setUser } = useUserContext();
+  const [loading, setLoading] = useState(true); // 로딩 상태 추가
 
   useEffect(() => {
     const unsubscribe = subscribeAuth(async (currentUser) => {
-      unsubscribe();
-      if (!currentUser) return;
-      const profile = await getUser(currentUser.uid);
-      if (profile) setUser(profile);
+      if (currentUser) {
+        const profile = await getUser(currentUser.uid);
+        if (profile) {
+          setUser(profile);
+        }
+      }
+      setLoading(false); // 인증 상태 확인 후 로딩 상태 해제
     });
+    return () => unsubscribe();
   }, [setUser]);
+
+  if (loading) {
+    return (
+      <View style={styles.loader}>
+        <ActivityIndicator size="large" color="royalblue" />
+      </View>
+    );
+  }
 
   return (
     <Stack.Navigator>
@@ -90,5 +104,14 @@ function Root() {
     </Stack.Navigator>
   );
 }
+
+const styles = StyleSheet.create({
+  loader: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#fff",
+  },
+});
 
 export default Root;
