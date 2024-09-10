@@ -159,6 +159,7 @@ function ExercisePostScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#fff",
   },
   image: {
     width: "100%",

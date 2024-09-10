@@ -29,7 +29,11 @@ function CameraButton({ relatedUserId, postType }) {
       return;
     }
 
-    navigation.navigate("UploadPost", { result, relatedUserId, postType });
+    if (postType === "Diet") {
+      navigation.navigate("DietPost", { result, relatedUserId, postType });
+    } else {
+      navigation.navigate("ExercisePost", { result, relatedUserId, postType });
+    }
   };
 
   const onLaunchCamera = async () => {

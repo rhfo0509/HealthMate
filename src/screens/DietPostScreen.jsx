@@ -4,11 +4,12 @@ import {
   View,
   TextInput,
   Text,
+  ScrollView,
   useWindowDimensions,
-  Animated,
   Keyboard,
+  Animated,
+  Pressable,
 } from "react-native";
-import { ButtonGroup } from "react-native-elements";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { v4 } from "uuid";
 import { createPost } from "../lib/posts";
@@ -22,6 +23,8 @@ import {
 import CameraButton from "../components/CameraButton";
 import ProgressBar from "../components/ProgressBar";
 import IconRightButton from "../components/IconRightButton";
+import { MaterialIcons } from "@expo/vector-icons";
+import FoodInput from "../components/FoodInput"; // 불러오기
 
 function DietPostScreen() {
   const { width } = useWindowDimensions();
@@ -33,12 +36,30 @@ function DietPostScreen() {
   const animation = useRef(new Animated.Value(width)).current;
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
   const [content, setContent] = useState("");
-  const [selectedIndex, setSelectedIndex] = useState(0);
   const [progress, setProgress] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
-  const buttons = ["아침", "점심", "저녁", "간식"];
+  const [foods, setFoods] = useState([]);
 
-  // 업로드 중 처리
+  const handleInputChange = (index, field, value) => {
+    const newFoods = [...foods];
+    newFoods[index][field] =
+      field === "name" ? value : value.replace(/[^0-9.]/g, "");
+    setFoods(newFoods);
+  };
+
+  const addFood = () => {
+    setFoods([
+      ...foods,
+      { name: "", calories: "", carbs: "", protein: "", fat: "" },
+    ]);
+  };
+
+  const removeFood = (index) => {
+    const newFoods = [...foods];
+    newFoods.splice(index, 1);
+    setFoods(newFoods);
+  };
+
   const handleUpload = async (asset, storageRef) => {
     const post = await fetch(asset.uri);
     const postBlob = await post.blob();
@@ -65,7 +86,6 @@ function DietPostScreen() {
     });
   };
 
-  // 포스트 생성
   const handleCreatePost = async (URL) => {
     const newPost = {
       author,
@@ -73,7 +93,7 @@ function DietPostScreen() {
       content,
       relatedUserId,
       postType,
-      dietType: buttons[selectedIndex],
+      foods,
     };
 
     await createPost(newPost);
@@ -81,7 +101,6 @@ function DietPostScreen() {
     navigation.pop();
   };
 
-  // 제출 처리
   const onSubmit = useCallback(async () => {
     setIsUploading(true);
 
@@ -97,9 +116,15 @@ function DietPostScreen() {
     }
 
     await handleCreatePost(URL);
-  }, [result, author, content, selectedIndex]);
+  }, [result, author, content, foods]);
 
-  // 키보드 이벤트 처리
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () =>
+        isUploading ? null : <IconRightButton onPress={onSubmit} name="send" />,
+    });
+  }, [navigation, onSubmit, isUploading]);
+
   useEffect(() => {
     const showListener = Keyboard.addListener("keyboardDidShow", () =>
       setIsKeyboardOpen(true)
@@ -121,14 +146,6 @@ function DietPostScreen() {
     }).start();
   }, [isKeyboardOpen, width]);
 
-  useEffect(() => {
-    navigation.setOptions({
-      headerRight: () =>
-        isUploading ? null : <IconRightButton onPress={onSubmit} name="send" />,
-    });
-  }, [navigation, onSubmit, isUploading]);
-
-  // 업로드 중 화면
   if (isUploading) {
     return (
       <View style={styles.uploadingContainer}>
@@ -140,26 +157,40 @@ function DietPostScreen() {
 
   return (
     <View style={styles.container}>
-      <ButtonGroup
-        onPress={setSelectedIndex}
-        selectedIndex={selectedIndex}
-        buttons={buttons}
-      />
-      {result && (
-        <Animated.Image
-          source={{ uri: result.assets[0]?.uri }}
-          style={[styles.image, { height: animation }]}
-          resizeMode="cover"
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        {result && (
+          <Animated.Image
+            source={{ uri: result.assets[0]?.uri }}
+            style={[styles.image, { height: animation }]}
+            resizeMode="cover"
+          />
+        )}
+        <TextInput
+          style={styles.input}
+          multiline
+          placeholder="식단 기록을 작성해주세요."
+          textAlignVertical="top"
+          value={content}
+          onChangeText={setContent}
         />
-      )}
-      <TextInput
-        style={styles.input}
-        multiline
-        placeholder="게시글을 작성해주세요."
-        textAlignVertical="top"
-        value={content}
-        onChangeText={setContent}
-      />
+
+        {/* 여러 음식 입력 */}
+        {foods.map((food, index) => (
+          <FoodInput
+            key={index}
+            food={food}
+            onChange={(field, value) => handleInputChange(index, field, value)}
+            onRemove={() => removeFood(index)}
+          />
+        ))}
+
+        <Pressable style={styles.addButton} onPress={addFood}>
+          <MaterialIcons name="add-circle-outline" size={24} color="blue" />
+          <Text style={styles.addText}>음식 추가</Text>
+        </Pressable>
+
+        <View style={{ height: 80 }} />
+      </ScrollView>
       <CameraButton relatedUserId={relatedUserId} postType={postType} />
     </View>
   );
@@ -168,6 +199,7 @@ function DietPostScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#fff",
   },
   image: {
     width: "100%",
@@ -176,6 +208,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 16,
     flex: 1,
+    fontSize: 16,
+  },
+  addButton: {
+    flexDirection: "row",
+    justifyContent: "center",
+    marginTop: 10,
+  },
+  addText: {
+    marginLeft: 5,
+    color: "blue",
     fontSize: 16,
   },
   uploadingContainer: {
