@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useRoute } from "@react-navigation/native";
-import { StyleSheet, View, FlatList, ActivityIndicator } from "react-native";
+import {
+  StyleSheet,
+  View,
+  FlatList,
+  ActivityIndicator,
+  Text,
+} from "react-native";
 import CalendarHeader from "../components/CalendarHeader";
 import WriteButton from "../components/WriteButton";
 import PostCard from "../components/PostCard";
@@ -92,13 +98,19 @@ function ExerciseScreen() {
         selectedDate={selectedDate}
         onSelectDate={setSelectedDate}
       />
-      <FlatList
-        style={{ backgroundColor: "white" }}
-        data={filteredPosts}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id}
-        ItemSeparatorComponent={() => <View style={styles.separator} />}
-      />
+      {filteredPosts.length === 0 ? (
+        <View style={styles.noPostsContainer}>
+          <Text style={styles.noPostsText}>작성된 글이 없습니다.</Text>
+        </View>
+      ) : (
+        <FlatList
+          style={{ backgroundColor: "white" }}
+          data={filteredPosts}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id}
+          ItemSeparatorComponent={() => <View style={styles.separator} />}
+        />
+      )}
       <WriteButton postType={postType} relatedUserId={relatedUserId} />
     </View>
   );
@@ -129,6 +141,15 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  noPostsContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  noPostsText: {
+    fontSize: 18,
+    color: "#757575",
   },
 });
 
