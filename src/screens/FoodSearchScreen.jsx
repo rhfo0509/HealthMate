@@ -45,8 +45,8 @@ const FoodSearchScreen = () => {
       selectedFood: {
         name: selectedFood.DESC_KOR,
         calories: selectedFood.NUTR_CONT1,
-        carbs: selectedFood.NUTR_CONT3,
-        protein: selectedFood.NUTR_CONT2,
+        carbs: selectedFood.NUTR_CONT2,
+        protein: selectedFood.NUTR_CONT3,
         fat: selectedFood.NUTR_CONT4,
       },
       index,
@@ -91,12 +91,12 @@ const FoodSearchScreen = () => {
                 칼로리: {item.NUTR_CONT1} kcal
               </Text>
               <Text style={styles.foodDetails}>
-                탄수화물: {item.NUTR_CONT3} g
+                탄수화물: {item.NUTR_CONT2} g
               </Text>
             </View>
             <View style={styles.nutritionRow}>
               <Text style={styles.foodDetails}>
-                단백질: {item.NUTR_CONT2} g
+                단백질: {item.NUTR_CONT3} g
               </Text>
               <Text style={styles.foodDetails}>지방: {item.NUTR_CONT4} g</Text>
             </View>

@@ -11,7 +11,7 @@ import CalendarHeader from "../components/CalendarHeader";
 import WriteButton from "../components/WriteButton";
 import PostCard from "../components/PostCard";
 import { useUserContext } from "../contexts/UserContext";
-import { format, isSameDay } from "date-fns";
+import { isSameDay } from "date-fns";
 import {
   getFirestore,
   collection,

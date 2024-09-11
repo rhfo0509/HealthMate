@@ -136,10 +136,15 @@ function DietPostScreen() {
     };
 
     const postRef = await createPost(newPost);
-    const postId = postRef.id;
 
     if (foods.length > 0) {
-      await createFoods(postId, foods);
+      const newFoods = {
+        userId: author.id,
+        relatedUserId,
+        postId: postRef.id,
+        foods,
+      };
+      await createFoods(newFoods);
     }
 
     setIsUploading(false);

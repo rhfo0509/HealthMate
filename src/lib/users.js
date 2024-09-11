@@ -6,6 +6,7 @@ import {
   getDoc,
   getDocs,
   deleteDoc,
+  updateDoc,
   query,
   where,
 } from "firebase/firestore";
@@ -119,4 +120,10 @@ export async function removeMemberByTrainer(trainerId, memberId) {
   await deleteDoc(
     doc(collection(firestore, `trainers/${trainerId}/members`), memberId)
   );
+}
+
+export async function updateMember({ memberId, bodyData }) {
+  await updateDoc(doc(membersCollection, memberId), {
+    bodyData,
+  });
 }
