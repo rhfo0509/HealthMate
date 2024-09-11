@@ -26,24 +26,21 @@ export async function createPost({
   postType,
   dietType,
 }) {
-  dietType
-    ? await addDoc(postsCollection, {
-        author,
-        URL,
-        content,
-        relatedUserId,
-        postType,
-        dietType,
-        createdAt: serverTimestamp(),
-      })
-    : await addDoc(postsCollection, {
-        author,
-        URL,
-        content,
-        relatedUserId,
-        postType,
-        createdAt: serverTimestamp(),
-      });
+  const post = {
+    author,
+    URL,
+    content,
+    relatedUserId,
+    postType,
+    createdAt: serverTimestamp(),
+  };
+
+  if (dietType) {
+    post.dietType = dietType;
+  }
+
+  const docRef = await addDoc(postsCollection, post);
+  return docRef;
 }
 
 export async function getPosts(authorId, relatedUserId, postType) {

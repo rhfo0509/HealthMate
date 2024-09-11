@@ -12,9 +12,7 @@ import {
 } from "react-native";
 import { ButtonGroup } from "react-native-elements";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { v4 as uuidv4 } from "uuid"; // UUID 생성
-import { createPost } from "../lib/posts";
-import { useUserContext } from "../contexts/UserContext";
+import { v4 as uuidv4 } from "uuid";
 import { MaterialIcons } from "@expo/vector-icons";
 import {
   getStorage,
@@ -22,6 +20,10 @@ import {
   getDownloadURL,
   uploadBytesResumable,
 } from "firebase/storage";
+
+import { createPost } from "../lib/posts";
+import { createFoods } from "../lib/foods";
+import { useUserContext } from "../contexts/UserContext";
 import CameraButton from "../components/CameraButton";
 import ProgressBar from "../components/ProgressBar";
 import IconRightButton from "../components/IconRightButton";
@@ -73,7 +75,7 @@ function DietPostScreen() {
       };
       setFoods(updatedFoods);
     }
-  }, [selectedFood, selectedFoodIndex, foods]);
+  }, [selectedFood, selectedFoodIndex]);
 
   // 음식 입력 핸들러
   const handleInputChange = (index, field, value) => {
@@ -130,11 +132,16 @@ function DietPostScreen() {
       content,
       relatedUserId,
       postType,
-      foods,
       dietType: buttons[selectedIndex],
     };
 
-    await createPost(newPost);
+    const postRef = await createPost(newPost);
+    const postId = postRef.id;
+
+    if (foods.length > 0) {
+      await createFoods(postId, foods);
+    }
+
     setIsUploading(false);
     navigation.pop();
   };
@@ -224,7 +231,6 @@ function DietPostScreen() {
           onChangeText={setContent}
         />
 
-        {/* 여러 음식 입력 */}
         {foods.map((food, index) => (
           <FoodInput
             key={index}
