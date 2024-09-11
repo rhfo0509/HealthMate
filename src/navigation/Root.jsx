@@ -17,6 +17,7 @@ import SettingScreen from "../screens/SettingScreen";
 import PostScreen from "../screens/PostScreen";
 import MembershipScreen from "../screens/trainer/MembershipScreen";
 import NotifyScreen from "../screens/NotifyScreen";
+import FoodSearchScreen from "../screens/FoodSearchScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -62,6 +63,11 @@ function Root() {
             name="ExercisePost"
             component={ExercisePostScreen}
             options={{ title: "오늘의 운동기록" }}
+          />
+          <Stack.Screen
+            name="FoodSearch"
+            component={FoodSearchScreen}
+            options={{ title: "검색 결과" }}
           />
           <Stack.Screen
             name="Comment"

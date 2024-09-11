@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useState, useCallback, useEffect, useRef } from "react";
 import {
   StyleSheet,
   View,
@@ -10,10 +10,12 @@ import {
   Animated,
   Pressable,
 } from "react-native";
+import { ButtonGroup } from "react-native-elements";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { v4 } from "uuid";
+import { v4 as uuidv4 } from "uuid"; // UUID 생성
 import { createPost } from "../lib/posts";
 import { useUserContext } from "../contexts/UserContext";
+import { MaterialIcons } from "@expo/vector-icons";
 import {
   getStorage,
   ref,
@@ -23,30 +25,65 @@ import {
 import CameraButton from "../components/CameraButton";
 import ProgressBar from "../components/ProgressBar";
 import IconRightButton from "../components/IconRightButton";
-import { MaterialIcons } from "@expo/vector-icons";
-import FoodInput from "../components/FoodInput"; // 불러오기
+import FoodInput from "../components/FoodInput";
 
 function DietPostScreen() {
   const { width } = useWindowDimensions();
-  const { result } = useRoute().params || {};
-  const { relatedUserId, postType } = useRoute().params || {};
+  const {
+    result,
+    selectedFood,
+    index: selectedFoodIndex,
+    postType,
+    relatedUserId,
+  } = useRoute().params || {};
   const { user: author } = useUserContext();
   const navigation = useNavigation();
 
   const animation = useRef(new Animated.Value(width)).current;
   const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
   const [content, setContent] = useState("");
+  const [selectedIndex, setSelectedIndex] = useState(0);
   const [progress, setProgress] = useState(0);
   const [isUploading, setIsUploading] = useState(false);
   const [foods, setFoods] = useState([]);
 
-  const handleInputChange = (index, field, value) => {
-    const newFoods = [...foods];
-    newFoods[index][field] =
-      field === "name" ? value : value.replace(/[^0-9.]/g, "");
-    setFoods(newFoods);
+  const buttons = ["아침", "점심", "저녁", "간식"];
+
+  // 음식 검색 화면으로 이동
+  const handleSearchFood = (index, foodName) => {
+    navigation.navigate("FoodSearch", {
+      index,
+      foodName,
+      postType,
+      relatedUserId,
+      result,
+    });
   };
 
+  // 선택된 음식 정보 반영
+  useEffect(() => {
+    if (selectedFood && typeof selectedFoodIndex === "number") {
+      const updatedFoods = [...foods];
+      updatedFoods[selectedFoodIndex] = {
+        name: selectedFood.name,
+        calories: selectedFood.calories,
+        carbs: selectedFood.carbs,
+        protein: selectedFood.protein,
+        fat: selectedFood.fat,
+      };
+      setFoods(updatedFoods);
+    }
+  }, [selectedFood, selectedFoodIndex, foods]);
+
+  // 음식 입력 핸들러
+  const handleInputChange = (index, field, value) => {
+    const updatedFoods = [...foods];
+    updatedFoods[index][field] =
+      field === "name" ? value : value.replace(/[^0-9.]/g, "");
+    setFoods(updatedFoods);
+  };
+
+  // 음식 추가
   const addFood = () => {
     setFoods([
       ...foods,
@@ -54,12 +91,12 @@ function DietPostScreen() {
     ]);
   };
 
+  // 음식 제거
   const removeFood = (index) => {
-    const newFoods = [...foods];
-    newFoods.splice(index, 1);
-    setFoods(newFoods);
+    setFoods(foods.filter((_, i) => i !== index));
   };
 
+  // 파일 업로드 처리
   const handleUpload = async (asset, storageRef) => {
     const post = await fetch(asset.uri);
     const postBlob = await post.blob();
@@ -74,7 +111,6 @@ function DietPostScreen() {
           setProgress(progress);
         },
         (error) => {
-          console.error(error);
           setIsUploading(false);
           reject(error);
         },
@@ -86,6 +122,7 @@ function DietPostScreen() {
     });
   };
 
+  // 게시글 생성 및 업로드
   const handleCreatePost = async (URL) => {
     const newPost = {
       author,
@@ -94,6 +131,7 @@ function DietPostScreen() {
       relatedUserId,
       postType,
       foods,
+      dietType: buttons[selectedIndex],
     };
 
     await createPost(newPost);
@@ -101,6 +139,7 @@ function DietPostScreen() {
     navigation.pop();
   };
 
+  // 제출 처리
   const onSubmit = useCallback(async () => {
     setIsUploading(true);
 
@@ -110,21 +149,15 @@ function DietPostScreen() {
       const extension = asset.uri.split(".").pop();
       const storageRef = ref(
         getStorage(),
-        `/asset/${author.id}/${v4()}.${extension}`
+        `/asset/${author.id}/${uuidv4()}.${extension}`
       );
       URL = await handleUpload(asset, storageRef);
     }
 
     await handleCreatePost(URL);
-  }, [result, author, content, foods]);
+  }, [result, author, content, foods, selectedIndex]);
 
-  useEffect(() => {
-    navigation.setOptions({
-      headerRight: () =>
-        isUploading ? null : <IconRightButton onPress={onSubmit} name="send" />,
-    });
-  }, [navigation, onSubmit, isUploading]);
-
+  // 키보드 이벤트 처리 및 애니메이션
   useEffect(() => {
     const showListener = Keyboard.addListener("keyboardDidShow", () =>
       setIsKeyboardOpen(true)
@@ -132,6 +165,7 @@ function DietPostScreen() {
     const hideListener = Keyboard.addListener("keyboardDidHide", () =>
       setIsKeyboardOpen(false)
     );
+
     return () => {
       showListener.remove();
       hideListener.remove();
@@ -146,6 +180,17 @@ function DietPostScreen() {
     }).start();
   }, [isKeyboardOpen, width]);
 
+  // 내비게이션 옵션 설정
+  useEffect(() => {
+    navigation.setOptions({
+      headerRight: () =>
+        !isUploading ? (
+          <IconRightButton onPress={onSubmit} name="send" />
+        ) : null,
+    });
+  }, [navigation, onSubmit, isUploading]);
+
+  // 업로드 중 표시
   if (isUploading) {
     return (
       <View style={styles.uploadingContainer}>
@@ -158,6 +203,11 @@ function DietPostScreen() {
   return (
     <View style={styles.container}>
       <ScrollView contentContainerStyle={styles.scrollContent}>
+        <ButtonGroup
+          onPress={setSelectedIndex}
+          selectedIndex={selectedIndex}
+          buttons={buttons}
+        />
         {result && (
           <Animated.Image
             source={{ uri: result.assets[0]?.uri }}
@@ -181,6 +231,7 @@ function DietPostScreen() {
             food={food}
             onChange={(field, value) => handleInputChange(index, field, value)}
             onRemove={() => removeFood(index)}
+            onSearch={() => handleSearchFood(index, food.name)}
           />
         ))}
 
@@ -217,8 +268,8 @@ const styles = StyleSheet.create({
   },
   addText: {
     marginLeft: 5,
-    color: "blue",
-    fontSize: 16,
+    color: "royalblue",
+    fontSize: 15,
   },
   uploadingContainer: {
     flex: 1,

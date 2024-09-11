@@ -2,7 +2,7 @@ import React from "react";
 import { View, TextInput, Pressable, StyleSheet, Text } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 
-function FoodInput({ food, onChange, onRemove }) {
+function FoodInput({ food, onChange, onRemove, onSearch }) {
   return (
     <View style={styles.foodCard}>
       <View style={styles.foodInputRow}>
@@ -12,6 +12,10 @@ function FoodInput({ food, onChange, onRemove }) {
           onChangeText={(value) => onChange("name", value)}
           style={styles.foodInput}
         />
+        {/* Add the search button here */}
+        <Pressable onPress={onSearch} style={styles.searchButton}>
+          <MaterialIcons name="search" size={24} color="royalblue" />
+        </Pressable>
         <Pressable onPress={onRemove} style={styles.removeButton}>
           <MaterialIcons
             name="remove-circle-outline"
@@ -92,6 +96,9 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     borderWidth: 1,
     borderColor: "#ccc",
+  },
+  searchButton: {
+    marginLeft: 8,
   },
   removeButton: {
     marginLeft: 8,

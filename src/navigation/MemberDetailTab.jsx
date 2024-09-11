@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { useRoute, useNavigation } from "@react-navigation/native";
+import DashboardScreen from "../screens/DashboardScreen";
 import DietScreen from "../screens/DietScreen";
 import ExerciseScreen from "../screens/ExerciseScreen";
 import IconRightButton from "../components/IconRightButton";
@@ -38,6 +39,12 @@ function MemberDetailTab() {
         tabBarLabelStyle: { color: "black" },
       }}
     >
+      <Tab.Screen
+        name="Dashboard"
+        component={DashboardScreen}
+        options={{ tabBarLabel: "대시보드" }}
+        initialParams={{ relatedUserId: relatedUser.id }}
+      />
       <Tab.Screen
         name="Diet"
         component={DietScreen}

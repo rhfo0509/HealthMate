@@ -123,9 +123,7 @@ function PostCard({
             </Modal>
           </View>
         ) : null}
-        <View
-          style={[styles.textContainer, isDetailMode && { paddingLeft: 16 }]}
-        >
+        <View style={styles.textContainer}>
           <Text
             style={styles.contentText}
             numberOfLines={isDetailMode ? undefined : 7}
@@ -190,8 +188,7 @@ const styles = StyleSheet.create({
   },
   textContainer: {
     flex: 1,
-    paddingLeft: 4,
-    paddingRight: 16,
+    paddingHorizontal: 16,
   },
   contentText: {
     fontSize: 16,

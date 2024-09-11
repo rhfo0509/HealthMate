@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
     fontWeight: "500",
   },
   addButton: {
-    backgroundColor: "#64B5F6",
+    backgroundColor: "royalblue",
     paddingHorizontal: 10,
   },
 });

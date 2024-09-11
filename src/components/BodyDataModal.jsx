@@ -27,8 +27,10 @@ function BodyDataModal({ memberId, show, setShow }) {
     setDate(selectedDate);
   };
 
-  const isNumeric = (value) => {
-    return /^-?\d+(\.\d+)?$/.test(value);
+  // 숫자와 소수점만 입력 허용하는 함수
+  const handleNumericInput = (value) => {
+    const filteredValue = value.replace(/[^0-9.]/g, ""); // 숫자와 소수점만 허용
+    return filteredValue;
   };
 
   const onSave = () => {
@@ -36,15 +38,6 @@ function BodyDataModal({ memberId, show, setShow }) {
 
     if (!weight || !SMM || !PBF) {
       Alert.alert("알림", "모든 항목을 입력해주세요.", [{ text: "확인" }]);
-      return;
-    }
-
-    if (!isNumeric(weight) || !isNumeric(SMM) || !isNumeric(PBF)) {
-      Alert.alert(
-        "알림",
-        "체중, 골격근량, 체지방률은 숫자 형식으로 입력해주세요.",
-        [{ text: "확인" }]
-      );
       return;
     }
 
@@ -78,7 +71,6 @@ function BodyDataModal({ memberId, show, setShow }) {
       <View style={styles.container}>
         <View style={styles.content}>
           <Text style={styles.title}>체성분 기록</Text>
-          <Text style={styles.subTitle}>날짜를 선택해주세요.</Text>
           <Pressable style={styles.select} onPress={onPressDatePicker}>
             <Text style={styles.selectText}>
               {date
@@ -94,14 +86,17 @@ function BodyDataModal({ memberId, show, setShow }) {
               maximumDate={new Date()}
             />
           )}
-          <View>
+          <View style={styles.inputContainer}>
             <View style={styles.bodyData}>
               <Text style={styles.label}>체중:</Text>
               <TextInput
                 style={styles.input}
                 value={bodyData.weight}
                 onChangeText={(text) =>
-                  setBodyData((prevState) => ({ ...prevState, weight: text }))
+                  setBodyData((prevState) => ({
+                    ...prevState,
+                    weight: handleNumericInput(text),
+                  }))
                 }
                 keyboardType="number-pad"
               />
@@ -113,7 +108,10 @@ function BodyDataModal({ memberId, show, setShow }) {
                 style={styles.input}
                 value={bodyData.SMM}
                 onChangeText={(text) =>
-                  setBodyData((prevState) => ({ ...prevState, SMM: text }))
+                  setBodyData((prevState) => ({
+                    ...prevState,
+                    SMM: handleNumericInput(text),
+                  }))
                 }
                 keyboardType="number-pad"
               />
@@ -125,7 +123,10 @@ function BodyDataModal({ memberId, show, setShow }) {
                 style={styles.input}
                 value={bodyData.PBF}
                 onChangeText={(text) =>
-                  setBodyData((prevState) => ({ ...prevState, PBF: text }))
+                  setBodyData((prevState) => ({
+                    ...prevState,
+                    PBF: handleNumericInput(text),
+                  }))
                 }
                 keyboardType="number-pad"
               />
@@ -155,9 +156,10 @@ const styles = StyleSheet.create({
   },
   content: {
     backgroundColor: "white",
-    padding: 20,
+    paddingVertical: 20,
+    paddingHorizontal: 15,
     borderRadius: 10,
-    width: "85%",
+    width: "80%",
     alignItems: "center",
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
@@ -166,32 +168,33 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   title: {
-    fontSize: 22,
+    fontSize: 20,
     fontWeight: "600",
     marginBottom: 10,
     color: "#333",
-  },
-  subTitle: {
-    fontSize: 16,
-    color: "#666",
-    marginBottom: 10,
   },
   select: {
     borderWidth: 1,
     borderColor: "#ccc",
     borderRadius: 5,
     paddingVertical: 8,
-    paddingHorizontal: 15,
-    marginBottom: 20,
+    paddingHorizontal: 10,
+    marginBottom: 15,
+    alignSelf: "stretch",
+    alignItems: "center",
   },
   selectText: {
     fontSize: 16,
     color: "#333",
   },
+  inputContainer: {
+    width: "100%",
+    marginBottom: 15,
+  },
   bodyData: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 15,
+    marginBottom: 10,
   },
   label: {
     fontSize: 16,
@@ -199,27 +202,26 @@ const styles = StyleSheet.create({
     width: 80,
   },
   input: {
-    width: "40%",
-    padding: 8,
+    flex: 1,
+    paddingVertical: 8,
     borderBottomWidth: 1,
     borderColor: "#ccc",
-    borderRadius: 5,
     textAlign: "center",
     fontSize: 16,
-    marginRight: 10,
   },
   unit: {
     fontSize: 16,
     color: "#666",
+    marginLeft: 5,
   },
   buttonGroup: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginTop: 20,
+    marginTop: 15,
   },
   saveButton: {
     backgroundColor: "#64B5F6",
-    paddingVertical: 10,
+    paddingVertical: 8,
     paddingHorizontal: 20,
     borderRadius: 5,
     marginRight: 10,
@@ -231,7 +233,7 @@ const styles = StyleSheet.create({
   },
   cancelButton: {
     backgroundColor: "#E57373",
-    paddingVertical: 10,
+    paddingVertical: 8,
     paddingHorizontal: 20,
     borderRadius: 5,
   },

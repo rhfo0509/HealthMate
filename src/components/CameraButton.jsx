@@ -21,7 +21,6 @@ function CameraButton({ relatedUserId, postType }) {
     }
 
     const asset = result.assets[0];
-    console.log(asset.duration / 1000);
     if (asset.type === "video" && asset.duration / 1000 > 60) {
       Alert.alert("알림", "60초 이내의 동영상만 업로드할 수 있습니다.", [
         { text: "확인" },
