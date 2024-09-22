@@ -34,60 +34,18 @@ function MembershipScreen() {
   const [membership, setMembership] = useState({});
   const [membershipCount, setMembershipCount] = useState("");
   const [membershipDays, setMembershipDays] = useState({
-    월: {
-      checked: false,
-      startHours: null,
-      startMinutes: null,
-      endHours: null,
-      endMinutes: null,
-    },
-    화: {
-      checked: false,
-      startHours: null,
-      startMinutes: null,
-      endHours: null,
-      endMinutes: null,
-    },
-    수: {
-      checked: false,
-      startHours: null,
-      startMinutes: null,
-      endHours: null,
-      endMinutes: null,
-    },
-    목: {
-      checked: false,
-      startHours: null,
-      startMinutes: null,
-      endHours: null,
-      endMinutes: null,
-    },
-    금: {
-      checked: false,
-      startHours: null,
-      startMinutes: null,
-      endHours: null,
-      endMinutes: null,
-    },
-    토: {
-      checked: false,
-      startHours: null,
-      startMinutes: null,
-      endHours: null,
-      endMinutes: null,
-    },
-    일: {
-      checked: false,
-      startHours: null,
-      startMinutes: null,
-      endHours: null,
-      endMinutes: null,
-    },
+    월: { checked: false, startTime: null },
+    화: { checked: false, startTime: null },
+    수: { checked: false, startTime: null },
+    목: { checked: false, startTime: null },
+    금: { checked: false, startTime: null },
+    토: { checked: false, startTime: null },
+    일: { checked: false, startTime: null },
   });
   const firestore = getFirestore();
   const membershipsCollection = collection(firestore, "memberships");
 
-  // memberships 컬렉션에 변화 발생시
+  // memberships 컬렉션에 변화 발생 시
   useEffect(() => {
     const q = query(
       membershipsCollection,
@@ -111,16 +69,11 @@ function MembershipScreen() {
   }, [user.id, memberId]);
 
   const onPressPause = () => {
-    // 회원권에 status라는 속성을 두어
-    // 활성화 상태: active, 중단된 상태: paused, 만료된 상태: expired로 설정
     Alert.alert(
       null,
       "정말로 중단하시겠습니까?",
       [
-        {
-          text: "아니오",
-          style: "cancel",
-        },
+        { text: "아니오", style: "cancel" },
         {
           text: "네",
           onPress: () => {
@@ -141,10 +94,7 @@ function MembershipScreen() {
       null,
       "정말로 재개하시겠습니까?",
       [
-        {
-          text: "아니오",
-          style: "cancel",
-        },
+        { text: "아니오", style: "cancel" },
         {
           text: "네",
           onPress: () => {
@@ -164,7 +114,6 @@ function MembershipScreen() {
   };
 
   const onPressExtend = () => {
-    // 현재 잔여횟수를 보여주고 연장할 횟수를 입력하도록 모달을 보여줌
     setShowFirst(true);
   };
 
@@ -173,10 +122,7 @@ function MembershipScreen() {
       null,
       "정말로 연장하시겠습니까?",
       [
-        {
-          text: "아니오",
-          style: "cancel",
-        },
+        { text: "아니오", style: "cancel" },
         {
           text: "네",
           onPress: () => {
@@ -188,7 +134,6 @@ function MembershipScreen() {
               createSchedulesWithMembership({
                 ...membership,
                 remaining: membershipCount,
-                // 현재 날짜와 종료일자 중 더 늦은 날짜를 구함
                 startDate: format(
                   max([addDays(new Date(membership.endDate), 1), new Date()]),
                   "yyyy-MM-dd"
@@ -210,15 +155,11 @@ function MembershipScreen() {
   };
 
   const onPressChange = () => {
-    // 현재 요일/시간 체크 및 설정 상황을 보여주고 직접 입력하도록 모달을 보여줌
     const days = { ...membershipDays };
-    Object.keys(membership.days).forEach((day) => {
-      days[day] = {
+    membership.schedules.forEach((schedule) => {
+      days[schedule.day] = {
         checked: true,
-        startHours: membership.days[day].startTime.split(":")[0],
-        startMinutes: membership.days[day].startTime.split(":")[1],
-        endHours: membership.days[day].endTime.split(":")[0],
-        endMinutes: membership.days[day].endTime.split(":")[1],
+        startTime: schedule.startTime,
       };
     });
     setMembershipDays(days);
@@ -230,25 +171,21 @@ function MembershipScreen() {
       null,
       "정말로 변경하시겠습니까?",
       [
-        {
-          text: "아니오",
-          style: "cancel",
-        },
+        { text: "아니오", style: "cancel" },
         {
           text: "네",
           onPress: () => {
             removeSchedulesWithMember(user.id, memberId)
               .then(() => {
-                const formatDays = {};
-                Object.entries(membershipDays).forEach(([day, data]) => {
-                  if (data.checked) {
-                    formatDays[day] = {
-                      startTime: `${data.startHours}:${data.startMinutes}`,
-                      endTime: `${data.endHours}:${data.endMinutes}`,
-                    };
-                  }
+                const updatedSchedules = Object.entries(membershipDays)
+                  .filter(([_, data]) => data.checked)
+                  .map(([day, data]) => ({
+                    day,
+                    startTime: data.startTime,
+                  }));
+                updateMembership(membership.id, {
+                  schedules: updatedSchedules,
                 });
-                updateMembership(membership.id, { days: formatDays });
               })
               .then(async () => {
                 const updatedMembership = await getMembership(
@@ -268,37 +205,21 @@ function MembershipScreen() {
   };
 
   const onCloseChange = () => {
-    const days = { ...membershipDays };
-    Object.keys(membership.days).forEach((day) => {
-      days[day] = {
-        checked: true,
-        startHours: membership.days[day].startTime.split(":")[0],
-        startMinutes: membership.days[day].startTime.split(":")[1],
-        endHours: membership.days[day].endTime.split(":")[0],
-        endMinutes: membership.days[day].endTime.split(":")[1],
-      };
-    });
-    setMembershipDays(days);
     setShowSecond(false);
   };
 
   const showMembershipDays = () => {
     const daysOrder = ["월", "화", "수", "목", "금", "토", "일"];
 
-    const daysKeys = Object.keys(membership?.days || {});
+    const sortedSchedules = membership?.schedules?.sort(
+      (a, b) => daysOrder.indexOf(a.day) - daysOrder.indexOf(b.day)
+    );
 
-    const sortedDaysKeys = daysKeys.sort((a, b) => {
-      return daysOrder.indexOf(a) - daysOrder.indexOf(b);
-    });
-
-    return sortedDaysKeys.map((key) => {
-      const value = membership?.days[key];
-      return (
-        <Text key={key} style={styles.itemText}>
-          {key} {value.startTime} : {value.endTime}
-        </Text>
-      );
-    });
+    return sortedSchedules?.map((schedule, index) => (
+      <Text key={index} style={styles.itemText}>
+        {schedule.day} {schedule.startTime}
+      </Text>
+    ));
   };
 
   return (
@@ -421,117 +342,54 @@ function MembershipScreen() {
                 </Text>
               </View>
               <View>
-                <View>
-                  {Object.entries(membershipDays).map(([day, data]) => (
+                {Object.entries(membershipDays).map(([day, data]) => (
+                  <View
+                    key={day}
+                    style={{ flexDirection: "row", alignItems: "center" }}
+                  >
+                    <Text>{day}</Text>
+                    <CheckBox
+                      checked={data.checked}
+                      onPress={() => {
+                        setMembershipDays((prevInfo) => ({
+                          ...prevInfo,
+                          [day]: {
+                            ...prevInfo[day],
+                            checked: !data.checked,
+                          },
+                        }));
+                      }}
+                    />
                     <View
-                      key={day}
-                      style={{ flexDirection: "row", alignItems: "center" }}
+                      style={{
+                        borderWidth: 1,
+                        borderRadius: 2,
+                        paddingHorizontal: 10,
+                        marginRight: 10,
+                        height: 24,
+                        width: 72,
+                        flexDirection: "row",
+                        alignItems: "center",
+                      }}
                     >
-                      <Text>{day}</Text>
-                      <CheckBox
-                        checked={data.checked}
-                        onPress={() => {
+                      <TextInput
+                        keyboardType="numeric"
+                        value={data.startTime}
+                        maxLength={5}
+                        editable={data.checked}
+                        onChangeText={(text) => {
                           setMembershipDays((prevInfo) => ({
                             ...prevInfo,
                             [day]: {
                               ...prevInfo[day],
-                              checked: !data.checked,
+                              startTime: text,
                             },
                           }));
                         }}
                       />
-                      <View
-                        style={{
-                          borderWidth: 1,
-                          borderRadius: 2,
-                          paddingHorizontal: 10,
-                          marginRight: 10,
-                          height: 24,
-                          width: 72,
-                          flexDirection: "row",
-                          alignItems: "center",
-                        }}
-                      >
-                        <TextInput
-                          keyboardType="numeric"
-                          value={data.startHours}
-                          maxLength={2}
-                          editable={data.checked}
-                          onChangeText={(text) => {
-                            setMembershipDays((prevInfo) => ({
-                              ...prevInfo,
-                              [day]: {
-                                ...prevInfo[day],
-                                startHours: text,
-                              },
-                            }));
-                          }}
-                        />
-                        <Text style={{ marginRight: 5 }}> : </Text>
-                        <TextInput
-                          keyboardType="numeric"
-                          value={data.startMinutes}
-                          maxLength={2}
-                          editable={data.checked}
-                          onChangeText={(text) => {
-                            setMembershipDays((prevInfo) => ({
-                              ...prevInfo,
-                              [day]: {
-                                ...prevInfo[day],
-                                startMinutes: text,
-                              },
-                            }));
-                          }}
-                        />
-                      </View>
-                      <Text style={{ marginRight: 10 }}>~</Text>
-                      <View
-                        style={{
-                          borderWidth: 1,
-                          borderRadius: 2,
-                          paddingHorizontal: 10,
-                          marginRight: 10,
-                          height: 24,
-                          width: 72,
-                          flexDirection: "row",
-                          alignItems: "center",
-                        }}
-                      >
-                        <TextInput
-                          keyboardType="numeric"
-                          value={data.endHours}
-                          maxLength={2}
-                          editable={data.checked}
-                          onChangeText={(text) => {
-                            setMembershipDays((prevInfo) => ({
-                              ...prevInfo,
-                              [day]: {
-                                ...prevInfo[day],
-                                endHours: text,
-                              },
-                            }));
-                          }}
-                        />
-                        <Text style={{ marginRight: 5 }}> : </Text>
-                        <TextInput
-                          keyboardType="numeric"
-                          value={data.endMinutes}
-                          maxLength={2}
-                          editable={data.checked}
-                          onChangeText={(text) => {
-                            setMembershipDays((prevInfo) => ({
-                              ...prevInfo,
-                              [day]: {
-                                ...prevInfo[day],
-                                endMinutes: text,
-                              },
-                            }));
-                          }}
-                        />
-                      </View>
                     </View>
-                  ))}
-                </View>
+                  </View>
+                ))}
               </View>
               <View
                 style={{

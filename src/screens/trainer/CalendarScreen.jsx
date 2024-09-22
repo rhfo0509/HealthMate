@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { Pressable, Text } from "react-native";
 import CalendarView from "../../components/CalendarView";
-import AddScheduleButton from "../../components/AddScheduleButton";
 import { useUserContext } from "../../contexts/UserContext";
 import { format } from "date-fns";
 import ScheduleList from "../../components/ScheduleList";
@@ -91,19 +90,16 @@ function CalendarScreen() {
   );
 
   return (
-    <>
-      <ScheduleList
-        schedules={filteredScheduleList}
-        ListHeaderComponent={
-          <CalendarView
-            markedDates={markedDates}
-            selectedDate={selectedDate}
-            onSelectDate={setSelectedDate}
-          />
-        }
-      />
-      <AddScheduleButton selectedDate={selectedDate} />
-    </>
+    <ScheduleList
+      schedules={filteredScheduleList}
+      ListHeaderComponent={
+        <CalendarView
+          markedDates={markedDates}
+          selectedDate={selectedDate}
+          onSelectDate={setSelectedDate}
+        />
+      }
+    />
   );
 }
 

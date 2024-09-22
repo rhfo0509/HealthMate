@@ -13,13 +13,13 @@ function BorderedInput({ hasMarginBottom, ...rest }, ref) {
 
 const styles = StyleSheet.create({
   input: {
+    flex: 1,
     borderColor: "#bdbdbd",
     borderWidth: 1,
     paddingHorizontal: 16,
     borderRadius: 4,
     height: 48,
     backgroundColor: "white",
-    width: "100%",
   },
   margin: {
     marginBottom: 16,

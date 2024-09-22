@@ -39,67 +39,57 @@ export async function createSchedule({
 }
 
 export async function createSchedulesWithMembership(membership) {
-  const { trainerId, memberId, remaining, startDate, days, id } = membership;
+  const { trainerId, memberId, remaining, startDate, schedules, id } =
+    membership;
 
   let currentDate = new Date(startDate);
-
-  const daysNumber = {
-    일: 0,
-    월: 1,
-    화: 2,
-    수: 3,
-    목: 4,
-    금: 5,
-    토: 6,
-  };
-
+  const dayNames = ["일", "월", "화", "수", "목", "금", "토"];
   const batch = writeBatch(firestore);
-  const schedules = [];
-  const checkedDays = Object.keys(days).map((day) => daysNumber[day]);
-  let i = remaining;
 
-  // remaining만큼 스케줄 생성
-  while (i) {
-    // 각 요일에 대해 반복
-    if (checkedDays.includes(currentDate.getDay())) {
-      console.log(currentDate);
-      i--;
-      // 해당 요일에 대한 시작 및 종료 시간 가져오기
-      const daysName = Object.keys(daysNumber).find(
-        (key) => daysNumber[key] === currentDate.getDay()
-      );
-      const { startTime, endTime } = days[daysName];
-      schedules.push({
+  // 스케줄이 포함된 요일의 숫자 배열
+  const checkedDays = schedules.map((schedule) =>
+    dayNames.indexOf(schedule.day)
+  );
+
+  for (let i = 0; i < remaining; i++) {
+    // 현재 날짜의 요일이 스케줄이 있는 요일인지 확인
+    while (!checkedDays.includes(currentDate.getDay())) {
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+
+    // 현재 날짜의 요일과 일치하는 스케줄을 찾음
+    const currentDayName = dayNames[currentDate.getDay()];
+    const scheduleForDay = schedules.find(
+      (schedule) => schedule.day === currentDayName
+    );
+
+    if (scheduleForDay) {
+      // 스케줄 데이터 구성
+      const schedule = {
         date: format(currentDate, "yyyy-MM-dd"),
-        startTime,
-        endTime,
+        startTime: scheduleForDay.startTime,
         trainerId,
         memberId,
         createdAt: serverTimestamp(),
-      });
-      currentDate.setDate(currentDate.getDate() + 1);
-    } else {
-      while (!checkedDays.includes(currentDate.getDay())) {
-        currentDate.setDate(currentDate.getDate() + 1);
-      }
+      };
+
+      // Batch에 스케줄 추가
+      batch.set(doc(schedulesCollection), schedule);
     }
+
+    // 다음 스케줄 날짜로 이동
+    currentDate.setDate(currentDate.getDate() + 1);
   }
 
-  schedules.forEach((schedule) => {
-    batch.set(doc(schedulesCollection), schedule);
-  });
-
-  batch
-    .commit()
-    .then(() => {
-      updateMembership(id, {
-        endDate: format(subDays(currentDate, 1), "yyyy-MM-dd"),
-      });
-      console.log("일정 일괄 추가 완료");
-    })
-    .catch((error) => {
-      console.error("일정 일괄 추가 중 오류 발생", error);
-    });
+  try {
+    // Batch로 모든 스케줄 일괄 추가
+    await batch.commit();
+    // 회원권의 종료일을 최종 스케줄 날짜로 업데이트
+    await updateMembership(id, { endDate: format(currentDate, "yyyy-MM-dd") });
+    console.log("일정 추가 완료");
+  } catch (error) {
+    console.error("일정 추가 중 오류 발생:", error);
+  }
 }
 
 export async function getMemberSchedules(memberId) {

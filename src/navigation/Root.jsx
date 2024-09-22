@@ -15,6 +15,7 @@ import CommentScreen from "../screens/CommentScreen";
 import ModifyScreen from "../screens/ModifyScreen";
 import SettingScreen from "../screens/SettingScreen";
 import PostScreen from "../screens/PostScreen";
+import AddMembershipScreen from "../screens/trainer/AddMembershipScreen";
 import MembershipScreen from "../screens/trainer/MembershipScreen";
 import NotifyScreen from "../screens/NotifyScreen";
 import FoodSearchScreen from "../screens/FoodSearchScreen";
@@ -88,6 +89,11 @@ function Root() {
             name="Post"
             component={PostScreen}
             options={{ title: "게시글" }}
+          />
+          <Stack.Screen
+            name="AddMembership"
+            component={AddMembershipScreen}
+            options={{ title: "회원 및 회원권 추가" }}
           />
           <Stack.Screen
             name="Membership"

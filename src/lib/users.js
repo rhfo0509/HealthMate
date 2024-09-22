@@ -20,110 +20,81 @@ const firestore = getFirestore();
 const membersCollection = collection(firestore, "members");
 const trainersCollection = collection(firestore, "trainers");
 
+// 사용자 등록 (회원/트레이너 구분)
 export function createUser(user, role) {
-  return role === "Member"
-    ? setDoc(doc(membersCollection, user.id), user)
-    : setDoc(doc(trainersCollection, user.id), user);
+  const targetCollection =
+    role === "Member" ? membersCollection : trainersCollection;
+  return setDoc(doc(targetCollection, user.id), user);
 }
 
+// 사용자 정보 조회 (회원/트레이너 구분)
 export async function getUser(id) {
-  let docRef = doc(membersCollection, id);
-  let docSnap = await getDoc(docRef);
-  if (docSnap.exists()) {
-    return docSnap.data();
-  } else {
-    docRef = doc(trainersCollection, id);
-    docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-      return docSnap.data();
-    } else {
-      return null;
-    }
-  }
+  let user = await getDoc(doc(membersCollection, id));
+  if (user.exists()) return user.data();
+
+  user = await getDoc(doc(trainersCollection, id));
+  return user.exists() ? user.data() : null;
 }
 
-export async function getRole(id) {
-  let docRef = doc(membersCollection, id);
-  let docSnap = await getDoc(docRef);
-  if (docSnap.exists()) {
-    return "member";
-  } else {
-    return "trainer";
-  }
-}
-
-export async function addMemberToTrainer(trainerId, member) {
-  const { name, phoneNumber, membershipInfo } = member;
+// 이름과 전화번호로 회원 조회
+export async function getMember(profile) {
+  const { displayName, phoneNumber } = profile;
   try {
     const q = query(
       membersCollection,
-      where("displayName", "==", name),
+      where("displayName", "==", displayName),
       where("phoneNumber", "==", phoneNumber)
     );
-    const docSnap = await getDocs(q);
+    const querySnapshot = await getDocs(q);
+    return !querySnapshot.empty ? querySnapshot.docs[0].data() : null;
+  } catch (error) {
+    console.error("회원 정보 확인 중 오류 발생:", error);
+    return null;
+  }
+}
 
-    if (!docSnap.empty) {
-      const memberDoc = docSnap.docs[0];
-      const trainerMembersCollection = collection(
-        firestore,
-        `trainers/${trainerId}/members`
-      );
-      await setDoc(
-        doc(trainerMembersCollection, memberDoc.id),
-        memberDoc.data()
-      ).then(() => {
-        const { count, startYear, startMonth, startDay, days } = membershipInfo;
-        const formatDays = {};
-        Object.entries(days).forEach(([day, data]) => {
-          if (data.checked) {
-            formatDays[day] = {
-              startTime: `${data.startHours}:${data.startMinutes}`,
-              endTime: `${data.endHours}:${data.endMinutes}`,
-            };
-          }
-        });
-        const formatMembership = {
-          count,
-          remaining: count,
-          startDate: `${startYear}-${startMonth}-${startDay}`,
-          days: formatDays,
-          memberId: memberDoc.id,
-          trainerId,
-        };
-        createMembership(formatMembership).then(async (membershipDoc) => {
-          const snapshot = await getDoc(membershipDoc);
-          createSchedulesWithMembership({
-            ...snapshot.data(),
-            id: membershipDoc.id,
-          });
-        });
-      });
-    } else {
-      console.log("회원이 존재하지 않음");
-    }
+// 사용자 역할 조회
+export async function getRole(id) {
+  const docRef = doc(membersCollection, id);
+  const docSnap = await getDoc(docRef);
+  return docSnap.exists() ? "member" : "trainer";
+}
+
+// 트레이너에 회원 추가
+export async function addMemberToTrainer(trainerId, memberId) {
+  try {
+    const docRef = doc(membersCollection, memberId);
+    const docSnap = await getDoc(docRef);
+
+    const trainerMembersCollection = collection(
+      firestore,
+      `trainers/${trainerId}/members`
+    );
+
+    await setDoc(doc(trainerMembersCollection, memberId), docSnap.data());
   } catch (error) {
     console.error("회원 추가 중 오류 발생", error);
   }
 }
 
+// 트레이너의 회원 목록 조회
 export async function getMembersByTrainer(trainerId) {
-  const docRef = collection(firestore, `trainers/${trainerId}/members`);
-  const docSnap = await getDocs(docRef);
-  const members = docSnap.docs.map((doc) => ({
-    id: doc.id,
-    ...doc.data(),
-  }));
-  return members;
+  const trainerMembersCollection = collection(
+    firestore,
+    `trainers/${trainerId}/members`
+  );
+  const docSnap = await getDocs(trainerMembersCollection);
+  return docSnap.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
 }
 
+// 트레이너의 회원 삭제
 export async function removeMemberByTrainer(trainerId, memberId) {
   await deleteDoc(
     doc(collection(firestore, `trainers/${trainerId}/members`), memberId)
   );
 }
 
+// 회원 정보 업데이트
 export async function updateMember({ memberId, bodyData }) {
-  await updateDoc(doc(membersCollection, memberId), {
-    bodyData,
-  });
+  await updateDoc(doc(membersCollection, memberId), { bodyData });
 }

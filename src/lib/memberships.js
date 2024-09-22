@@ -20,6 +20,7 @@ const membershipsCollection = collection(firestore, "memberships");
 export async function createMembership(membership) {
   return await addDoc(collection(firestore, "memberships"), {
     ...membership,
+    remaining: membership.count,
     status: "active",
     createdAt: serverTimestamp(),
   });
