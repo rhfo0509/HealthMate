@@ -13,30 +13,13 @@ import {
   writeBatch,
 } from "firebase/firestore";
 import { initFirebase } from "../../firebaseConfig";
-import { format, subDays } from "date-fns";
+import { format } from "date-fns";
 import { decreaseMembershipCount, updateMembership } from "./memberships";
 
 initFirebase();
 
 const firestore = getFirestore();
 const schedulesCollection = collection(firestore, "schedules");
-
-export async function createSchedule({
-  memberId,
-  trainerId,
-  date,
-  startTime,
-  endTime,
-}) {
-  await addDoc(schedulesCollection, {
-    date,
-    startTime,
-    endTime,
-    trainerId,
-    memberId,
-    createdAt: serverTimestamp(),
-  });
-}
 
 export async function createSchedulesWithMembership(membership) {
   const { trainerId, memberId, remaining, startDate, schedules, id } =

@@ -8,7 +8,7 @@ import { useUserContext } from "../../contexts/UserContext";
 import Avatar from "../../components/Avatar";
 import { getMemberSchedules } from "../../lib/schedules";
 import { getMembershipsByMember } from "../../lib/memberships";
-import { addMinutes, differenceInMinutes, format, isAfter } from "date-fns";
+import { format, isAfter } from "date-fns";
 import { ko } from "date-fns/locale";
 import { getUser } from "../../lib/users";
 import IconRightButton from "../../components/IconRightButton";
@@ -107,21 +107,9 @@ function MemberHomeScreen() {
       updatedField: {
         date: date ? date : schedule.date,
         startTime: time ? time : schedule.startTime,
-        endTime: time
-          ? format(
-              addMinutes(
-                new Date(schedule.date + "T" + schedule.endTime),
-                differenceInMinutes(
-                  new Date(schedule.date + "T" + time),
-                  new Date(schedule.date + "T" + schedule.startTime)
-                )
-              ),
-              "HH:mm"
-            )
-          : schedule.endTime,
       },
     };
-    const message = `${user.displayName}님이 ${schedule.date} ${schedule.startTime} ~ ${schedule.endTime} 에서 ${data.updatedField.date} ${data.updatedField.startTime} ~ ${data.updatedField.endTime} 으로 일정 변경을 신청하였습니다.`;
+    const message = `${user.displayName}님이 ${schedule.date} ${schedule.startTime} 에서 ${data.updatedField.date} ${data.updatedField.startTime} 으로 일정 변경을 신청하였습니다.`;
     Alert.alert(
       null,
       "정말로 변경 신청하시겠습니까?",
@@ -157,7 +145,7 @@ function MemberHomeScreen() {
       reason: reason,
       scheduleId: schedule.id,
     };
-    const message = `${user.displayName}님이 ${schedule.date} ${schedule.startTime} ~ ${schedule.endTime} 일정 취소를 신청하였습니다.`;
+    const message = `${user.displayName}님이 ${schedule.date} ${schedule.startTime} 일정 취소를 신청하였습니다.`;
     Alert.alert(
       null,
       "정말로 취소 신청하시겠습니까?",
@@ -260,7 +248,7 @@ function MemberHomeScreen() {
             >
               <Text style={styles.itemText}>
                 {format(new Date(schedule.date), "M/d(E)", { locale: ko })}{" "}
-                {schedule.startTime} : {schedule.endTime}
+                {schedule.startTime}
               </Text>
             </View>
           </View>
@@ -272,11 +260,11 @@ function MemberHomeScreen() {
             }}
           >
             <Pressable
-              style={[styles.button, { backgroundColor: "#90CAF9" }]}
+              style={[styles.button, styles.requestButton]}
               android_ripple={{ color: "#ededed" }}
               onPress={() => onPressFirst(index)}
             >
-              <Text style={[styles.itemText, { color: "white" }]}>
+              <Text style={[styles.itemText, styles.requestText]}>
                 변경신청
               </Text>
             </Pressable>
@@ -337,49 +325,32 @@ function MemberHomeScreen() {
                       onChangeText={setReason}
                     />
                   </View>
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      position: "absolute",
-                      bottom: 10,
-                      right: 10,
-                    }}
-                  >
+                  <View style={styles.modalButtons}>
                     <Pressable
                       onPress={() => onSaveFirst(schedule)}
-                      style={{ padding: 10 }}
+                      style={[
+                        styles.modalButton,
+                        { backgroundColor: "#1f6feb" },
+                      ]}
                     >
-                      <Text
-                        style={{
-                          fontSize: 16,
-                          fontWeight: "500",
-                          color: "#64B5F6",
-                        }}
-                      >
-                        등록
-                      </Text>
+                      <Text style={{ color: "#fff" }}>등록</Text>
                     </Pressable>
-                    <Pressable onPress={onCloseFirst} style={{ padding: 10 }}>
-                      <Text
-                        style={{
-                          fontSize: 16,
-                          fontWeight: "500",
-                          color: "#E57373",
-                        }}
-                      >
-                        취소
-                      </Text>
+                    <Pressable
+                      onPress={onCloseFirst}
+                      style={styles.modalButton}
+                    >
+                      <Text style={{ color: "#1f6feb" }}>취소</Text>
                     </Pressable>
                   </View>
                 </View>
               </View>
             </Modal>
             <Pressable
-              style={[styles.button, { backgroundColor: "#EF9A9A" }]}
+              style={[styles.button, styles.cancelRequestButton]}
               android_ripple={{ color: "#ededed" }}
               onPress={() => onPressSecond(index)}
             >
-              <Text style={[styles.itemText, { color: "white" }]}>
+              <Text style={[styles.itemText, styles.cancelRequestText]}>
                 취소신청
               </Text>
             </Pressable>
@@ -399,38 +370,21 @@ function MemberHomeScreen() {
                       onChangeText={setReason}
                     />
                   </View>
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      position: "absolute",
-                      bottom: 10,
-                      right: 10,
-                    }}
-                  >
+                  <View style={styles.modalButtons}>
                     <Pressable
                       onPress={() => onSaveSecond(schedule)}
-                      style={{ padding: 10 }}
+                      style={[
+                        styles.modalButton,
+                        { backgroundColor: "#1f6feb" },
+                      ]}
                     >
-                      <Text
-                        style={{
-                          fontSize: 16,
-                          fontWeight: "500",
-                          color: "#64B5F6",
-                        }}
-                      >
-                        등록
-                      </Text>
+                      <Text style={{ color: "#fff" }}>등록</Text>
                     </Pressable>
-                    <Pressable onPress={onCloseSecond} style={{ padding: 10 }}>
-                      <Text
-                        style={{
-                          fontSize: 16,
-                          fontWeight: "500",
-                          color: "#E57373",
-                        }}
-                      >
-                        취소
-                      </Text>
+                    <Pressable
+                      onPress={onCloseSecond}
+                      style={styles.modalButton}
+                    >
+                      <Text style={{ color: "#1f6feb" }}>취소</Text>
                     </Pressable>
                   </View>
                 </View>
@@ -468,7 +422,6 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderBottomWidth: 1,
     borderColor: "#eeeeee",
-
     backgroundColor: "white",
     paddingVertical: 16,
     paddingHorizontal: 12,
@@ -479,9 +432,23 @@ const styles = StyleSheet.create({
   },
   button: {
     paddingHorizontal: 8,
-    paddingVertical: 8,
-    borderRadius: 10,
-    marginHorizontal: 2,
+    paddingVertical: 6,
+    borderRadius: 4,
+    marginHorizontal: 4,
+  },
+  requestButton: {
+    backgroundColor: "#1f6feb",
+  },
+  requestText: {
+    color: "#fff",
+  },
+  cancelRequestButton: {
+    backgroundColor: "#fff",
+    borderColor: "#1f6feb",
+    borderWidth: 1,
+  },
+  cancelRequestText: {
+    color: "#1f6feb",
   },
   input: {
     width: "100%",
@@ -502,12 +469,25 @@ const styles = StyleSheet.create({
   },
   modalContent: {
     backgroundColor: "white",
-    paddingHorizontal: 20,
-    paddingTop: 30,
-    paddingBottom: 50,
+    padding: 20,
     borderRadius: 10,
     width: "80%",
     alignItems: "center",
+  },
+  modalButtons: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    width: "100%",
+    marginTop: 20,
+    gap: 12,
+  },
+  modalButton: {
+    flex: 1,
+    paddingVertical: 12,
+    alignItems: "center",
+    borderRadius: 4,
+    borderWidth: 1,
+    borderColor: "#1f6feb",
   },
 });
 

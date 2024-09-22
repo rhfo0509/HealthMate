@@ -16,13 +16,10 @@ function ScheduleModal({
   setDate,
   startTime,
   setStartTime,
-  endTime,
-  setEndTime,
   selectedDate,
 }) {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showStartTimePicker, setShowStartTimePicker] = useState(false);
-  const [showEndTimePicker, setShowEndTimePicker] = useState(false);
 
   const onChangeDate = (event, selectedDate) => {
     setShowDatePicker(false);
@@ -32,11 +29,6 @@ function ScheduleModal({
   const onChangeStartTime = (event, selectedTime) => {
     setShowStartTimePicker(false);
     event.type === "set" ? setStartTime(selectedTime) : setStartTime(startTime);
-  };
-
-  const onChangeEndTime = (event, selectedTime) => {
-    setShowEndTimePicker(false);
-    event.type === "set" ? setEndTime(selectedTime) : setEndTime(endTime);
   };
 
   return (
@@ -96,26 +88,6 @@ function ScheduleModal({
                 />
               )}
               {startTime && <Text>{format(startTime, `HH시 mm분`)}</Text>}
-            </View>
-            <View style={styles.pickerGroup}>
-              <Pressable
-                style={styles.picker}
-                onPress={() => setShowEndTimePicker(true)}
-              >
-                <MaterialIcons name="access-time" size={24} color="black" />
-                <Text> 종료시간 선택</Text>
-              </Pressable>
-              {showEndTimePicker && (
-                <RNDateTimePicker
-                  value={endTime || new Date()}
-                  mode="time"
-                  is24Hour={true}
-                  display="spinner"
-                  onChange={onChangeEndTime}
-                  minuteInterval={30}
-                />
-              )}
-              {endTime && <Text>{format(endTime, "HH시 mm분")}</Text>}
             </View>
           </View>
           <View style={styles.buttonGroup}>

@@ -11,7 +11,7 @@ import {
 } from "firebase/firestore";
 import { getTrainerSchedules } from "../../lib/schedules";
 import { getMembersByTrainer } from "../../lib/users";
-import { startOfWeek, endOfWeek, format, addDays } from "date-fns";
+import { startOfWeek, endOfWeek, format, addDays, addMinutes } from "date-fns";
 import { ko } from "date-fns/locale"; // 한글 요일을 위한 locale import
 
 const HOURS_IN_DAY = Array.from({ length: 14 }, (_, i) => i + 9); // 9시부터 22시까지
@@ -88,10 +88,12 @@ function WeeklyCalendarScreen() {
       const selectedMember = members.find(
         (member) => member.id === schedule.memberId
       );
+      const startDate = combineDateAndTime(schedule.date, schedule.startTime);
+      const endDate = addMinutes(startDate, 60); // startTime + 60분으로 설정
       return {
         id: schedule.id,
-        startDate: combineDateAndTime(schedule.date, schedule.startTime),
-        endDate: combineDateAndTime(schedule.date, schedule.endTime),
+        startDate,
+        endDate,
         color: selectedMember?.color,
         description: selectedMember?.name,
       };
