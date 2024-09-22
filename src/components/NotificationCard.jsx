@@ -32,7 +32,7 @@ function NotificationCard({
               ? createNotification({
                   senderId: receiverId,
                   receiverId: senderId,
-                  message: `일정이 성공적으로 변경되었습니다.(${data.updatedField.date} ${data.updatedField.startTime} ~ ${data.updatedField.endTime})`,
+                  message: `일정이 성공적으로 변경되었습니다. (${data.updatedField.date} ${data.updatedField.startTime})`,
                   data: null,
                 })
               : createNotification({
@@ -47,6 +47,7 @@ function NotificationCard({
       { cancelable: true }
     );
   };
+
   const onPressRefuse = () => {
     Alert.alert(
       null,
@@ -79,35 +80,46 @@ function NotificationCard({
       { cancelable: true }
     );
   };
+
   return (
     <View style={styles.block}>
-      <Text style={[styles.content, { fontWeight: "600" }]}>{message}</Text>
-      {data && <Text style={styles.content}>사유: {data.reason}</Text>}
-      <Text style={styles.date}>{createdAt.toDate().toLocaleString()}</Text>
-      {data ? (
-        clicked ? (
-          <Text style={{ color: "#E57373", fontWeight: "600" }}>
-            처리가 완료되었습니다.
+      <View style={styles.messageContainer}>
+        <Text style={styles.messageText}>{`${message}`}</Text>
+
+        {data?.updatedField && (
+          <Text style={styles.infoText}>
+            변경시간:{" "}
+            {`${data.updatedField.date} ${data.updatedField.startTime}`}
           </Text>
-        ) : (
-          <View style={styles.buttons}>
-            <Pressable
-              style={[styles.button, { backgroundColor: "#64B5F6" }]}
-              android_ripple={{ color: "#ededed" }}
-              onPress={onPressAccept}
-            >
-              <Text style={{ color: "white" }}>수락</Text>
-            </Pressable>
-            <Pressable
-              style={[styles.button, { backgroundColor: "#E57373" }]}
-              android_ripple={{ color: "#ededed" }}
-              onPress={onPressRefuse}
-            >
-              <Text style={{ color: "white" }}>거절</Text>
-            </Pressable>
-          </View>
-        )
-      ) : null}
+        )}
+
+        {data && <Text style={styles.reasonText}>사유: {data.reason}</Text>}
+
+        <Text style={styles.dateText}>
+          {createdAt.toDate().toLocaleString()}
+        </Text>
+      </View>
+      {data && !clicked && (
+        <View style={styles.buttons}>
+          <Pressable
+            style={[styles.button, styles.acceptButton]}
+            android_ripple={{ color: "#ededed" }}
+            onPress={onPressAccept}
+          >
+            <Text style={styles.acceptText}>수락</Text>
+          </Pressable>
+          <Pressable
+            style={[styles.button, styles.refuseButton]}
+            android_ripple={{ color: "#ededed" }}
+            onPress={onPressRefuse}
+          >
+            <Text style={styles.refuseText}>거절</Text>
+          </Pressable>
+        </View>
+      )}
+      {clicked && (
+        <Text style={styles.completedText}>처리가 완료되었습니다.</Text>
+      )}
     </View>
   );
 }
@@ -116,29 +128,74 @@ const styles = StyleSheet.create({
   block: {
     flex: 1,
     padding: 16,
-    backgroundColor: "white",
+    backgroundColor: "#ffffff",
     marginVertical: 8,
-    borderRadius: 20,
+    borderRadius: 12,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 3,
   },
-  content: {
+  messageContainer: {
+    marginBottom: 10,
+  },
+  messageText: {
     fontSize: 16,
-    lineHeight: 24,
-    marginBottom: 8,
+    fontWeight: "bold",
+    color: "#333",
+    marginBottom: 6,
   },
-  date: {
-    color: "#757575",
+  infoText: {
+    fontSize: 14,
+    color: "#555",
+    marginBottom: 4,
+  },
+  reasonText: {
+    fontSize: 14,
+    color: "#666",
+    marginBottom: 4,
+  },
+  dateText: {
     fontSize: 12,
-    lineHeight: 18,
+    color: "#999",
+    textAlign: "right",
   },
   buttons: {
     flexDirection: "row",
-    marginTop: 8,
+    justifyContent: "space-between",
+    marginTop: 12,
+    gap: 12,
   },
   button: {
-    width: "50%",
+    flex: 1,
+    paddingVertical: 12,
     alignItems: "center",
-    paddingVertical: 8,
-    borderRadius: 4,
+    borderRadius: 6,
+    borderWidth: 1,
+  },
+  acceptButton: {
+    backgroundColor: "#1f6feb",
+    borderColor: "#1f6feb",
+  },
+  acceptText: {
+    color: "#fff",
+    fontSize: 16,
+  },
+  refuseButton: {
+    backgroundColor: "#fff",
+    borderColor: "#1f6feb",
+  },
+  refuseText: {
+    color: "#1f6feb",
+    fontSize: 16,
+  },
+  completedText: {
+    color: "#E57373",
+    fontWeight: "600",
+    fontSize: 14,
+    textAlign: "center",
+    marginTop: 12,
   },
 });
 

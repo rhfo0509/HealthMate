@@ -28,9 +28,8 @@ function BodyDataModal({ memberId, show, setShow }) {
     setDate(selectedDate);
   };
 
-  // 숫자와 소수점만 입력 허용하는 함수
   const handleNumericInput = (value) => {
-    const filteredValue = value.replace(/[^0-9.]/g, ""); // 숫자와 소수점만 허용
+    const filteredValue = value.replace(/[^0-9.]/g, "");
     return filteredValue;
   };
 
@@ -137,12 +136,15 @@ function BodyDataModal({ memberId, show, setShow }) {
               <Text style={styles.unit}>(%)</Text>
             </View>
           </View>
-          <View style={styles.buttonGroup}>
-            <Pressable onPress={onSave} style={styles.saveButton}>
-              <Text style={styles.saveText}>등록</Text>
+          <View style={styles.modalButtons}>
+            <Pressable
+              onPress={onSave}
+              style={[styles.modalButton, { backgroundColor: "#1f6feb" }]}
+            >
+              <Text style={{ color: "#fff" }}>등록</Text>
             </Pressable>
-            <Pressable onPress={onClose} style={styles.cancelButton}>
-              <Text style={styles.cancelText}>취소</Text>
+            <Pressable onPress={onClose} style={styles.modalButton}>
+              <Text style={{ color: "#1f6feb" }}>취소</Text>
             </Pressable>
           </View>
         </View>
@@ -165,11 +167,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     width: "80%",
     alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
   },
   title: {
     fontSize: 20,
@@ -218,33 +215,20 @@ const styles = StyleSheet.create({
     color: "#666",
     marginLeft: 5,
   },
-  buttonGroup: {
+  modalButtons: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginTop: 15,
+    width: "100%",
+    marginTop: 12,
+    gap: 12,
   },
-  saveButton: {
-    backgroundColor: "#64B5F6",
-    paddingVertical: 8,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-    marginRight: 10,
-  },
-  saveText: {
-    color: "white",
-    fontSize: 16,
-    fontWeight: "500",
-  },
-  cancelButton: {
-    backgroundColor: "#E57373",
-    paddingVertical: 8,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-  },
-  cancelText: {
-    color: "white",
-    fontSize: 16,
-    fontWeight: "500",
+  modalButton: {
+    flex: 1,
+    paddingVertical: 12,
+    alignItems: "center",
+    borderRadius: 4,
+    borderWidth: 1,
+    borderColor: "#1f6feb",
   },
 });
 

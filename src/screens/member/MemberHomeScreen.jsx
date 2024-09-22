@@ -109,7 +109,7 @@ function MemberHomeScreen() {
         startTime: time ? time : schedule.startTime,
       },
     };
-    const message = `${user.displayName}님이 ${schedule.date} ${schedule.startTime} 에서 ${data.updatedField.date} ${data.updatedField.startTime} 으로 일정 변경을 신청하였습니다.`;
+    const message = `${user.displayName}님이 ${schedule.date} ${schedule.startTime} 일정 변경을 신청하였습니다.`;
     Alert.alert(
       null,
       "정말로 변경 신청하시겠습니까?",
