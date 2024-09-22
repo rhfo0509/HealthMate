@@ -17,7 +17,6 @@ import {
   where,
   onSnapshot,
 } from "firebase/firestore";
-import { getFoods } from "../lib/foods";
 import { getUser, getRole } from "../lib/users";
 import NutritionPieChart from "../components/NutritionPieChart";
 
@@ -93,33 +92,13 @@ function DashboardScreen() {
         });
       } catch (error) {
         console.error("Error fetching user info:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
     if (role) {
       fetchMemberInfo();
-    }
-  }, [user.id, relatedUserId, role]);
-
-  useEffect(() => {
-    const fetchFoods = async () => {
-      try {
-        const fetchedFoods = await getFoods(
-          user.id,
-          role === "trainer" ? relatedUserId : user.id
-        );
-        setFoods(fetchedFoods);
-      } catch (error) {
-        console.error("Error fetching foods:", error);
-      } finally {
-        setTimeout(() => {
-          setIsLoading(false);
-        }, 1500);
-      }
-    };
-
-    if (role) {
-      fetchFoods();
     }
   }, [user.id, relatedUserId, role]);
 

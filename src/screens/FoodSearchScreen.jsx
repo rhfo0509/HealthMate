@@ -28,7 +28,7 @@ const FoodSearchScreen = () => {
             startIndex + 9
           }/DESC_KOR=${encodeURIComponent(foodName)}`
         );
-        const foodItems = response.data.I2790.row;
+        const foodItems = response.data.I2790?.row || [];
         setFoods(foodItems);
       } catch (error) {
         console.error("Error fetching food data:", error);
@@ -65,6 +65,14 @@ const FoodSearchScreen = () => {
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color="royalblue" />
+      </View>
+    );
+  }
+
+  if (!loading && foods.length === 0) {
+    return (
+      <View style={styles.noResultsContainer}>
+        <Text style={styles.noResultsText}>검색 결과가 없습니다.</Text>
       </View>
     );
   }
@@ -121,6 +129,15 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#fff",
+  },
+  noResultsContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  noResultsText: {
+    fontSize: 18,
+    color: "#333",
   },
   foodItem: {
     padding: 12,
