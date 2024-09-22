@@ -1,14 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  Pressable,
-  StyleSheet,
-  View,
-  Text,
-  Modal,
-  TextInput,
-  Alert,
-} from "react-native";
-import { CheckBox } from "react-native-elements";
+import { Pressable, StyleSheet, View, Text, Alert } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import { useUserContext } from "../../contexts/UserContext";
 import { getMembership, updateMembership } from "../../lib/memberships";
@@ -24,6 +15,8 @@ import {
   where,
   onSnapshot,
 } from "firebase/firestore";
+import ExtendCountModal from "../../components/ExtendCountModal";
+import ChangeScheduleModal from "../../components/ChangeScheduleModal";
 
 function MembershipScreen() {
   const [showFirst, setShowFirst] = useState(false);
@@ -45,7 +38,6 @@ function MembershipScreen() {
   const firestore = getFirestore();
   const membershipsCollection = collection(firestore, "memberships");
 
-  // memberships 컬렉션에 변화 발생 시
   useEffect(() => {
     const q = query(
       membershipsCollection,
@@ -62,7 +54,7 @@ function MembershipScreen() {
     return () => {
       unsubscribe();
     };
-  }, []);
+  }, [user.id, memberId]);
 
   useEffect(() => {
     getMembership(user.id, memberId).then(setMembership);
@@ -122,7 +114,10 @@ function MembershipScreen() {
       null,
       "정말로 연장하시겠습니까?",
       [
-        { text: "아니오", style: "cancel" },
+        {
+          text: "아니오",
+          style: "cancel",
+        },
         {
           text: "네",
           onPress: () => {
@@ -149,11 +144,6 @@ function MembershipScreen() {
     );
   };
 
-  const onCloseExtend = () => {
-    setMembershipCount("");
-    setShowFirst(false);
-  };
-
   const onPressChange = () => {
     const days = { ...membershipDays };
     membership.schedules.forEach((schedule) => {
@@ -171,7 +161,10 @@ function MembershipScreen() {
       null,
       "정말로 변경하시겠습니까?",
       [
-        { text: "아니오", style: "cancel" },
+        {
+          text: "아니오",
+          style: "cancel",
+        },
         {
           text: "네",
           onPress: () => {
@@ -205,12 +198,19 @@ function MembershipScreen() {
   };
 
   const onCloseChange = () => {
+    const days = { ...membershipDays };
+    membership.schedules?.forEach((schedule) => {
+      days[schedule.day] = {
+        checked: true,
+        startTime: schedule.startTime,
+      };
+    });
+    setMembershipDays(days);
     setShowSecond(false);
   };
 
   const showMembershipDays = () => {
     const daysOrder = ["월", "화", "수", "목", "금", "토", "일"];
-
     const sortedSchedules = membership?.schedules?.sort(
       (a, b) => daysOrder.indexOf(a.day) - daysOrder.indexOf(b.day)
     );
@@ -263,62 +263,6 @@ function MembershipScreen() {
             <Text>횟수연장</Text>
           </Pressable>
         ) : null}
-        <Modal
-          visible={showFirst}
-          animationType="fade"
-          transparent={true}
-          onRequestClose={onCloseExtend}
-        >
-          <View style={styles.modalContainer}>
-            <View style={styles.modalContent}>
-              <View>
-                <Text style={{ fontSize: 16, fontWeight: "500" }}>
-                  연장할 횟수를 입력해주세요.
-                </Text>
-              </View>
-              <View style={{ flexDirection: "row", alignItems: "center" }}>
-                <TextInput
-                  style={{ borderBottomWidth: 1, marginRight: 5 }}
-                  value={membershipCount}
-                  onChangeText={setMembershipCount}
-                  keyboardType="number-pad"
-                />
-                <Text> 회</Text>
-              </View>
-              <View
-                style={{
-                  flexDirection: "row",
-                  position: "absolute",
-                  bottom: 10,
-                  right: 10,
-                }}
-              >
-                <Pressable onPress={onSaveExtend} style={{ padding: 10 }}>
-                  <Text
-                    style={{
-                      fontSize: 16,
-                      fontWeight: "500",
-                      color: "#64B5F6",
-                    }}
-                  >
-                    등록
-                  </Text>
-                </Pressable>
-                <Pressable onPress={onCloseExtend} style={{ padding: 10 }}>
-                  <Text
-                    style={{
-                      fontSize: 16,
-                      fontWeight: "500",
-                      color: "#E57373",
-                    }}
-                  >
-                    취소
-                  </Text>
-                </Pressable>
-              </View>
-            </View>
-          </View>
-        </Modal>
         {membership?.status === "active" ? (
           <Pressable
             style={styles.button}
@@ -328,104 +272,24 @@ function MembershipScreen() {
             <Text>요일/시간변경</Text>
           </Pressable>
         ) : null}
-        <Modal
-          visible={showSecond}
-          animationType="fade"
-          transparent={true}
-          onRequestClose={onCloseChange}
-        >
-          <View style={styles.modalContainer}>
-            <View style={styles.modalContent}>
-              <View>
-                <Text style={{ fontSize: 16, fontWeight: "500" }}>
-                  변경할 스케줄을 입력해주세요.
-                </Text>
-              </View>
-              <View>
-                {Object.entries(membershipDays).map(([day, data]) => (
-                  <View
-                    key={day}
-                    style={{ flexDirection: "row", alignItems: "center" }}
-                  >
-                    <Text>{day}</Text>
-                    <CheckBox
-                      checked={data.checked}
-                      onPress={() => {
-                        setMembershipDays((prevInfo) => ({
-                          ...prevInfo,
-                          [day]: {
-                            ...prevInfo[day],
-                            checked: !data.checked,
-                          },
-                        }));
-                      }}
-                    />
-                    <View
-                      style={{
-                        borderWidth: 1,
-                        borderRadius: 2,
-                        paddingHorizontal: 10,
-                        marginRight: 10,
-                        height: 24,
-                        width: 72,
-                        flexDirection: "row",
-                        alignItems: "center",
-                      }}
-                    >
-                      <TextInput
-                        keyboardType="numeric"
-                        value={data.startTime}
-                        maxLength={5}
-                        editable={data.checked}
-                        onChangeText={(text) => {
-                          setMembershipDays((prevInfo) => ({
-                            ...prevInfo,
-                            [day]: {
-                              ...prevInfo[day],
-                              startTime: text,
-                            },
-                          }));
-                        }}
-                      />
-                    </View>
-                  </View>
-                ))}
-              </View>
-              <View
-                style={{
-                  flexDirection: "row",
-                  position: "absolute",
-                  bottom: 10,
-                  right: 10,
-                }}
-              >
-                <Pressable onPress={onSaveChange} style={{ padding: 10 }}>
-                  <Text
-                    style={{
-                      fontSize: 16,
-                      fontWeight: "500",
-                      color: "#64B5F6",
-                    }}
-                  >
-                    등록
-                  </Text>
-                </Pressable>
-                <Pressable onPress={onCloseChange} style={{ padding: 10 }}>
-                  <Text
-                    style={{
-                      fontSize: 16,
-                      fontWeight: "500",
-                      color: "#E57373",
-                    }}
-                  >
-                    취소
-                  </Text>
-                </Pressable>
-              </View>
-            </View>
-          </View>
-        </Modal>
       </View>
+
+      <ExtendCountModal
+        visible={showFirst}
+        onClose={() => setShowFirst(false)}
+        membership={membership}
+        membershipCount={membershipCount}
+        setMembershipCount={setMembershipCount}
+        onSave={onSaveExtend} // Pass the onSaveExtend function as a prop
+      />
+
+      <ChangeScheduleModal
+        visible={showSecond}
+        onClose={onCloseChange}
+        onSave={onSaveChange}
+        membershipDays={membershipDays}
+        setMembershipDays={setMembershipDays}
+      />
     </View>
   );
 }
@@ -458,21 +322,6 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     paddingVertical: 16,
     paddingHorizontal: 24,
-  },
-  modalContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-  },
-  modalContent: {
-    backgroundColor: "white",
-    paddingHorizontal: 20,
-    paddingTop: 30,
-    paddingBottom: 50,
-    borderRadius: 10,
-    width: "80%",
-    alignItems: "center",
   },
 });
 
