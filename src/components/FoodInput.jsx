@@ -28,7 +28,7 @@ function FoodInput({ food, onChange, onRemove, onSearch }) {
         <View style={styles.nutritionInputWrapper}>
           <TextInput
             placeholder="칼로리"
-            value={food.calories}
+            value={food.calories.toString()}
             onChangeText={(value) => onChange("calories", value)}
             keyboardType="numeric"
             style={styles.nutritionInput}
@@ -38,7 +38,7 @@ function FoodInput({ food, onChange, onRemove, onSearch }) {
         <View style={styles.nutritionInputWrapper}>
           <TextInput
             placeholder="탄수화물"
-            value={food.carbs}
+            value={food.carbs.toString()}
             onChangeText={(value) => onChange("carbs", value)}
             keyboardType="numeric"
             style={styles.nutritionInput}
@@ -50,7 +50,7 @@ function FoodInput({ food, onChange, onRemove, onSearch }) {
         <View style={styles.nutritionInputWrapper}>
           <TextInput
             placeholder="단백질"
-            value={food.protein}
+            value={food.protein.toString()}
             onChangeText={(value) => onChange("protein", value)}
             keyboardType="numeric"
             style={styles.nutritionInput}
@@ -60,7 +60,7 @@ function FoodInput({ food, onChange, onRemove, onSearch }) {
         <View style={styles.nutritionInputWrapper}>
           <TextInput
             placeholder="지방"
-            value={food.fat}
+            value={food.fat.toString()}
             onChangeText={(value) => onChange("fat", value)}
             keyboardType="numeric"
             style={styles.nutritionInput}
