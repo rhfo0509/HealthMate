@@ -15,16 +15,9 @@ import { MaterialIcons } from "@expo/vector-icons";
 import useActions from "../hooks/useActions";
 import VideoView from "./VideoView";
 import { getRole } from "../lib/users";
+import { getFoods } from "../lib/foods"; // getFoods 함수 임포트
 
-function PostCard({
-  author,
-  URL,
-  content,
-  createdAt,
-  id,
-  isDetailMode,
-  dietType,
-}) {
+function PostCard({ author, URL, content, createdAt, id, isDetailMode }) {
   const navigation = useNavigation();
   const date = useMemo(
     () =>
@@ -36,6 +29,7 @@ function PostCard({
   const [role, setRole] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [show, setShow] = useState(false);
+  const [foods, setFoods] = useState([]); // foods 상태 추가
 
   const onPressPost = () => {
     navigation.navigate("Post", {
@@ -44,7 +38,6 @@ function PostCard({
       content,
       createdAt,
       id,
-      dietType,
       isDetailMode: true,
     });
   };
@@ -63,6 +56,27 @@ function PostCard({
 
     fetchRole();
   }, [author.id]);
+
+  // foods 데이터를 가져오는 useEffect 추가
+  useEffect(() => {
+    const fetchFoods = async () => {
+      if (isDetailMode) {
+        try {
+          const foodDocs = await getFoods(id); // postId를 기준으로 foods 가져오기
+          if (foodDocs.length > 0) {
+            setFoods(foodDocs[0].foods || []); // 가져온 데이터에서 foods 배열 설정
+          } else {
+            setFoods([]); // 데이터가 없는 경우 빈 배열 설정
+          }
+        } catch (error) {
+          console.error("Error fetching foods:", error);
+          setFoods([]);
+        }
+      }
+    };
+
+    fetchFoods();
+  }, [id, isDetailMode]);
 
   return (
     <View style={styles.card}>
@@ -131,6 +145,30 @@ function PostCard({
           >
             {content}
           </Text>
+          {isDetailMode &&
+            foods.length > 0 && ( // foods가 있을 때만 표시
+              <View style={styles.foodsContainer}>
+                {foods.map((food, index) => (
+                  <View key={food.id || index} style={styles.foodItem}>
+                    <Text style={styles.foodName}>{food.name}</Text>
+                    <View style={styles.nutritionRow}>
+                      <Text style={[styles.nutrient, styles.calories]}>
+                        칼 {parseFloat(food.calories).toFixed(2)}
+                      </Text>
+                      <Text style={[styles.nutrient, styles.carbs]}>
+                        탄 {parseFloat(food.carbs).toFixed(2)}
+                      </Text>
+                      <Text style={[styles.nutrient, styles.protein]}>
+                        단 {parseFloat(food.protein).toFixed(2)}
+                      </Text>
+                      <Text style={[styles.nutrient, styles.fat]}>
+                        지 {parseFloat(food.fat).toFixed(2)}
+                      </Text>
+                    </View>
+                  </View>
+                ))}
+              </View>
+            )}
         </View>
       </Pressable>
       <View style={styles.footer}>
@@ -205,6 +243,47 @@ const styles = StyleSheet.create({
   },
   imageViewer: {
     padding: 16,
+  },
+  foodsContainer: {
+    marginTop: 12,
+    padding: 10,
+    backgroundColor: "#f9f9f9",
+    borderRadius: 8,
+  },
+  foodItem: {
+    marginBottom: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: "#e0e0e0",
+    paddingBottom: 8,
+  },
+  foodName: {
+    fontSize: 14,
+    fontWeight: "500",
+    color: "#333",
+  },
+  nutritionRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 4,
+  },
+  nutrient: {
+    marginRight: 6,
+    paddingHorizontal: 4,
+    borderRadius: 4,
+    fontSize: 14,
+    color: "#fff",
+  },
+  calories: {
+    backgroundColor: "#ffab91",
+  },
+  carbs: {
+    backgroundColor: "#81d4fa",
+  },
+  protein: {
+    backgroundColor: "#aed581",
+  },
+  fat: {
+    backgroundColor: "#ffcc80",
   },
 });
 

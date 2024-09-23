@@ -110,7 +110,6 @@ function DietScreen() {
                   URL={post.URL}
                   isDetailMode={false}
                   postType={post.postType}
-                  dietType={post.dietType}
                 />
               ))
             ) : (
