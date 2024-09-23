@@ -9,8 +9,6 @@ import {
   Text,
   TouchableOpacity,
 } from "react-native";
-import { MaterialIcons } from "@expo/vector-icons";
-import RNPickerSelect from "react-native-picker-select";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 import { logOut } from "../lib/auth";
 import { createUser } from "../lib/users";
@@ -50,12 +48,11 @@ function SetupProfile() {
 
     if (response) {
       const asset = response.assets[0];
-      console.log(asset);
       const extension = asset.uri.split(".").pop();
       const storageRef = ref(storage, `/profile/${uid}.${extension}`);
       const img = await fetch(asset.uri);
       const imgBlob = await img.blob();
-      await uploadBytesResumable(storageRef, imgBlob).then(async (snapshot) => {
+      await uploadBytesResumable(storageRef, imgBlob).then(async () => {
         photoURL = await getDownloadURL(storageRef);
       });
     }
@@ -70,10 +67,12 @@ function SetupProfile() {
     createUser(user, role);
     setUser(user);
   };
+
   const onCancel = () => {
     logOut();
     navigation.goBack();
   };
+
   const onSelectImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -108,66 +107,108 @@ function SetupProfile() {
           onChangeText={setDisplayName}
         />
         <BorderedInput
+          hasMarginBottom
           placeholder="전화번호 (숫자만 입력)"
           value={phoneNumber}
           onChangeText={setPhoneNumber}
           keyboardType="number-pad"
         />
-        <RNPickerSelect
-          value={gender}
-          onValueChange={(value) => setGender(value)}
-          items={[
-            { label: "남성", value: "Male" },
-            { label: "여성", value: "Female" },
-          ]}
-          placeholder={{
-            label: "성별 선택",
-            color: "#ced4da",
-          }}
-        />
-        <RNPickerSelect
-          value={role}
-          onValueChange={(value) => setRole(value)}
-          items={[
-            { label: "회원", value: "Member" },
-            { label: "트레이너", value: "Trainer" },
-          ]}
-          placeholder={{
-            label: "회원 / 트레이너 선택",
-            color: "#ced4da",
-          }}
-        />
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            justifyContent: "space-between",
-            marginHorizontal: 5,
-          }}
-        >
+        {/* 성별 선택 섹션 */}
+        <View style={styles.section}>
+          <Text style={styles.label}>성별</Text>
+          <View style={styles.buttonGroup}>
+            <TouchableOpacity
+              style={[
+                styles.optionButton,
+                gender === "Male" && styles.selectedButton,
+              ]}
+              onPress={() => setGender("Male")}
+            >
+              <Text
+                style={[
+                  styles.optionText,
+                  gender === "Male" && styles.selectedText,
+                ]}
+              >
+                남
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.optionButton,
+                gender === "Female" && styles.selectedButton,
+              ]}
+              onPress={() => setGender("Female")}
+            >
+              <Text
+                style={[
+                  styles.optionText,
+                  gender === "Female" && styles.selectedText,
+                ]}
+              >
+                여
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+        {/* 회원/트레이너 선택 섹션 */}
+        <View style={styles.section}>
+          <Text style={styles.label}>구분</Text>
+          <View style={styles.buttonGroup}>
+            <TouchableOpacity
+              style={[
+                styles.optionButton,
+                role === "Member" && styles.selectedButton,
+              ]}
+              onPress={() => setRole("Member")}
+            >
+              <Text
+                style={[
+                  styles.optionText,
+                  role === "Member" && styles.selectedText,
+                ]}
+              >
+                회원
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[
+                styles.optionButton,
+                role === "Trainer" && styles.selectedButton,
+              ]}
+              onPress={() => setRole("Trainer")}
+            >
+              <Text
+                style={[
+                  styles.optionText,
+                  role === "Trainer" && styles.selectedText,
+                ]}
+              >
+                트레이너
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+        {/* 생년월일 선택 섹션 */}
+        <View style={styles.section}>
+          <Text style={styles.label}>생년월일</Text>
           <TouchableOpacity
-            style={{
-              flexDirection: "row",
-              alignItems: "center",
-              backgroundColor: "#e9ecef",
-              padding: 10,
-              borderRadius: 5,
-            }}
+            style={styles.dateButton}
             onPress={() => setShow(true)}
           >
-            <MaterialIcons name="calendar-month" size={24} color="black" />
-            <Text> 생년월일 입력</Text>
+            <Text style={styles.dateText}>
+              {format(birthDate, "yyyy년 MM월 dd일")}
+            </Text>
           </TouchableOpacity>
-          {show && (
-            <RNDateTimePicker
-              value={birthDate}
-              onChange={onDateSelected}
-              display="spinner"
-              maximumDate={new Date()}
-            />
-          )}
-          <Text>{format(birthDate, "yyyy년 MM월 dd일")}</Text>
         </View>
+        {show && (
+          <RNDateTimePicker
+            value={birthDate}
+            onChange={onDateSelected}
+            display="default"
+            maximumDate={new Date()}
+          />
+        )}
         {loading ? (
           <ActivityIndicator
             size={32}
@@ -196,12 +237,61 @@ const styles = StyleSheet.create({
     marginTop: 16,
     width: "100%",
   },
-  buttons: {
-    marginTop: 48,
+  section: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginBottom: 16,
   },
   label: {
-    marginBottom: 8,
+    fontSize: 16,
+    fontWeight: "500",
+    color: "#212529",
+    width: "30%",
+  },
+  buttonGroup: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    flex: 1,
+  },
+  optionButton: {
+    flex: 1,
+    height: 48,
+    justifyContent: "center",
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: "#ced4da",
+    borderRadius: 4,
+    backgroundColor: "#ffffff",
+  },
+  selectedButton: {
+    backgroundColor: "#007bff",
+    borderColor: "#0056b3",
+  },
+  optionText: {
+    fontSize: 16,
+    color: "#212529",
+  },
+  selectedText: {
+    color: "#ffffff",
     fontWeight: "bold",
+  },
+  dateButton: {
+    flex: 1,
+    height: 48,
+    justifyContent: "center",
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: "#ced4da",
+    borderRadius: 4,
+    backgroundColor: "#ffffff",
+  },
+  dateText: {
+    fontSize: 16,
+    color: "#212529",
+  },
+  spinner: {
+    marginTop: 32,
   },
 });
 

@@ -60,6 +60,15 @@ export async function getRole(id) {
   return docSnap.exists() ? "member" : "trainer";
 }
 
+// 사용자 정보 업데이트
+export async function updateUser({ userId, updateField }) {
+  const role = await getRole(userId);
+  await updateDoc(
+    doc(role === "member" ? membersCollection : trainersCollection, userId),
+    { ...updateField }
+  );
+}
+
 // 트레이너에 회원 추가
 export async function addMemberToTrainer(trainerId, memberId) {
   try {
@@ -92,9 +101,4 @@ export async function removeMemberByTrainer(trainerId, memberId) {
   await deleteDoc(
     doc(collection(firestore, `trainers/${trainerId}/members`), memberId)
   );
-}
-
-// 회원 정보 업데이트
-export async function updateMember({ memberId, bodyData }) {
-  await updateDoc(doc(membersCollection, memberId), { bodyData });
 }

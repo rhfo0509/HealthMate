@@ -19,6 +19,7 @@ import AddMembershipScreen from "../screens/trainer/AddMembershipScreen";
 import MembershipScreen from "../screens/trainer/MembershipScreen";
 import NotifyScreen from "../screens/NotifyScreen";
 import FoodSearchScreen from "../screens/FoodSearchScreen";
+import EditProfileScreen from "../screens/EditProfileScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -84,6 +85,11 @@ function Root() {
             name="Setting"
             component={SettingScreen}
             options={{ title: "설정" }}
+          />
+          <Stack.Screen
+            name="EditProfile"
+            component={EditProfileScreen}
+            options={{ title: "프로필 수정" }}
           />
           <Stack.Screen
             name="Post"

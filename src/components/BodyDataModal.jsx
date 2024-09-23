@@ -12,7 +12,7 @@ import RNDateTimePicker from "@react-native-community/datetimepicker";
 import { format } from "date-fns";
 
 import { createBodyData } from "../lib/bodyData";
-import { updateMember } from "../lib/users";
+import { updateUser } from "../lib/users";
 
 function BodyDataModal({ memberId, show, setShow }) {
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -51,7 +51,7 @@ function BodyDataModal({ memberId, show, setShow }) {
       },
     });
 
-    updateMember({ memberId, bodyData });
+    updateUser({ memberId, bodyData });
 
     setDate(null);
     setBodyData({ weight: "", SMM: "", PBF: "" });

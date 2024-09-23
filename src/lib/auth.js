@@ -4,6 +4,7 @@ import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
   signOut,
+  updatePassword,
 } from "firebase/auth";
 import { initFirebase } from "../../firebaseConfig";
 
@@ -24,4 +25,8 @@ export function subscribeAuth(callback) {
 
 export function logOut() {
   return signOut(auth);
+}
+
+export function changePassword(password) {
+  return updatePassword(auth.currentUser, password);
 }
