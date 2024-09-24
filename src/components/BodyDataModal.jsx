@@ -51,7 +51,7 @@ function BodyDataModal({ memberId, show, setShow }) {
       },
     });
 
-    updateUser({ memberId, bodyData });
+    updateUser({ userId: memberId, updateField: { bodyData } });
 
     setDate(null);
     setBodyData({ weight: "", SMM: "", PBF: "" });
