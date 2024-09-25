@@ -2,15 +2,30 @@ import React from "react";
 import { useNavigation } from "@react-navigation/native";
 import { Pressable, StyleSheet, View } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
+import { useActionSheet } from "@expo/react-native-action-sheet";
 
 function WriteButton({ postType, relatedUserId }) {
   const navigation = useNavigation();
+  const { showActionSheetWithOptions } = useActionSheet();
 
   const onPress = () => {
     if (postType === "Diet") {
       navigation.navigate("DietPost", { postType, relatedUserId });
     } else if (postType === "Exercise") {
-      navigation.navigate("ExercisePost", { postType, relatedUserId });
+      showActionSheetWithOptions(
+        {
+          options: ["일지 작성하기", "루틴 등록하기", "취소"],
+          cancelButtonIndex: 2,
+          cancelButtonTintColor: "#D9534F",
+        },
+        (selectedIndex) => {
+          if (selectedIndex === 0) {
+            navigation.navigate("ExercisePost", { postType, relatedUserId });
+          } else if (selectedIndex === 1) {
+            navigation.navigate("AddRoutine", { relatedUserId });
+          }
+        }
+      );
     }
   };
 

@@ -11,6 +11,10 @@ import SignInScreen from "../screens/SignInScreen";
 import WelcomeScreen from "../screens/WelcomeScreen";
 import DietPostScreen from "../screens/DietPostScreen";
 import ExercisePostScreen from "../screens/ExercisePostScreen";
+import AddRoutineScreen from "../screens/AddRoutineScreen";
+import ExerciseSearchScreen from "../screens/ExerciseSearchScreen";
+import MyRoutineScreen from "../screens/MyRoutineScreen";
+import FoodSearchScreen from "../screens/FoodSearchScreen";
 import CommentScreen from "../screens/CommentScreen";
 import ModifyScreen from "../screens/ModifyScreen";
 import SettingScreen from "../screens/SettingScreen";
@@ -18,7 +22,6 @@ import PostScreen from "../screens/PostScreen";
 import AddMembershipScreen from "../screens/trainer/AddMembershipScreen";
 import MembershipScreen from "../screens/trainer/MembershipScreen";
 import NotifyScreen from "../screens/NotifyScreen";
-import FoodSearchScreen from "../screens/FoodSearchScreen";
 import EditProfileScreen from "../screens/EditProfileScreen";
 
 const Stack = createNativeStackNavigator();
@@ -67,6 +70,21 @@ function Root() {
             options={{ title: "오늘의 운동기록" }}
           />
           <Stack.Screen
+            name="AddRoutine"
+            component={AddRoutineScreen}
+            options={{ title: "오늘의 운동루틴" }}
+          />
+          <Stack.Screen
+            name="MyRoutine"
+            component={MyRoutineScreen}
+            options={{ title: "나의 루틴" }}
+          />
+          <Stack.Screen
+            name="ExerciseSearch"
+            component={ExerciseSearchScreen}
+            options={{ title: "검색 결과" }}
+          />
+          <Stack.Screen
             name="FoodSearch"
             component={FoodSearchScreen}
             options={{ title: "검색 결과" }}
@@ -89,7 +107,7 @@ function Root() {
           <Stack.Screen
             name="EditProfile"
             component={EditProfileScreen}
-            options={{ title: "프로필 수정" }}
+            options={{ title: "회원정보 수정" }}
           />
           <Stack.Screen
             name="Post"

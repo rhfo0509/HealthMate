@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from "react";
+// DashboardScreen.js
+import React, { useState, useEffect, useMemo } from "react";
 import {
   StyleSheet,
   View,
@@ -22,12 +23,15 @@ import NutritionPieChart from "../components/NutritionPieChart";
 
 function DashboardScreen() {
   const route = useRoute();
-  const { relatedUserId } = route.params; // 회원의 ID
+  const { relatedUserId } = route.params;
   const { user } = useUserContext();
   const firestore = getFirestore();
   const foodsCollection = collection(firestore, "foods");
+  const routinesCollection = collection(firestore, "routines");
+
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [foods, setFoods] = useState([]);
+  const [routines, setRoutines] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [totals, setTotals] = useState({
     totalCalories: 0,
@@ -35,20 +39,17 @@ function DashboardScreen() {
     totalProtein: 0,
     totalFat: 0,
   });
-
   const [recommendedIntake, setRecommendedIntake] = useState({
     calories: 0,
     carbs: 0,
     protein: 0,
     fat: 0,
   });
-
-  const [role, setRole] = useState(null); // 트레이너인지 회원인지 저장할 상태
+  const [role, setRole] = useState(null);
 
   useEffect(() => {
     const fetchRole = async () => {
       try {
-        // 현재 로그인한 사용자의 역할을 가져옴
         const userRole = await getRole(user.id);
         setRole(userRole);
       } catch (error) {
@@ -61,35 +62,11 @@ function DashboardScreen() {
 
   useEffect(() => {
     const fetchMemberInfo = async () => {
+      if (!role) return;
       try {
-        // 트레이너일 경우 relatedUserId로 회원 정보, 회원일 경우 자기 자신의 정보를 가져옴
         const userIdToFetch = role === "trainer" ? relatedUserId : user.id;
-        const userInfo = await getUser(userIdToFetch); // 관련된 사용자 정보 가져오기
-        const birthYear = new Date(userInfo.birthDate).getFullYear();
-        const age = new Date().getFullYear() - birthYear;
-        const weight = parseFloat(userInfo?.bodyData?.weight || 0);
-        let BMR;
-
-        if (userInfo.gender === "Male") {
-          BMR = 88.362 + 13.397 * weight + 4.799 * 175 - 5.677 * age;
-        } else {
-          BMR = 447.593 + 9.247 * weight + 3.098 * 160 - 4.33 * age;
-        }
-
-        const activityLevel = 1.55;
-        const TDEE = BMR * activityLevel;
-
-        const recommendedProtein = weight * 1.5;
-        const recommendedFat = (TDEE * 0.25) / 9;
-        const recommendedCarbs =
-          (TDEE - (recommendedProtein * 4 + recommendedFat * 9)) / 4;
-
-        setRecommendedIntake({
-          calories: TDEE.toFixed(2),
-          carbs: recommendedCarbs.toFixed(2),
-          protein: recommendedProtein.toFixed(2),
-          fat: recommendedFat.toFixed(2),
-        });
+        const userInfo = await getUser(userIdToFetch);
+        calculateRecommendedIntake(userInfo);
       } catch (error) {
         console.error("Error fetching user info:", error);
       } finally {
@@ -97,70 +74,167 @@ function DashboardScreen() {
       }
     };
 
-    if (role) {
-      fetchMemberInfo();
-    }
-  }, [user.id, relatedUserId, role]);
+    fetchMemberInfo();
+  }, [role, user.id, relatedUserId]);
+
+  const calculateRecommendedIntake = (userInfo) => {
+    const birthYear = new Date(userInfo.birthDate).getFullYear();
+    const age = new Date().getFullYear() - birthYear;
+    const weight = parseFloat(userInfo?.bodyData?.weight || 0);
+    const BMR =
+      userInfo.gender === "Male"
+        ? 88.362 + 13.397 * weight + 4.799 * 175 - 5.677 * age
+        : 447.593 + 9.247 * weight + 3.098 * 160 - 4.33 * age;
+
+    const activityLevel = 1.55;
+    const TDEE = BMR * activityLevel;
+    const recommendedProtein = weight * 1.5;
+    const recommendedFat = (TDEE * 0.25) / 9;
+    const recommendedCarbs =
+      (TDEE - (recommendedProtein * 4 + recommendedFat * 9)) / 4;
+
+    setRecommendedIntake({
+      calories: TDEE.toFixed(2),
+      carbs: recommendedCarbs.toFixed(2),
+      protein: recommendedProtein.toFixed(2),
+      fat: recommendedFat.toFixed(2),
+    });
+  };
 
   useEffect(() => {
-    const q = query(
-      foodsCollection,
-      where("userId", "in", [user.id, relatedUserId]),
-      where("relatedUserId", "in", [user.id, relatedUserId])
+    const unsubscribeFoods = subscribeToCollection(foodsCollection, setFoods);
+    const unsubscribeRoutines = subscribeToCollection(
+      routinesCollection,
+      setRoutines
     );
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const foods = snapshot.docs.map((doc) => ({
+
+    return () => {
+      unsubscribeFoods();
+      unsubscribeRoutines();
+    };
+  }, [user.id, relatedUserId, selectedDate]);
+
+  const subscribeToCollection = (collectionRef, setData) => {
+    const q = query(
+      collectionRef,
+      where("userId", "in", [user.id, relatedUserId])
+    );
+    return onSnapshot(q, (snapshot) => {
+      const data = snapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
       }));
-      setFoods(foods);
+      setData(data);
     });
-    return () => {
-      unsubscribe();
-    };
-  }, [user.id, relatedUserId]);
+  };
 
   useEffect(() => {
-    const calculateTotalsByDate = () => {
-      const filtered = foods.filter((foodItem) =>
-        isSameDay(foodItem.createdAt?.toDate(), selectedDate)
-      );
+    calculateTotalsByDate();
+  }, [foods, selectedDate]);
 
-      const totalValues = filtered.reduce(
-        (acc, foodItem) => {
-          foodItem.foods.forEach((food) => {
-            acc.totalCalories += parseFloat(food.calories || 0);
-            acc.totalCarbs += parseFloat(food.carbs || 0);
-            acc.totalProtein += parseFloat(food.protein || 0);
-            acc.totalFat += parseFloat(food.fat || 0);
-          });
-          return acc;
-        },
-        { totalCalories: 0, totalCarbs: 0, totalProtein: 0, totalFat: 0 }
-      );
+  const calculateTotalsByDate = () => {
+    const filteredFoods = foods.filter((food) =>
+      isSameDay(food.createdAt?.toDate(), selectedDate)
+    );
 
-      setTotals({
-        totalCalories: totalValues.totalCalories.toFixed(2),
-        totalCarbs: totalValues.totalCarbs.toFixed(2),
-        totalProtein: totalValues.totalProtein.toFixed(2),
-        totalFat: totalValues.totalFat.toFixed(2),
-      });
-    };
+    const totalValues = filteredFoods.reduce(
+      (acc, foodItem) => {
+        foodItem.foods.forEach((food) => {
+          acc.totalCalories += parseFloat(food.calories || 0);
+          acc.totalCarbs += parseFloat(food.carbs || 0);
+          acc.totalProtein += parseFloat(food.protein || 0);
+          acc.totalFat += parseFloat(food.fat || 0);
+        });
+        return acc;
+      },
+      { totalCalories: 0, totalCarbs: 0, totalProtein: 0, totalFat: 0 }
+    );
 
-    if (foods.length > 0) {
-      calculateTotalsByDate();
-    }
-  }, [selectedDate, foods]);
+    setTotals({
+      totalCalories: totalValues.totalCalories.toFixed(2),
+      totalCarbs: totalValues.totalCarbs.toFixed(2),
+      totalProtein: totalValues.totalProtein.toFixed(2),
+      totalFat: totalValues.totalFat.toFixed(2),
+    });
+  };
+
+  const getMarkedDates = () => {
+    const foodDates = foods.map((food) =>
+      food.createdAt?.toDate().toDateString()
+    );
+    const routineDates = routines.map((routine) =>
+      routine.createdAt?.toDate().toDateString()
+    );
+    const uniqueDates = [...new Set([...foodDates, ...routineDates])];
+
+    return uniqueDates.map((date) => {
+      const isFoodDate = foodDates.includes(date);
+      const isRoutineDate = routineDates.includes(date);
+      const dots = [];
+
+      if (isFoodDate)
+        dots.push({ color: "royalblue", selectedColor: "royalblue" });
+      if (isRoutineDate)
+        dots.push({ color: "orange", selectedColor: "orange" });
+
+      return { date: new Date(date), dots };
+    });
+  };
+
+  // Define calculateRoutineSummary before useMemo
+  const calculateRoutineSummary = (routines) => {
+    const exerciseCount = routines.reduce(
+      (acc, routine) => acc + routine.exercises.length,
+      0
+    );
+    const totalSets = routines.reduce(
+      (acc, routine) =>
+        acc +
+        routine.exercises.reduce((setAcc, ex) => setAcc + ex.sets.length, 0),
+      0
+    );
+    const totalReps = routines.reduce(
+      (acc, routine) =>
+        acc +
+        routine.exercises.reduce(
+          (repAcc, ex) =>
+            repAcc +
+            ex.sets.reduce((sum, set) => sum + parseInt(set.reps || 0), 0),
+          0
+        ),
+      0
+    );
+    const totalVolume = routines.reduce(
+      (acc, routine) =>
+        acc +
+        routine.exercises.reduce(
+          (volAcc, ex) =>
+            volAcc +
+            ex.sets.reduce(
+              (sum, set) =>
+                sum + parseInt(set.weight || 0) * parseInt(set.reps || 0),
+              0
+            ),
+          0
+        ),
+      0
+    );
+
+    return { exerciseCount, totalSets, totalReps, totalVolume };
+  };
+
+  // Use calculateRoutineSummary correctly in useMemo
+  const routineSummary = useMemo(
+    () => calculateRoutineSummary(routines),
+    [routines]
+  );
 
   return (
     <View style={styles.block}>
       <CalendarHeader
         selectedDate={selectedDate}
         onSelectDate={setSelectedDate}
-        markedDates={foods.map((food) => ({
-          date: food.createdAt?.toDate(),
-          dots: [{ color: "royalblue", selectedColor: "royalblue" }],
-        }))}
+        markedDates={getMarkedDates()}
       />
 
       {isLoading ? (
@@ -169,6 +243,7 @@ function DashboardScreen() {
         </View>
       ) : (
         <ScrollView>
+          <Text style={styles.sectionTitle}>오늘의 영양성분</Text>
           <View style={styles.pieRow}>
             <NutritionPieChart
               title="칼로리"
@@ -198,6 +273,47 @@ function DashboardScreen() {
               color="#F8E71C"
             />
           </View>
+
+          {routines.length > 0 && (
+            <>
+              <Text style={styles.sectionTitle}>오늘의 운동</Text>
+              <View style={styles.summaryContainer}>
+                {["EXERCISES", "SETS", "REPS", "VOLUME"].map((label, index) => (
+                  <View key={index} style={styles.summaryItem}>
+                    <Text style={styles.summaryLabel}>{label}</Text>
+                    <Text style={styles.summaryValue}>
+                      {label === "EXERCISES"
+                        ? routineSummary.exerciseCount
+                        : label === "SETS"
+                        ? routineSummary.totalSets
+                        : label === "REPS"
+                        ? routineSummary.totalReps
+                        : `${routineSummary.totalVolume}kg`}
+                    </Text>
+                  </View>
+                ))}
+              </View>
+              <View style={styles.routinesContainer}>
+                {routines.map((routine) => (
+                  <View key={routine.id} style={styles.routineItem}>
+                    {routine.exercises.map((exercise, index) => (
+                      <View key={index} style={styles.nutritionRow}>
+                        <Text style={[styles.nutrient, styles.exerciseName]}>
+                          {exercise.name}
+                        </Text>
+                        <Text style={[styles.nutrient, styles.category]}>
+                          {exercise.category}
+                        </Text>
+                        <Text style={[styles.nutrient, styles.setCount]}>
+                          {exercise.sets.length}세트
+                        </Text>
+                      </View>
+                    ))}
+                  </View>
+                ))}
+              </View>
+            </>
+          )}
         </ScrollView>
       )}
     </View>
@@ -214,9 +330,70 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  sectionTitle: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginVertical: 10,
+    marginLeft: 16,
+    color: "#333",
+  },
   pieRow: {
     flexDirection: "row",
     justifyContent: "space-between",
+  },
+  summaryContainer: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    padding: 16,
+    backgroundColor: "#f4f6f9",
+    borderRadius: 8,
+    marginBottom: 12,
+  },
+  summaryItem: {
+    width: "50%",
+    padding: 8,
+    alignItems: "center",
+  },
+  summaryLabel: {
+    fontSize: 14,
+    color: "#777",
+    marginBottom: 4,
+  },
+  summaryValue: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#333",
+  },
+  routinesContainer: {
+    marginTop: 12,
+    padding: 10,
+    backgroundColor: "#f9f9f9",
+    borderRadius: 8,
+  },
+  routineItem: {
+    marginBottom: 8,
+    paddingBottom: 8,
+  },
+  nutritionRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginTop: 4,
+  },
+  nutrient: {
+    marginRight: 6,
+    paddingHorizontal: 4,
+    borderRadius: 4,
+    fontSize: 14,
+    color: "#fff",
+  },
+  exerciseName: {
+    backgroundColor: "#ffab91",
+  },
+  category: {
+    backgroundColor: "#81d4fa",
+  },
+  setCount: {
+    backgroundColor: "#aed581",
   },
 });
 
