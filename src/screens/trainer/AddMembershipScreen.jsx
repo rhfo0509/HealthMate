@@ -126,7 +126,12 @@ function AddMembershipScreen() {
         });
       })
       .then(() => {
-        console.log("회원권과 스케줄 생성 완료");
+        Alert.alert("알림", "회원권과 스케줄이 성공적으로 생성되었습니다.", [
+          {
+            text: "확인",
+            onPress: () => navigation.goBack(),
+          },
+        ]);
       })
       .catch((error) => {
         console.error("회원권 생성 중 오류 발생:", error);
