@@ -31,7 +31,7 @@ function DashboardScreen() {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [foods, setFoods] = useState([]);
   const [routines, setRoutines] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true); // 단일 로딩 상태
   const [totals, setTotals] = useState({
     totalCalories: 0,
     totalCarbs: 0,
@@ -68,8 +68,6 @@ function DashboardScreen() {
         calculateRecommendedIntake(userInfo);
       } catch (error) {
         console.error("Error fetching user info:", error);
-      } finally {
-        setIsLoading(false);
       }
     };
 
@@ -130,6 +128,7 @@ function DashboardScreen() {
 
   useEffect(() => {
     calculateTotalsByDate();
+    setIsLoading(false);
   }, [foods, selectedDate]);
 
   const calculateTotalsByDate = () => {

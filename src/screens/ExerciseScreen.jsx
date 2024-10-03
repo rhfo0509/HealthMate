@@ -130,6 +130,7 @@ const renderItem = ({ item }) => (
 const styles = StyleSheet.create({
   block: {
     flex: 1,
+    backgroundColor: "#fff",
   },
   loader: {
     flex: 1,
