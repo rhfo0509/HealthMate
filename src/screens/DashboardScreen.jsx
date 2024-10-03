@@ -102,10 +102,26 @@ function DashboardScreen() {
   };
 
   useEffect(() => {
+    // 음식 데이터 실시간 구독 설정
     const unsubscribeFoods = subscribeToCollection(foodsCollection, setFoods);
-    const unsubscribeRoutines = subscribeToCollection(
-      routinesCollection,
-      setRoutines
+
+    // 운동 데이터 실시간 구독 설정
+    const unsubscribeRoutines = onSnapshot(
+      query(
+        routinesCollection,
+        where("userId", "in", [user.id, relatedUserId])
+      ),
+      (snapshot) => {
+        const fetchedRoutines = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        // selectedDate에 맞게 필터링하여 setRoutines에 설정
+        const filteredRoutines = fetchedRoutines.filter((routine) =>
+          isSameDay(routine.createdAt?.toDate(), selectedDate)
+        );
+        setRoutines(filteredRoutines);
+      }
     );
 
     return () => {
@@ -181,7 +197,6 @@ function DashboardScreen() {
     });
   };
 
-  // Define calculateRoutineSummary before useMemo
   const calculateRoutineSummary = (routines) => {
     const exerciseCount = routines.reduce(
       (acc, routine) => acc + routine.exercises.length,
@@ -223,7 +238,6 @@ function DashboardScreen() {
     return { exerciseCount, totalSets, totalReps, totalVolume };
   };
 
-  // Use calculateRoutineSummary correctly in useMemo
   const routineSummary = useMemo(
     () => calculateRoutineSummary(routines),
     [routines]
@@ -243,40 +257,52 @@ function DashboardScreen() {
         </View>
       ) : (
         <ScrollView>
+          {/* 오늘의 영양성분 */}
           <Text style={styles.sectionTitle}>오늘의 영양성분</Text>
-          <View style={styles.pieRow}>
-            <NutritionPieChart
-              title="칼로리"
-              total={totals.totalCalories}
-              recommended={recommendedIntake.calories}
-              color="#FF6F61"
-            />
-            <NutritionPieChart
-              title="탄수화물"
-              total={totals.totalCarbs}
-              recommended={recommendedIntake.carbs}
-              color="#4A90E2"
-            />
-          </View>
+          {user?.bodyData ? (
+            <View>
+              <View style={styles.pieRow}>
+                <NutritionPieChart
+                  title="칼로리"
+                  total={totals.totalCalories}
+                  recommended={recommendedIntake.calories}
+                  color="#FF6F61"
+                />
+                <NutritionPieChart
+                  title="탄수화물"
+                  total={totals.totalCarbs}
+                  recommended={recommendedIntake.carbs}
+                  color="#4A90E2"
+                />
+              </View>
 
-          <View style={styles.pieRow}>
-            <NutritionPieChart
-              title="단백질"
-              total={totals.totalProtein}
-              recommended={recommendedIntake.protein}
-              color="#7ED321"
-            />
-            <NutritionPieChart
-              title="지방"
-              total={totals.totalFat}
-              recommended={recommendedIntake.fat}
-              color="#F8E71C"
-            />
-          </View>
+              <View style={styles.pieRow}>
+                <NutritionPieChart
+                  title="단백질"
+                  total={totals.totalProtein}
+                  recommended={recommendedIntake.protein}
+                  color="#7ED321"
+                />
+                <NutritionPieChart
+                  title="지방"
+                  total={totals.totalFat}
+                  recommended={recommendedIntake.fat}
+                  color="#F8E71C"
+                />
+              </View>
+            </View>
+          ) : (
+            <View style={styles.infoContainer}>
+              <Text style={styles.infoText}>
+                체성분을 등록한 후에 차트가 표시됩니다.
+              </Text>
+            </View>
+          )}
 
-          {routines.length > 0 && (
+          {/* 오늘의 운동 */}
+          <Text style={styles.sectionTitle}>오늘의 운동</Text>
+          {routines.length > 0 ? (
             <>
-              <Text style={styles.sectionTitle}>오늘의 운동</Text>
               <View style={styles.summaryContainer}>
                 {["EXERCISES", "SETS", "REPS", "VOLUME"].map((label, index) => (
                   <View key={index} style={styles.summaryItem}>
@@ -313,6 +339,10 @@ function DashboardScreen() {
                 ))}
               </View>
             </>
+          ) : (
+            <View style={styles.infoContainer}>
+              <Text style={styles.infoText}>등록된 운동이 없습니다.</Text>
+            </View>
           )}
         </ScrollView>
       )}
@@ -394,6 +424,15 @@ const styles = StyleSheet.create({
   },
   setCount: {
     backgroundColor: "#aed581",
+  },
+  infoContainer: {
+    padding: 20,
+    alignItems: "center",
+  },
+  infoText: {
+    fontSize: 16,
+    color: "#666",
+    textAlign: "center",
   },
 });
 

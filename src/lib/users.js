@@ -11,8 +11,6 @@ import {
   where,
 } from "firebase/firestore";
 import { initFirebase } from "../../firebaseConfig";
-import { createMembership } from "./memberships";
-import { createSchedulesWithMembership } from "./schedules";
 
 initFirebase();
 

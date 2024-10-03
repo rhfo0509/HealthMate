@@ -20,12 +20,13 @@ function MemberProfile({ user }) {
   const firestore = getFirestore();
   const bodyDataCollection = collection(firestore, "bodyData");
   const [show, setShow] = useState(false);
+  const [editData, setEditData] = useState(null);
   const [mode, setMode] = useState("weight");
   const [weightData, setWeightData] = useState([]);
   const [SMMData, setSMMData] = useState([]);
   const [PBFData, setPBFData] = useState([]);
   const [bodyData, setBodyData] = useState([]);
-  const [isLoading, setIsLoading] = useState(true); // 로딩 상태 관리
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const q = query(
@@ -62,13 +63,19 @@ function MemberProfile({ user }) {
       setSMMData(SMMs);
       setPBFData(PBFs);
 
-      setIsLoading(false); // 데이터 로딩 후 로딩 상태 해제
+      setIsLoading(false);
     });
 
     return () => {
       unsubscribe();
     };
   }, [user.id]);
+
+  // 등록 모드로 모달을 열 때는 editData를 null로 설정
+  const handleAddData = () => {
+    setEditData(null); // 새로 등록할 때는 editData를 null로 설정
+    setShow(true);
+  };
 
   return (
     <View style={styles.block}>
@@ -80,8 +87,22 @@ function MemberProfile({ user }) {
       </View>
 
       <View style={styles.chartInfo}>
-        <BodyChartButtons setMode={setMode} setShow={setShow} />
-        <BodyDataModal memberId={user.id} show={show} setShow={setShow} />
+        <BodyChartButtons
+          setMode={setMode}
+          setShow={handleAddData} // 등록 모드에서는 handleAddData 호출
+          latestData={{
+            weight: bodyData[0]?.weight,
+            SMM: bodyData[0]?.SMM,
+            PBF: bodyData[0]?.PBF,
+          }}
+        />
+        <BodyDataModal
+          memberId={user.id}
+          show={show}
+          setShow={setShow}
+          editData={editData}
+          latestData={bodyData[0]}
+        />
       </View>
 
       {isLoading ? (
@@ -103,7 +124,12 @@ function MemberProfile({ user }) {
             SMMData={SMMData}
             PBFData={PBFData}
           />
-          <BodyHistory bodyData={bodyData} />
+          <BodyHistory
+            memberId={user.id}
+            bodyData={bodyData}
+            setShow={setShow}
+            setEditData={setEditData}
+          />
         </>
       )}
     </View>

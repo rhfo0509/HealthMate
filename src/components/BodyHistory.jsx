@@ -10,9 +10,10 @@ import {
 import { format } from "date-fns";
 import { MaterialIcons } from "@expo/vector-icons";
 import { removeBodyData } from "../lib/bodyData";
+import { updateUser } from "../lib/users";
 
-function BodyHistory({ bodyData }) {
-  const handleDelete = (id) => {
+function BodyHistory({ bodyData, setShow, setEditData, memberId }) {
+  const handleDelete = (id, index) => {
     Alert.alert(
       "알림",
       "해당 데이터를 삭제하시겠습니까?",
@@ -24,6 +25,30 @@ function BodyHistory({ bodyData }) {
           onPress: async () => {
             try {
               await removeBodyData(id);
+
+              // 최신 데이터인지 확인
+              if (index === 0) {
+                const nextData = bodyData[1]; // 최신 데이터가 삭제되면 그 다음 데이터 가져오기
+                if (nextData) {
+                  // 다음 데이터를 updateUser에 반영
+                  await updateUser({
+                    userId: memberId,
+                    updateField: {
+                      bodyData: {
+                        weight: nextData.weight,
+                        SMM: nextData.SMM,
+                        PBF: nextData.PBF,
+                      },
+                    },
+                  });
+                } else {
+                  // 데이터가 없는 경우
+                  await updateUser({
+                    userId: memberId,
+                    updateField: { bodyData: null },
+                  });
+                }
+              }
             } catch (error) {
               console.error("데이터 삭제 중 오류 발생:", error);
             }
@@ -32,6 +57,11 @@ function BodyHistory({ bodyData }) {
       ],
       { cancelable: true }
     );
+  };
+
+  const handleEdit = (item) => {
+    setEditData(item);
+    setShow(true);
   };
 
   const renderItem = ({ item, index }) => {
@@ -52,17 +82,26 @@ function BodyHistory({ bodyData }) {
           <Text style={{ fontWeight: "bold" }}>
             {format(item.date.toDate(), "yyyy년 MM월 dd일")}
           </Text>
-          {/* 삭제 버튼 */}
-          <Pressable
-            onPress={() => handleDelete(item.id)}
-            style={styles.deleteButton}
-          >
-            <MaterialIcons
-              name="remove-circle-outline"
-              size={20}
-              color="crimson"
-            />
-          </Pressable>
+          <View style={styles.historyButtonGroup}>
+            {/* 수정 버튼 */}
+            <Pressable
+              onPress={() => handleEdit(item)}
+              style={styles.editButton}
+            >
+              <MaterialIcons name="edit" size={20} color="royalblue" />
+            </Pressable>
+            {/* 삭제 버튼 */}
+            <Pressable
+              onPress={() => handleDelete(item.id, index)}
+              style={styles.deleteButton}
+            >
+              <MaterialIcons
+                name="remove-circle-outline"
+                size={20}
+                color="crimson"
+              />
+            </Pressable>
+          </View>
         </View>
         <View style={styles.historyGroup}>
           <View style={styles.history}>
@@ -122,6 +161,9 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
   },
+  historyButtonGroup: {
+    flexDirection: "row",
+  },
   history: {
     alignItems: "center",
   },
@@ -130,6 +172,9 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
   },
   deleteButton: {
+    padding: 4,
+  },
+  editButton: {
     padding: 4,
   },
 });

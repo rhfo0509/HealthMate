@@ -5,6 +5,7 @@ import {
   Timestamp,
   deleteDoc,
   doc,
+  updateDoc,
 } from "firebase/firestore";
 import { initFirebase } from "../../firebaseConfig";
 
@@ -13,13 +14,17 @@ initFirebase();
 const firestore = getFirestore();
 const bodyDataCollection = collection(firestore, "bodyData");
 
-export async function createBodyData({ memberId, date, bodyData }) {
+export async function createBodyData(data) {
   await addDoc(bodyDataCollection, {
-    memberId,
-    date: Timestamp.fromDate(date),
-    weight: bodyData.weight,
-    SMM: bodyData.SMM,
-    PBF: bodyData.PBF,
+    ...data,
+    date: Timestamp.fromDate(data.date),
+  });
+}
+
+export async function updateBodyData(id, data) {
+  await updateDoc(doc(bodyDataCollection, id), {
+    ...data,
+    date: Timestamp.fromDate(data.date),
   });
 }
 

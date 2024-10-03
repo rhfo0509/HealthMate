@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Modal,
   View,
@@ -8,142 +8,120 @@ import {
   Pressable,
   Alert,
 } from "react-native";
-import RNDateTimePicker from "@react-native-community/datetimepicker";
 import { format } from "date-fns";
-
-import { createBodyData } from "../lib/bodyData";
+import { createBodyData, updateBodyData } from "../lib/bodyData";
 import { updateUser } from "../lib/users";
 
-function BodyDataModal({ memberId, show, setShow }) {
-  const [showDatePicker, setShowDatePicker] = useState(false);
-  const [date, setDate] = useState(null);
+function BodyDataModal({ memberId, show, setShow, editData, latestData }) {
+  const [date, setDate] = useState(new Date());
   const [bodyData, setBodyData] = useState({ weight: "", SMM: "", PBF: "" });
 
-  const onPressDatePicker = () => {
-    setShowDatePicker(true);
-  };
+  // 수정할 데이터가 있으면 미리 값을 설정
+  useEffect(() => {
+    if (editData) {
+      setDate(editData.date.toDate()); // 날짜는 변경 불가 (읽기 전용)
+      setBodyData({
+        weight: String(editData.weight),
+        SMM: String(editData.SMM),
+        PBF: String(editData.PBF),
+      });
+    } else {
+      setDate(new Date()); // 새 데이터 등록 시 현재 날짜 설정
+      setBodyData({ weight: "", SMM: "", PBF: "" });
+    }
+  }, [editData]);
 
-  const onChangeDate = (_, selectedDate) => {
-    setShowDatePicker(false);
-    setDate(selectedDate);
-  };
+  // 숫자 입력만 허용
+  const handleNumericInput = (value) => value.replace(/[^0-9.]/g, "");
 
-  const handleNumericInput = (value) => {
-    const filteredValue = value.replace(/[^0-9.]/g, "");
-    return filteredValue;
-  };
-
-  const onSave = () => {
+  const onSave = async () => {
     const { weight, SMM, PBF } = bodyData;
-
     if (!weight || !SMM || !PBF) {
       Alert.alert("알림", "모든 항목을 입력해주세요.", [{ text: "확인" }]);
       return;
     }
 
-    createBodyData({
+    const data = {
       memberId,
-      date: date ? date : new Date(),
-      bodyData: {
-        weight: parseFloat(weight).toFixed(1),
-        SMM: parseFloat(SMM).toFixed(1),
-        PBF: parseFloat(PBF).toFixed(1),
-      },
-    });
+      date,
+      weight: parseFloat(weight).toFixed(1),
+      SMM: parseFloat(SMM).toFixed(1),
+      PBF: parseFloat(PBF).toFixed(1),
+    };
 
-    updateUser({ userId: memberId, updateField: { bodyData } });
+    try {
+      if (editData) {
+        await updateBodyData(editData.id, data);
+        Alert.alert("알림", "수정이 완료되었습니다.", [{ text: "확인" }]);
 
-    setDate(null);
-    setBodyData({ weight: "", SMM: "", PBF: "" });
-    setShow(false);
-  };
+        // 수정하는 데이터가 최신 데이터일 경우 updateUser 호출
+        if (latestData && editData.id === latestData.id) {
+          await updateUser({ userId: memberId, updateField: { bodyData } });
+        }
+      } else {
+        // 새로 등록하는 경우
+        await createBodyData(data);
+        Alert.alert("알림", "등록이 완료되었습니다.", [{ text: "확인" }]);
+        await updateUser({ userId: memberId, updateField: { bodyData } });
+      }
 
-  const onClose = () => {
-    setDate(null);
-    setBodyData({ weight: "", SMM: "", PBF: "" });
-    setShow(false);
+      setShow(false);
+    } catch (error) {
+      console.error("데이터 저장 중 오류 발생:", error);
+      Alert.alert("오류", "데이터 저장 중 오류가 발생했습니다.", [
+        { text: "확인" },
+      ]);
+    }
   };
 
   return (
-    <Modal
-      visible={show}
-      animationType="fade"
-      transparent={true}
-      onRequestClose={onClose}
-    >
+    <Modal visible={show} transparent={true}>
       <View style={styles.container}>
         <View style={styles.content}>
-          <Text style={styles.title}>체성분 기록</Text>
-          <Pressable style={styles.select} onPress={onPressDatePicker}>
-            <Text style={styles.selectText}>
-              {date
-                ? format(date, "yyyy-MM-dd")
-                : format(new Date(), "yyyy-MM-dd")}
-            </Text>
-          </Pressable>
-          {showDatePicker && (
-            <RNDateTimePicker
-              value={new Date()}
-              display="spinner"
-              onChange={onChangeDate}
-              maximumDate={new Date()}
-            />
-          )}
+          <Text style={styles.title}>
+            {editData ? "체성분 수정" : "체성분 등록"}
+          </Text>
+          {/* 날짜는 텍스트로만 표시하고 수정 불가 */}
+          <View style={styles.dateContainer}>
+            <Text style={styles.selectText}>{format(date, "yyyy-MM-dd")}</Text>
+          </View>
           <View style={styles.inputContainer}>
-            <View style={styles.bodyData}>
-              <Text style={styles.label}>체중:</Text>
-              <TextInput
-                style={styles.input}
-                value={bodyData.weight}
-                onChangeText={(text) =>
-                  setBodyData((prevState) => ({
-                    ...prevState,
-                    weight: handleNumericInput(text),
-                  }))
-                }
-                keyboardType="number-pad"
-              />
-              <Text style={styles.unit}>(kg)</Text>
-            </View>
-            <View style={styles.bodyData}>
-              <Text style={styles.label}>골격근량:</Text>
-              <TextInput
-                style={styles.input}
-                value={bodyData.SMM}
-                onChangeText={(text) =>
-                  setBodyData((prevState) => ({
-                    ...prevState,
-                    SMM: handleNumericInput(text),
-                  }))
-                }
-                keyboardType="number-pad"
-              />
-              <Text style={styles.unit}>(kg)</Text>
-            </View>
-            <View style={styles.bodyData}>
-              <Text style={styles.label}>체지방률:</Text>
-              <TextInput
-                style={styles.input}
-                value={bodyData.PBF}
-                onChangeText={(text) =>
-                  setBodyData((prevState) => ({
-                    ...prevState,
-                    PBF: handleNumericInput(text),
-                  }))
-                }
-                keyboardType="number-pad"
-              />
-              <Text style={styles.unit}>(%)</Text>
-            </View>
+            {["체중", "골격근량", "체지방률"].map((label, index) => (
+              <View key={label} style={styles.bodyData}>
+                <Text style={styles.label}>{label}:</Text>
+                <TextInput
+                  style={styles.input}
+                  value={
+                    bodyData[
+                      index === 0 ? "weight" : index === 1 ? "SMM" : "PBF"
+                    ]
+                  }
+                  onChangeText={(text) =>
+                    setBodyData((prevState) => ({
+                      ...prevState,
+                      [index === 0 ? "weight" : index === 1 ? "SMM" : "PBF"]:
+                        handleNumericInput(text),
+                    }))
+                  }
+                  keyboardType="number-pad"
+                />
+                <Text style={styles.unit}>{index === 2 ? "(%)" : "(kg)"}</Text>
+              </View>
+            ))}
           </View>
           <View style={styles.modalButtons}>
             <Pressable
               onPress={onSave}
               style={[styles.modalButton, { backgroundColor: "#1f6feb" }]}
             >
-              <Text style={{ color: "#fff" }}>등록</Text>
+              <Text style={{ color: "#fff" }}>
+                {editData ? "수정" : "등록"}
+              </Text>
             </Pressable>
-            <Pressable onPress={onClose} style={styles.modalButton}>
+            <Pressable
+              onPress={() => setShow(false)}
+              style={styles.modalButton}
+            >
               <Text style={{ color: "#1f6feb" }}>취소</Text>
             </Pressable>
           </View>
@@ -174,7 +152,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     color: "#333",
   },
-  select: {
+  dateContainer: {
     borderWidth: 1,
     borderColor: "#ccc",
     borderRadius: 5,

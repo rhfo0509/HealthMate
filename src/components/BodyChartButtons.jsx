@@ -2,12 +2,13 @@ import React from "react";
 import { View, Text, StyleSheet, Pressable } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 
-function BodyChartButtons({ setMode, setShow }) {
+function BodyChartButtons({ setMode, setShow, latestData }) {
   const buttons = [
-    { text: "체중", mode: "weight" },
-    { text: "골격근량", mode: "SMM" },
-    { text: "체지방률", mode: "PBF" },
+    { text: "체중", mode: "weight", value: latestData.weight },
+    { text: "골격근량", mode: "SMM", value: latestData.SMM },
+    { text: "체지방률", mode: "PBF", value: latestData.PBF },
   ];
+
   return (
     <View style={styles.container}>
       {buttons.map((button) => (
@@ -20,14 +21,13 @@ function BodyChartButtons({ setMode, setShow }) {
           onPress={() => setMode(button.mode)}
         >
           <Text style={styles.buttonText}>{button.text}</Text>
+          <Text style={styles.recentValueText}>
+            {button.value ? button.value : "없음"}
+          </Text>
         </Pressable>
       ))}
       <Pressable
-        style={({ pressed }) => [
-          styles.button,
-          styles.addButton,
-          pressed && styles.pressedButton,
-        ]}
+        style={[styles.button, styles.addButton]}
         onPress={() => setShow(true)}
         android_ripple={{ color: "white" }}
       >
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     justifyContent: "center",
     alignItems: "center",
-    elevation: 2, // For subtle shadow
+    elevation: 2,
   },
   pressedButton: {
     backgroundColor: "#e0e0e0",
@@ -61,9 +61,13 @@ const styles = StyleSheet.create({
     color: "#333",
     fontWeight: "500",
   },
+  recentValueText: {
+    fontSize: 12,
+    color: "#757575",
+  },
   addButton: {
     backgroundColor: "royalblue",
-    paddingHorizontal: 10,
+    paddingHorizontal: 16,
   },
 });
 
