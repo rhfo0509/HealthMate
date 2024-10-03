@@ -10,9 +10,12 @@ import {
 import { format } from "date-fns";
 import { MaterialIcons } from "@expo/vector-icons";
 import { removeBodyData } from "../lib/bodyData";
-import { updateUser } from "../lib/users";
+import { updateUser, getUser } from "../lib/users";
+import { useUserContext } from "../contexts/UserContext";
 
 function BodyHistory({ bodyData, setShow, setEditData, memberId }) {
+  const { setUser } = useUserContext();
+
   const handleDelete = (id, index) => {
     Alert.alert(
       "알림",
@@ -48,6 +51,9 @@ function BodyHistory({ bodyData, setShow, setEditData, memberId }) {
                     updateField: { bodyData: null },
                   });
                 }
+
+                const updatedUser = await getUser(memberId);
+                setUser(updatedUser);
               }
             } catch (error) {
               console.error("데이터 삭제 중 오류 발생:", error);

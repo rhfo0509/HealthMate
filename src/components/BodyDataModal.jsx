@@ -10,9 +10,11 @@ import {
 } from "react-native";
 import { format } from "date-fns";
 import { createBodyData, updateBodyData } from "../lib/bodyData";
-import { updateUser } from "../lib/users";
+import { updateUser, getUser } from "../lib/users";
+import { useUserContext } from "../contexts/UserContext";
 
 function BodyDataModal({ memberId, show, setShow, editData, latestData }) {
+  const { setUser } = useUserContext();
   const [date, setDate] = useState(new Date());
   const [bodyData, setBodyData] = useState({ weight: "", SMM: "", PBF: "" });
 
@@ -52,7 +54,6 @@ function BodyDataModal({ memberId, show, setShow, editData, latestData }) {
     try {
       if (editData) {
         await updateBodyData(editData.id, data);
-        Alert.alert("알림", "수정이 완료되었습니다.", [{ text: "확인" }]);
 
         // 수정하는 데이터가 최신 데이터일 경우 updateUser 호출
         if (latestData && editData.id === latestData.id) {
@@ -61,10 +62,13 @@ function BodyDataModal({ memberId, show, setShow, editData, latestData }) {
       } else {
         // 새로 등록하는 경우
         await createBodyData(data);
-        Alert.alert("알림", "등록이 완료되었습니다.", [{ text: "확인" }]);
         await updateUser({ userId: memberId, updateField: { bodyData } });
       }
-
+      const updatedUser = await getUser(memberId);
+      setUser(updatedUser);
+      Alert.alert("알림", `${editData ? "수정" : "등록"}이 완료되었습니다.`, [
+        { text: "확인" },
+      ]);
       setShow(false);
     } catch (error) {
       console.error("데이터 저장 중 오류 발생:", error);

@@ -1,5 +1,4 @@
-// DashboardScreen.js
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   View,
@@ -48,7 +47,7 @@ function DashboardScreen() {
   const [role, setRole] = useState(null);
 
   useEffect(() => {
-    const fetchRole = async () => {
+    const fetchUserRole = async () => {
       try {
         const userRole = await getRole(user.id);
         setRole(userRole);
@@ -56,15 +55,15 @@ function DashboardScreen() {
         console.error("Error fetching user role:", error);
       }
     };
-
-    fetchRole();
+    fetchUserRole();
   }, [user.id]);
 
   useEffect(() => {
+    if (!role) return;
+
     const fetchMemberInfo = async () => {
-      if (!role) return;
+      const userIdToFetch = role === "trainer" ? relatedUserId : user.id;
       try {
-        const userIdToFetch = role === "trainer" ? relatedUserId : user.id;
         const userInfo = await getUser(userIdToFetch);
         calculateRecommendedIntake(userInfo);
       } catch (error) {
@@ -81,6 +80,7 @@ function DashboardScreen() {
     const birthYear = new Date(userInfo.birthDate).getFullYear();
     const age = new Date().getFullYear() - birthYear;
     const weight = parseFloat(userInfo?.bodyData?.weight || 0);
+
     const BMR =
       userInfo.gender === "Male"
         ? 88.362 + 13.397 * weight + 4.799 * 175 - 5.677 * age
@@ -102,26 +102,10 @@ function DashboardScreen() {
   };
 
   useEffect(() => {
-    // 음식 데이터 실시간 구독 설정
     const unsubscribeFoods = subscribeToCollection(foodsCollection, setFoods);
-
-    // 운동 데이터 실시간 구독 설정
-    const unsubscribeRoutines = onSnapshot(
-      query(
-        routinesCollection,
-        where("userId", "in", [user.id, relatedUserId])
-      ),
-      (snapshot) => {
-        const fetchedRoutines = snapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        // selectedDate에 맞게 필터링하여 setRoutines에 설정
-        const filteredRoutines = fetchedRoutines.filter((routine) =>
-          isSameDay(routine.createdAt?.toDate(), selectedDate)
-        );
-        setRoutines(filteredRoutines);
-      }
+    const unsubscribeRoutines = subscribeToCollection(
+      routinesCollection,
+      setRoutines
     );
 
     return () => {
@@ -175,73 +159,156 @@ function DashboardScreen() {
   };
 
   const getMarkedDates = () => {
-    const foodDates = foods.map((food) =>
-      food.createdAt?.toDate().toDateString()
+    const allDates = [...foods, ...routines].map((item) =>
+      item.createdAt?.toDate().toDateString()
     );
-    const routineDates = routines.map((routine) =>
-      routine.createdAt?.toDate().toDateString()
-    );
-    const uniqueDates = [...new Set([...foodDates, ...routineDates])];
+
+    const uniqueDates = [...new Set(allDates)];
 
     return uniqueDates.map((date) => {
-      const isFoodDate = foodDates.includes(date);
-      const isRoutineDate = routineDates.includes(date);
-      const dots = [];
-
-      if (isFoodDate)
-        dots.push({ color: "royalblue", selectedColor: "royalblue" });
-      if (isRoutineDate)
-        dots.push({ color: "orange", selectedColor: "orange" });
+      const dots = [
+        foods.some(
+          (food) => food.createdAt?.toDate().toDateString() === date
+        ) && { color: "royalblue", selectedColor: "royalblue" },
+        routines.some(
+          (routine) => routine.createdAt?.toDate().toDateString() === date
+        ) && { color: "orange", selectedColor: "orange" },
+      ].filter(Boolean);
 
       return { date: new Date(date), dots };
     });
   };
 
-  const calculateRoutineSummary = (routines) => {
-    const exerciseCount = routines.reduce(
-      (acc, routine) => acc + routine.exercises.length,
-      0
-    );
-    const totalSets = routines.reduce(
-      (acc, routine) =>
-        acc +
-        routine.exercises.reduce((setAcc, ex) => setAcc + ex.sets.length, 0),
-      0
-    );
-    const totalReps = routines.reduce(
-      (acc, routine) =>
-        acc +
-        routine.exercises.reduce(
-          (repAcc, ex) =>
-            repAcc +
-            ex.sets.reduce((sum, set) => sum + parseInt(set.reps || 0), 0),
-          0
-        ),
-      0
-    );
-    const totalVolume = routines.reduce(
-      (acc, routine) =>
-        acc +
-        routine.exercises.reduce(
-          (volAcc, ex) =>
-            volAcc +
-            ex.sets.reduce(
-              (sum, set) =>
-                sum + parseInt(set.weight || 0) * parseInt(set.reps || 0),
-              0
-            ),
-          0
-        ),
-      0
+  const renderRoutinesContent = () => {
+    const todayRoutines = routines.filter((routine) =>
+      isSameDay(routine.createdAt?.toDate(), selectedDate)
     );
 
-    return { exerciseCount, totalSets, totalReps, totalVolume };
+    return todayRoutines.length > 0 ? (
+      <>
+        <View style={styles.summaryContainer}>
+          {["EXERCISES", "SETS", "REPS", "VOLUME"].map((label, index) => (
+            <View key={index} style={styles.summaryItem}>
+              <Text style={styles.summaryLabel}>{label}</Text>
+              <Text style={styles.summaryValue}>
+                {label === "EXERCISES"
+                  ? todayRoutines.reduce(
+                      (acc, routine) => acc + routine.exercises.length,
+                      0
+                    )
+                  : label === "SETS"
+                  ? todayRoutines.reduce(
+                      (acc, routine) =>
+                        acc +
+                        routine.exercises.reduce(
+                          (setAcc, exercise) => setAcc + exercise.sets.length,
+                          0
+                        ),
+                      0
+                    )
+                  : label === "REPS"
+                  ? todayRoutines.reduce(
+                      (acc, routine) =>
+                        acc +
+                        routine.exercises.reduce(
+                          (repAcc, exercise) =>
+                            repAcc +
+                            exercise.sets.reduce(
+                              (sum, set) => sum + parseInt(set.reps || 0),
+                              0
+                            ),
+                          0
+                        ),
+                      0
+                    )
+                  : `${todayRoutines.reduce(
+                      (acc, routine) =>
+                        acc +
+                        routine.exercises.reduce(
+                          (volAcc, exercise) =>
+                            volAcc +
+                            exercise.sets.reduce(
+                              (sum, set) =>
+                                sum +
+                                parseInt(set.weight || 0) *
+                                  parseInt(set.reps || 0),
+                              0
+                            ),
+                          0
+                        ),
+                      0
+                    )}kg`}
+              </Text>
+            </View>
+          ))}
+        </View>
+        <View style={styles.routinesContainer}>
+          {todayRoutines.map((routine) => (
+            <View key={routine.id} style={styles.routineItem}>
+              {routine.exercises.map((exercise, index) => (
+                <View key={index} style={styles.nutritionRow}>
+                  <Text style={[styles.nutrient, styles.exerciseName]}>
+                    {exercise.name}
+                  </Text>
+                  <Text style={[styles.nutrient, styles.category]}>
+                    {exercise.category}
+                  </Text>
+                  <Text style={[styles.nutrient, styles.setCount]}>
+                    {exercise.sets.length}세트
+                  </Text>
+                </View>
+              ))}
+            </View>
+          ))}
+        </View>
+      </>
+    ) : (
+      <View style={styles.infoContainer}>
+        <Text style={styles.infoText}>등록된 운동이 없습니다.</Text>
+      </View>
+    );
   };
 
-  const routineSummary = useMemo(
-    () => calculateRoutineSummary(routines),
-    [routines]
-  );
+  const renderNutritionContent = () => {
+    return user?.bodyData ? (
+      <View>
+        <View style={styles.pieRow}>
+          <NutritionPieChart
+            title="칼로리"
+            total={totals.totalCalories}
+            recommended={recommendedIntake.calories}
+            color="#FF6F61"
+          />
+          <NutritionPieChart
+            title="탄수화물"
+            total={totals.totalCarbs}
+            recommended={recommendedIntake.carbs}
+            color="#4A90E2"
+          />
+        </View>
+        <View style={styles.pieRow}>
+          <NutritionPieChart
+            title="단백질"
+            total={totals.totalProtein}
+            recommended={recommendedIntake.protein}
+            color="#7ED321"
+          />
+          <NutritionPieChart
+            title="지방"
+            total={totals.totalFat}
+            recommended={recommendedIntake.fat}
+            color="#F8E71C"
+          />
+        </View>
+      </View>
+    ) : (
+      <View style={styles.infoContainer}>
+        <Text style={styles.infoText}>
+          체성분을 등록한 후에 차트가 표시됩니다.
+        </Text>
+      </View>
+    );
+  };
 
   return (
     <View style={styles.block}>
@@ -257,93 +324,11 @@ function DashboardScreen() {
         </View>
       ) : (
         <ScrollView>
-          {/* 오늘의 영양성분 */}
           <Text style={styles.sectionTitle}>오늘의 영양성분</Text>
-          {user?.bodyData ? (
-            <View>
-              <View style={styles.pieRow}>
-                <NutritionPieChart
-                  title="칼로리"
-                  total={totals.totalCalories}
-                  recommended={recommendedIntake.calories}
-                  color="#FF6F61"
-                />
-                <NutritionPieChart
-                  title="탄수화물"
-                  total={totals.totalCarbs}
-                  recommended={recommendedIntake.carbs}
-                  color="#4A90E2"
-                />
-              </View>
+          {renderNutritionContent()}
 
-              <View style={styles.pieRow}>
-                <NutritionPieChart
-                  title="단백질"
-                  total={totals.totalProtein}
-                  recommended={recommendedIntake.protein}
-                  color="#7ED321"
-                />
-                <NutritionPieChart
-                  title="지방"
-                  total={totals.totalFat}
-                  recommended={recommendedIntake.fat}
-                  color="#F8E71C"
-                />
-              </View>
-            </View>
-          ) : (
-            <View style={styles.infoContainer}>
-              <Text style={styles.infoText}>
-                체성분을 등록한 후에 차트가 표시됩니다.
-              </Text>
-            </View>
-          )}
-
-          {/* 오늘의 운동 */}
           <Text style={styles.sectionTitle}>오늘의 운동</Text>
-          {routines.length > 0 ? (
-            <>
-              <View style={styles.summaryContainer}>
-                {["EXERCISES", "SETS", "REPS", "VOLUME"].map((label, index) => (
-                  <View key={index} style={styles.summaryItem}>
-                    <Text style={styles.summaryLabel}>{label}</Text>
-                    <Text style={styles.summaryValue}>
-                      {label === "EXERCISES"
-                        ? routineSummary.exerciseCount
-                        : label === "SETS"
-                        ? routineSummary.totalSets
-                        : label === "REPS"
-                        ? routineSummary.totalReps
-                        : `${routineSummary.totalVolume}kg`}
-                    </Text>
-                  </View>
-                ))}
-              </View>
-              <View style={styles.routinesContainer}>
-                {routines.map((routine) => (
-                  <View key={routine.id} style={styles.routineItem}>
-                    {routine.exercises.map((exercise, index) => (
-                      <View key={index} style={styles.nutritionRow}>
-                        <Text style={[styles.nutrient, styles.exerciseName]}>
-                          {exercise.name}
-                        </Text>
-                        <Text style={[styles.nutrient, styles.category]}>
-                          {exercise.category}
-                        </Text>
-                        <Text style={[styles.nutrient, styles.setCount]}>
-                          {exercise.sets.length}세트
-                        </Text>
-                      </View>
-                    ))}
-                  </View>
-                ))}
-              </View>
-            </>
-          ) : (
-            <View style={styles.infoContainer}>
-              <Text style={styles.infoText}>등록된 운동이 없습니다.</Text>
-            </View>
-          )}
+          {renderRoutinesContent()}
         </ScrollView>
       )}
     </View>
