@@ -63,10 +63,11 @@ function ExerciseSearchScreen() {
     <TouchableOpacity
       style={styles.exerciseItem}
       onPress={() =>
-        navigation.navigate("AddRoutine", {
+        navigation.navigate("Routine", {
           relatedUserId,
           selectedExercise: item.name,
-          selectedCategory: item.category, // 실제 카테고리 전달
+          selectedCategory: item.category,
+          isEditing: false,
         })
       }
     >

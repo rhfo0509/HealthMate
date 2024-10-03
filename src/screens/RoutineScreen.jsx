@@ -11,11 +11,16 @@ import {
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { useUserContext } from "../contexts/UserContext";
 import IconRightButton from "../components/IconRightButton";
-import { createRoutines } from "../lib/routines";
+import { createRoutine, updateRoutine } from "../lib/routines";
 
-function AddRoutineScreen() {
-  const { relatedUserId, selectedExercise, selectedCategory, selectedRoutine } =
-    useRoute().params || {};
+function RoutineScreen() {
+  const {
+    relatedUserId,
+    selectedExercise,
+    selectedCategory,
+    selectedRoutine,
+    isEditing,
+  } = useRoute().params || {};
   const { user } = useUserContext();
   const navigation = useNavigation();
   const [isUploading, setIsUploading] = useState(false);
@@ -51,20 +56,30 @@ function AddRoutineScreen() {
 
   const onSubmit = useCallback(async () => {
     setIsUploading(true);
+
     const routineData = {
       userId: user.id,
-      relatedUserId,
+      relatedUserId: relatedUserId
+        ? relatedUserId
+        : selectedRoutine.relatedUserId,
       exercises,
-      routineName: null,
+      routineName: isSaveToMyRoutine && routineName.trim() ? routineName : null,
     };
-    if (isSaveToMyRoutine && routineName.trim()) {
-      routineData.routineName = routineName;
+
+    try {
+      if (isEditing) {
+        await updateRoutine(selectedRoutine.id, routineData);
+      } else {
+        await createRoutine(routineData);
+      }
+      navigation.pop();
+    } catch (error) {
+      console.error("Error saving routine:", error);
+    } finally {
+      setIsUploading(false);
     }
-    await createRoutines(routineData);
-    setIsUploading(false);
-    navigation.pop();
   }, [
-    createRoutines,
+    createRoutine,
     navigation,
     user.id,
     relatedUserId,
@@ -371,4 +386,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default AddRoutineScreen;
+export default RoutineScreen;

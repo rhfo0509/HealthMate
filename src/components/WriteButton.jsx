@@ -22,7 +22,7 @@ function WriteButton({ postType, relatedUserId }) {
           if (selectedIndex === 0) {
             navigation.navigate("ExercisePost", { postType, relatedUserId });
           } else if (selectedIndex === 1) {
-            navigation.navigate("AddRoutine", { relatedUserId });
+            navigation.navigate("Routine", { relatedUserId });
           }
         }
       );

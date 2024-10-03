@@ -11,7 +11,7 @@ import SignInScreen from "../screens/SignInScreen";
 import WelcomeScreen from "../screens/WelcomeScreen";
 import DietPostScreen from "../screens/DietPostScreen";
 import ExercisePostScreen from "../screens/ExercisePostScreen";
-import AddRoutineScreen from "../screens/AddRoutineScreen";
+import RoutineScreen from "../screens/RoutineScreen";
 import ExerciseSearchScreen from "../screens/ExerciseSearchScreen";
 import MyRoutineScreen from "../screens/MyRoutineScreen";
 import FoodSearchScreen from "../screens/FoodSearchScreen";
@@ -70,8 +70,8 @@ function Root() {
             options={{ title: "오늘의 운동기록" }}
           />
           <Stack.Screen
-            name="AddRoutine"
-            component={AddRoutineScreen}
+            name="Routine"
+            component={RoutineScreen}
             options={{ title: "오늘의 운동루틴" }}
           />
           <Stack.Screen

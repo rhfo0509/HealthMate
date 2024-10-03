@@ -5,8 +5,10 @@ import {
   ScrollView,
   ActivityIndicator,
   Text,
+  Pressable,
+  Alert,
 } from "react-native";
-import { useRoute } from "@react-navigation/native";
+import { useRoute, useNavigation } from "@react-navigation/native";
 import CalendarHeader from "../components/CalendarHeader";
 import { useUserContext } from "../contexts/UserContext";
 import { isSameDay } from "date-fns";
@@ -19,9 +21,11 @@ import {
 } from "firebase/firestore";
 import { getUser, getRole } from "../lib/users";
 import NutritionPieChart from "../components/NutritionPieChart";
+import { MaterialIcons } from "@expo/vector-icons";
 
 function DashboardScreen() {
   const route = useRoute();
+  const navigation = useNavigation();
   const { relatedUserId } = route.params;
   const { user } = useUserContext();
   const firestore = getFirestore();
@@ -31,7 +35,9 @@ function DashboardScreen() {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [foods, setFoods] = useState([]);
   const [routines, setRoutines] = useState([]);
-  const [isLoading, setIsLoading] = useState(true); // 단일 로딩 상태
+  const [isLoading, setIsLoading] = useState(true);
+  const [selectedRoutineId, setSelectedRoutineId] = useState(null); // 선택된 루틴 ID
+
   const [totals, setTotals] = useState({
     totalCalories: 0,
     totalCarbs: 0,
@@ -168,10 +174,16 @@ function DashboardScreen() {
       const dots = [
         foods.some(
           (food) => food.createdAt?.toDate().toDateString() === date
-        ) && { color: "royalblue", selectedColor: "royalblue" },
+        ) && {
+          color: "royalblue",
+          selectedColor: "royalblue",
+        },
         routines.some(
           (routine) => routine.createdAt?.toDate().toDateString() === date
-        ) && { color: "orange", selectedColor: "orange" },
+        ) && {
+          color: "orange",
+          selectedColor: "orange",
+        },
       ].filter(Boolean);
 
       return { date: new Date(date), dots };
@@ -242,8 +254,27 @@ function DashboardScreen() {
           ))}
         </View>
         <View style={styles.routinesContainer}>
-          {todayRoutines.map((routine) => (
+          {todayRoutines.map((routine, index) => (
             <View key={routine.id} style={styles.routineItem}>
+              {/* 체크박스와 운동 루틴 타이틀 표시 */}
+              <Pressable
+                style={styles.checkbox}
+                onPress={() =>
+                  setSelectedRoutineId(
+                    selectedRoutineId === routine.id ? null : routine.id
+                  )
+                }
+              >
+                <View
+                  style={
+                    selectedRoutineId === routine.id
+                      ? styles.checkboxChecked
+                      : styles.checkboxUnchecked
+                  }
+                />
+                <Text style={styles.routineName}>루틴 {index + 1}</Text>
+              </Pressable>
+
               {routine.exercises.map((exercise, index) => (
                 <View key={index} style={styles.nutritionRow}>
                   <Text style={[styles.nutrient, styles.exerciseName]}>
@@ -269,7 +300,11 @@ function DashboardScreen() {
   };
 
   const renderNutritionContent = () => {
-    return user?.bodyData ? (
+    const todayFoods = foods.filter((food) =>
+      isSameDay(food.createdAt?.toDate(), selectedDate)
+    );
+
+    return todayFoods.length > 0 ? (
       <View>
         <View style={styles.pieRow}>
           <NutritionPieChart
@@ -323,10 +358,45 @@ function DashboardScreen() {
         </View>
       ) : (
         <ScrollView>
-          <Text style={styles.sectionTitle}>오늘의 영양성분</Text>
+          <View style={styles.titleRow}>
+            <Text style={styles.sectionTitle}>오늘의 영양성분</Text>
+            {foods.filter((food) =>
+              isSameDay(food.createdAt?.toDate(), selectedDate)
+            ).length > 0 && (
+              <Pressable
+                onPress={() => console.log("Edit Nutrition")}
+                style={styles.editButton}
+              >
+                <MaterialIcons name="edit" size={24} color="royalblue" />
+              </Pressable>
+            )}
+          </View>
           {renderNutritionContent()}
 
-          <Text style={styles.sectionTitle}>오늘의 운동</Text>
+          <View style={styles.titleRow}>
+            <Text style={styles.sectionTitle}>오늘의 운동</Text>
+            {routines.filter((routine) =>
+              isSameDay(routine.createdAt?.toDate(), selectedDate)
+            ).length > 0 && (
+              <Pressable
+                onPress={() => {
+                  if (!selectedRoutineId) {
+                    Alert.alert("알림", "수정할 루틴을 선택해주세요.");
+                    return;
+                  }
+                  navigation.navigate("Routine", {
+                    selectedRoutine: routines.find(
+                      (routine) => routine.id === selectedRoutineId
+                    ),
+                    isEditing: true,
+                  });
+                }}
+                style={styles.editButton}
+              >
+                <MaterialIcons name="edit" size={24} color="royalblue" />
+              </Pressable>
+            )}
+          </View>
           {renderRoutinesContent()}
         </ScrollView>
       )}
@@ -344,12 +414,20 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  titleRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginVertical: 10,
+    marginHorizontal: 16,
+  },
   sectionTitle: {
     fontSize: 20,
     fontWeight: "bold",
-    marginVertical: 10,
-    marginLeft: 16,
     color: "#333",
+  },
+  editButton: {
+    padding: 5,
   },
   pieRow: {
     flexDirection: "row",
@@ -400,6 +478,10 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "#fff",
   },
+  routineName: {
+    fontSize: 16,
+    fontWeight: "500",
+  },
   exerciseName: {
     backgroundColor: "#ffab91",
   },
@@ -417,6 +499,25 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: "#666",
     textAlign: "center",
+  },
+  checkbox: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  checkboxUnchecked: {
+    width: 20,
+    height: 20,
+    borderWidth: 1,
+    borderColor: "#ddd",
+    marginRight: 10,
+    borderRadius: 4,
+  },
+  checkboxChecked: {
+    width: 20,
+    height: 20,
+    backgroundColor: "royalblue",
+    marginRight: 10,
+    borderRadius: 4,
   },
 });
 

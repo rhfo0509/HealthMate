@@ -9,7 +9,7 @@ import {
   Alert,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { getRoutines, removeRoutines } from "../lib/routines";
+import { getRoutines, removeRoutine } from "../lib/routines";
 import { useUserContext } from "../contexts/UserContext";
 import { format } from "date-fns";
 
@@ -27,13 +27,16 @@ function MyRoutineScreen() {
   }, [user.id]);
 
   const handleRoutineSelect = (routine) => {
-    // 선택된 루틴 데이터를 AddRoutineScreen으로 전달
-    navigation.navigate("AddRoutine", { selectedRoutine: routine });
+    // 선택된 루틴 데이터를 RoutineScreen으로 전달
+    navigation.navigate("Routine", {
+      selectedRoutine: routine,
+      isEditing: false,
+    });
   };
 
   const handleRoutineDelete = async (routineId) => {
     try {
-      await removeRoutines(routineId);
+      await removeRoutine(routineId);
       setRoutines((prev) => prev.filter((routine) => routine.id !== routineId));
     } catch (error) {
       console.error("Error deleting routine:", error);
