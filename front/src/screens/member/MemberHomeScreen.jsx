@@ -31,8 +31,12 @@ function MemberHomeScreen() {
   useEffect(() => {
     // 회원권 하나만 가져오는 로직
     getMembership(user.id).then(async (membership) => {
-      const trainer = await getUser(membership.trainerId);
-      setMembership({ ...membership, trainer });
+      if (membership) {
+        const trainer = await getUser(membership.trainerId);
+        setMembership({ ...membership, trainer });
+      } else {
+        setMembership(null);
+      }
     });
 
     // 스케줄 목록 가져오기
@@ -190,6 +194,16 @@ function MemberHomeScreen() {
     setShowTimePicker([false, false, false]);
     setTime(format(selectedTime, "HH:mm"));
   };
+
+  if (!membership) {
+    return (
+      <View style={styles.noMembership}>
+        <Text style={styles.noMembershipText}>
+          아직 회원권이 존재하지 않습니다.
+        </Text>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.block}>
@@ -388,6 +402,15 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "space-between",
     backgroundColor: "white",
+  },
+  noMembership: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  noMembershipText: {
+    fontSize: 18,
+    color: "gray",
   },
   title: {
     paddingHorizontal: 12,
