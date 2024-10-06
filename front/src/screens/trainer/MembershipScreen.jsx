@@ -224,7 +224,7 @@ function MembershipScreen() {
 
       return (
         <View key={index} style={styles.itemRow}>
-          <Text style={styles.itemText}>{schedule.day}</Text>
+          <Text style={styles.itemText}>{schedule.day}요일</Text>
           <Text style={styles.itemValue}>
             {schedule.startTime} ~ {endTime}
           </Text>
@@ -361,13 +361,12 @@ const styles = StyleSheet.create({
   button: {
     backgroundColor: "#1f6feb",
     paddingVertical: 16,
-    borderRadius: 8,
+    borderRadius: 4,
     alignItems: "center",
     flex: 1,
   },
   buttonText: {
     color: "#fff",
-    fontSize: 16,
   },
 });
 
