@@ -26,41 +26,6 @@ function ScheduleList({ schedules, ListHeaderComponent }) {
         renderItem={({ item }) => <ScheduleListItem schedule={item} />}
         keyExtractor={(schedule) => schedule.id}
         ListHeaderComponent={ListHeaderComponent}
-        renderLeftActions={({ item }) => (
-          <SwipeableQuickActions>
-            <SwipeableQuickActionButton
-              onPress={() => {
-                Alert.alert(
-                  "일정 완료",
-                  "일정을 완료하시겠습니까?",
-                  [
-                    {
-                      text: "취소",
-                      style: "cancel",
-                    },
-                    {
-                      text: "확인",
-                      onPress: () => {
-                        const isCompleted = true;
-                        removeSchedule(item.id, isCompleted);
-                      },
-                    },
-                  ],
-                  { cancelable: true }
-                );
-              }}
-              text="완료"
-              textStyle={{ fontWeight: "bold", color: "white" }}
-              style={{
-                flex: 1,
-                paddingHorizontal: 30,
-                alignItems: "center",
-                justifyContent: "center",
-                backgroundColor: "royalblue",
-              }}
-            />
-          </SwipeableQuickActions>
-        )}
         renderRightActions={({ item }) => (
           <SwipeableQuickActions>
             <SwipeableQuickActionButton
