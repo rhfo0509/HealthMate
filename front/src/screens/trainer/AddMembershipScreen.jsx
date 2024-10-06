@@ -95,6 +95,7 @@ function AddMembershipScreen() {
 
     const formattedMembershipInfo = {
       ...membershipInfo,
+      count: +membershipInfo.count,
       startDate: membershipInfo.startDate.toISOString().split("T")[0],
       schedules: Object.entries(newSchedule.days)
         .filter(([_, { checked }]) => checked)
