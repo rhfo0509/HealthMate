@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Pressable, StyleSheet, View, Text, Alert } from "react-native";
 import { useRoute } from "@react-navigation/native";
-import { useUserContext } from "../../contexts/UserContext";
 import { getMembership, updateMembership } from "../../lib/memberships";
 import {
   createSchedulesWithMembership,
@@ -23,7 +22,6 @@ function MembershipScreen() {
   const [showSecond, setShowSecond] = useState(false);
   const route = useRoute();
   const { memberId } = route.params;
-  const { user } = useUserContext();
   const [membership, setMembership] = useState({});
   const [membershipCount, setMembershipCount] = useState("");
   const [membershipDays, setMembershipDays] = useState({
@@ -39,11 +37,7 @@ function MembershipScreen() {
   const membershipsCollection = collection(firestore, "memberships");
 
   useEffect(() => {
-    const q = query(
-      membershipsCollection,
-      where("trainerId", "==", user.id),
-      where("memberId", "==", memberId)
-    );
+    const q = query(membershipsCollection, where("memberId", "==", memberId));
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const membership = {
         id: snapshot.docs[0].id,
@@ -54,11 +48,11 @@ function MembershipScreen() {
     return () => {
       unsubscribe();
     };
-  }, [user.id, memberId]);
+  }, [memberId]);
 
   useEffect(() => {
-    getMembership(user.id, memberId).then(setMembership);
-  }, [user.id, memberId]);
+    getMembership(memberId).then(setMembership);
+  }, [memberId]);
 
   const onPressPause = () => {
     Alert.alert(
@@ -70,9 +64,9 @@ function MembershipScreen() {
           text: "네",
           onPress: () => {
             updateMembership(membership.id, { status: "paused" }).then(() => {
-              getMembership(user.id, memberId)
+              getMembership(memberId)
                 .then(setMembership)
-                .then(() => removeSchedulesWithMember(user.id, memberId));
+                .then(() => removeSchedulesWithMember(memberId));
             });
           },
         },
@@ -94,7 +88,7 @@ function MembershipScreen() {
               status: "active",
               startDate: format(new Date(), "yyyy-MM-dd"),
             }).then(() => {
-              getMembership(user.id, memberId)
+              getMembership(memberId)
                 .then(setMembership)
                 .then(() => createSchedulesWithMembership(membership));
             });
@@ -168,7 +162,7 @@ function MembershipScreen() {
         {
           text: "네",
           onPress: () => {
-            removeSchedulesWithMember(user.id, memberId)
+            removeSchedulesWithMember(memberId)
               .then(() => {
                 const updatedSchedules = Object.entries(membershipDays)
                   .filter(([_, data]) => data.checked)
@@ -181,10 +175,7 @@ function MembershipScreen() {
                 });
               })
               .then(async () => {
-                const updatedMembership = await getMembership(
-                  user.id,
-                  memberId
-                );
+                const updatedMembership = await getMembership(memberId);
                 createSchedulesWithMembership(updatedMembership).then(() =>
                   setMembership(updatedMembership)
                 );
@@ -280,7 +271,7 @@ function MembershipScreen() {
         membership={membership}
         membershipCount={membershipCount}
         setMembershipCount={setMembershipCount}
-        onSave={onSaveExtend} // Pass the onSaveExtend function as a prop
+        onSave={onSaveExtend}
       />
 
       <ChangeScheduleModal

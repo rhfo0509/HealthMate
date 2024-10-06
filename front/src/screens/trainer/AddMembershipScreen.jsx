@@ -16,7 +16,7 @@ import {
   getMember,
   getMembersByTrainer,
 } from "../../lib/users";
-import { createMembership } from "../../lib/memberships";
+import { createMembership, getMembership } from "../../lib/memberships";
 import { useUserContext } from "../../contexts/UserContext";
 import BorderedInput from "../../components/BorderedInput";
 import IconRightButton from "../../components/IconRightButton";
@@ -73,6 +73,12 @@ function AddMembershipScreen() {
     }
 
     if (member) {
+      const membership = await getMembership(member.id);
+
+      if (membership) {
+        Alert.alert("알림", "해당 회원은 이미 회원권을 보유하고 있습니다.");
+        return;
+      }
       setShowMembershipFields(true);
       setIsMemberVerified(true);
       setMemberId(member.id);

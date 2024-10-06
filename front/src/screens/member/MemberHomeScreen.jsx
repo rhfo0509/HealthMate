@@ -2,12 +2,11 @@ import React, { useState, useEffect } from "react";
 import { Pressable, StyleSheet, View, Text, Modal, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
-import PagerView from "react-native-pager-view";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useUserContext } from "../../contexts/UserContext";
 import Avatar from "../../components/Avatar";
 import { getMemberSchedules } from "../../lib/schedules";
-import { getMembershipsByMember } from "../../lib/memberships";
+import { getMembership } from "../../lib/memberships";
 import { format, isAfter } from "date-fns";
 import { ko } from "date-fns/locale";
 import { getUser } from "../../lib/users";
@@ -20,7 +19,7 @@ function MemberHomeScreen() {
   const navigation = useNavigation();
   const { user } = useUserContext();
   const [scheduleList, setScheduleList] = useState([]);
-  const [membershipList, setMembershipList] = useState([]);
+  const [membership, setMembership] = useState(null); // 단일 회원권을 처리하는 상태로 수정
   const [showFirst, setShowFirst] = useState([false, false, false]);
   const [showSecond, setShowSecond] = useState([false, false, false]);
   const [showDatePicker, setShowDatePicker] = useState([false, false, false]);
@@ -30,16 +29,13 @@ function MemberHomeScreen() {
   const [reason, setReason] = useState("");
 
   useEffect(() => {
-    getMembershipsByMember(user.id).then((memberships) => {
-      Promise.all(
-        memberships.map(async (membership) => {
-          const trainer = await getUser(membership.trainerId);
-          return { ...membership, trainer };
-        })
-      ).then((membershipsWithTrainer) => {
-        setMembershipList(membershipsWithTrainer);
-      });
+    // 회원권 하나만 가져오는 로직
+    getMembership(user.id).then(async (membership) => {
+      const trainer = await getUser(membership.trainerId);
+      setMembership({ ...membership, trainer });
     });
+
+    // 스케줄 목록 가져오기
     getMemberSchedules(user.id).then((schedules) => {
       const futureSchedules = schedules.filter((schedule) =>
         isAfter(new Date(schedule.date), new Date())
@@ -200,19 +196,9 @@ function MemberHomeScreen() {
       <View style={styles.title}>
         <Text style={styles.titleText}>나의 회원권</Text>
       </View>
-      <View style={{ flex: 1, flexDirection: "row" }}>
-        <View style={{ alignSelf: "center" }}>
-          <MaterialIcons name="chevron-left" size={24} color="black" />
-        </View>
-        <PagerView style={styles.pagerView} initialPage={0}>
-          {membershipList.map((membership, index) => (
-            <MembershipCard membership={membership} key={index} />
-          ))}
-        </PagerView>
-        <View style={{ alignSelf: "center" }}>
-          <MaterialIcons name="chevron-right" size={24} color="black" />
-        </View>
-      </View>
+
+      {/* 단일 MembershipCard */}
+      {membership && <MembershipCard membership={membership} />}
 
       <View style={styles.title}>
         <Text style={styles.titleText}>다가오는 일정</Text>
@@ -398,19 +384,12 @@ function MemberHomeScreen() {
 }
 
 const styles = StyleSheet.create({
-  pagerView: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 24,
-    marginHorizontal: 24,
-  },
   block: {
     flex: 1,
     justifyContent: "space-between",
+    backgroundColor: "white",
   },
   title: {
-    backgroundColor: "white",
     paddingHorizontal: 12,
     paddingVertical: 12,
   },
@@ -422,7 +401,6 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderBottomWidth: 1,
     borderColor: "#eeeeee",
-    backgroundColor: "white",
     paddingVertical: 16,
     paddingHorizontal: 12,
   },

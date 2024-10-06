@@ -26,12 +26,8 @@ export async function createMembership(membership) {
   });
 }
 
-export async function getMembership(trainerId, memberId) {
-  const q = query(
-    membershipsCollection,
-    where("trainerId", "==", trainerId),
-    where("memberId", "==", memberId)
-  );
+export async function getMembership(memberId) {
+  const q = query(membershipsCollection, where("memberId", "==", memberId));
   const membershipSnapshot = await getDocs(q);
   if (!membershipSnapshot.empty) {
     const membershipDoc = membershipSnapshot.docs[0];
@@ -43,17 +39,6 @@ export async function getMembership(trainerId, memberId) {
 
 export async function getMembershipsByTrainer(trainerId) {
   const q = query(membershipsCollection, where("trainerId", "==", trainerId));
-  const snapshot = await getDocs(q);
-
-  const memberships = snapshot.docs.map((doc) => ({
-    id: doc.id,
-    ...doc.data(),
-  }));
-  return memberships;
-}
-
-export async function getMembershipsByMember(memberId) {
-  const q = query(membershipsCollection, where("memberId", "==", memberId));
   const snapshot = await getDocs(q);
 
   const memberships = snapshot.docs.map((doc) => ({

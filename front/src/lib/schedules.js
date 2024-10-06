@@ -117,13 +117,9 @@ export async function updateSchedule(id, updateField) {
   });
 }
 
-export async function removeSchedulesWithMember(trainerId, memberId) {
+export async function removeSchedulesWithMember(memberId) {
   try {
-    const q = query(
-      schedulesCollection,
-      where("trainerId", "==", trainerId),
-      where("memberId", "==", memberId)
-    );
+    const q = query(schedulesCollection, where("memberId", "==", memberId));
     const querySnapshot = await getDocs(q);
     const scheduleDeletePromises = [];
 
