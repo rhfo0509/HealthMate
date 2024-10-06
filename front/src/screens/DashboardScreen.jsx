@@ -175,8 +175,8 @@ function DashboardScreen() {
         foods.some(
           (food) => food.createdAt?.toDate().toDateString() === date
         ) && {
-          color: "royalblue",
-          selectedColor: "royalblue",
+          color: "#1f6feb",
+          selectedColor: "#1f6feb",
         },
         routines.some(
           (routine) => routine.createdAt?.toDate().toDateString() === date
@@ -354,7 +354,7 @@ function DashboardScreen() {
 
       {isLoading ? (
         <View style={styles.loader}>
-          <ActivityIndicator size="large" color="royalblue" />
+          <ActivityIndicator size="large" color="#1f6feb" />
         </View>
       ) : (
         <ScrollView>
@@ -367,7 +367,7 @@ function DashboardScreen() {
                 onPress={() => console.log("Edit Nutrition")}
                 style={styles.editButton}
               >
-                <MaterialIcons name="edit" size={24} color="royalblue" />
+                <MaterialIcons name="edit" size={24} color="#1f6feb" />
               </Pressable>
             )}
           </View>
@@ -393,7 +393,7 @@ function DashboardScreen() {
                 }}
                 style={styles.editButton}
               >
-                <MaterialIcons name="edit" size={24} color="royalblue" />
+                <MaterialIcons name="edit" size={24} color="#1f6feb" />
               </Pressable>
             )}
           </View>
@@ -515,7 +515,7 @@ const styles = StyleSheet.create({
   checkboxChecked: {
     width: 20,
     height: 20,
-    backgroundColor: "royalblue",
+    backgroundColor: "#1f6feb",
     marginRight: 10,
     borderRadius: 4,
   },

@@ -47,10 +47,10 @@ function CalendarView({ markedDates, selectedDate, onSelectDate }) {
       monthFormat={"yyyy년 MM월"}
       hideExtraDays
       theme={{
-        selectedDayBackgroundColor: "royalblue",
-        arrowColor: "royalblue",
-        dotColor: "royalblue",
-        todayTextColor: "royalblue",
+        selectedDayBackgroundColor: "#1f6feb",
+        arrowColor: "#1f6feb",
+        dotColor: "#1f6feb",
+        todayTextColor: "#1f6feb",
       }}
     />
   );

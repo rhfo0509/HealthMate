@@ -18,7 +18,7 @@ function SignButtons({ isSignUp, onSubmit, loading }) {
   if (loading) {
     return (
       <View style={styles.spinnerWrapper}>
-        <ActivityIndicator size={32} color="royalblue" />
+        <ActivityIndicator size={32} color="#1f6feb" />
       </View>
     );
   }

@@ -11,7 +11,7 @@ function MainTab() {
       screenOptions={{
         headerShown: false,
         tabBarShowLabel: false,
-        tabBarActiveTintColor: "royalblue",
+        tabBarActiveTintColor: "#1f6feb",
       }}
     >
       <BottomTab.Screen

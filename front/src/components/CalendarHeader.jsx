@@ -74,7 +74,7 @@ function CalendarHeader({ markedDates, selectedDate, onSelectDate }) {
         onDateSelected={(date) => onSelectDate(new Date(date))}
         selectedDate={new Date(selectedDate)}
         highlightDateNameStyle={{ display: "none" }}
-        highlightDateNumberStyle={{ color: "royalblue" }}
+        highlightDateNumberStyle={{ color: "#1f6feb" }}
         calendarHeaderFormat={"YYYY년 M월"}
       />
     </View>

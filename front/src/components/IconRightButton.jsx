@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet, View, Pressable } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 
-function IconRightButton({ name, color = "royalblue", onPress }) {
+function IconRightButton({ name, color = "#1f6feb", onPress }) {
   return (
     <View style={styles.block}>
       <Pressable

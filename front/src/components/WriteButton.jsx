@@ -16,7 +16,7 @@ function WriteButton({ postType, relatedUserId }) {
         {
           options: ["일지 작성하기", "루틴 등록하기", "취소"],
           cancelButtonIndex: 2,
-          cancelButtonTintColor: "#D9534F",
+          cancelButtonTintColor: "#d9534f",
         },
         (selectedIndex) => {
           if (selectedIndex === 0) {
@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
     bottom: 10,
   },
   circle: {
-    backgroundColor: "royalblue",
+    backgroundColor: "#1f6feb",
     borderRadius: 27,
     height: 54,
     width: 54,

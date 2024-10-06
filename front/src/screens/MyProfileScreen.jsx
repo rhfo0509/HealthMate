@@ -45,7 +45,7 @@ function MyProfileScreen() {
   if (isLoading) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <ActivityIndicator size="large" color="royalblue" />
+        <ActivityIndicator size="large" color="#1f6feb" />
       </View>
     );
   }

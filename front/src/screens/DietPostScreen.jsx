@@ -279,7 +279,7 @@ const styles = StyleSheet.create({
   },
   addText: {
     marginLeft: 5,
-    color: "royalblue",
+    color: "#1f6feb",
     fontSize: 15,
   },
   uploadingContainer: {

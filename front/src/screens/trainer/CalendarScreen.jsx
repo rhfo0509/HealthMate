@@ -67,7 +67,7 @@ function CalendarScreen() {
               navigation.navigate("WeeklyCalendar");
             }}
           >
-            <Text style={{ color: "royalblue" }}>주간 일정 보기</Text>
+            <Text style={{ color: "#1f6feb" }}>주간 일정 보기</Text>
           </Pressable>
           <IconRightButton
             onPress={() => {

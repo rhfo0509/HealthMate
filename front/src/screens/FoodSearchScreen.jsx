@@ -118,7 +118,7 @@ const FoodSearchScreen = () => {
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="royalblue" />
+        <ActivityIndicator size="large" color="#1f6feb" />
       </View>
     );
   }
@@ -383,7 +383,7 @@ const styles = StyleSheet.create({
     color: "#333",
   },
   registerButton: {
-    backgroundColor: "royalblue",
+    backgroundColor: "#1f6feb",
     padding: 12,
     alignItems: "center",
     borderRadius: 4,
@@ -397,7 +397,7 @@ const styles = StyleSheet.create({
   previousButton: {
     flex: 1,
     padding: 12,
-    backgroundColor: "royalblue",
+    backgroundColor: "#1f6feb",
     alignItems: "center",
     borderRadius: 4,
     marginRight: 4,
@@ -405,7 +405,7 @@ const styles = StyleSheet.create({
   nextButton: {
     flex: 1,
     padding: 12,
-    backgroundColor: "royalblue",
+    backgroundColor: "#1f6feb",
     alignItems: "center",
     borderRadius: 4,
     marginLeft: 4,

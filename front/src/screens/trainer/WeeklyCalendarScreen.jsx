@@ -51,7 +51,7 @@ function WeeklyCalendarScreen() {
       title: "주간 일정",
       headerRight: () => (
         <Pressable onPress={() => navigation.navigate("Calendar")}>
-          <Text style={{ color: "royalblue" }}>월간 일정 보기</Text>
+          <Text style={{ color: "#1f6feb" }}>월간 일정 보기</Text>
         </Pressable>
       ),
     });

@@ -71,7 +71,7 @@ function ExerciseScreen() {
 
   const markedDates = posts?.map((post) => {
     const date = post.createdAt?.toDate();
-    return { date, dots: [{ color: "royalblue", selectedColor: "royalblue" }] };
+    return { date, dots: [{ color: "#1f6feb", selectedColor: "#1f6feb" }] };
   });
 
   const filteredPosts = posts.filter((post) => {
@@ -86,7 +86,7 @@ function ExerciseScreen() {
   if (isLoading) {
     return (
       <View style={styles.loader}>
-        <ActivityIndicator size="large" color="royalblue" />
+        <ActivityIndicator size="large" color="#1f6feb" />
       </View>
     );
   }

@@ -109,7 +109,7 @@ function EditProfileScreen() {
     return (
       <View style={styles.container}>
         <View style={styles.loader}>
-          <ActivityIndicator size="large" color="royalblue" />
+          <ActivityIndicator size="large" color="#1f6feb" />
         </View>
       </View>
     );

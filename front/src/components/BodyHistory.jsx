@@ -94,7 +94,7 @@ function BodyHistory({ bodyData, setShow, setEditData, memberId }) {
               onPress={() => handleEdit(item)}
               style={styles.editButton}
             >
-              <MaterialIcons name="edit" size={20} color="royalblue" />
+              <MaterialIcons name="edit" size={20} color="#1f6feb" />
             </Pressable>
             {/* 삭제 버튼 */}
             <Pressable
@@ -104,7 +104,7 @@ function BodyHistory({ bodyData, setShow, setEditData, memberId }) {
               <MaterialIcons
                 name="remove-circle-outline"
                 size={20}
-                color="crimson"
+                color="#d9534f"
               />
             </Pressable>
           </View>

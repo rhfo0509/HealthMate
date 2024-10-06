@@ -14,7 +14,7 @@ function FoodInput({ food, onChange, onRemove, onSearch }) {
         />
         {/* Add the search button here */}
         <Pressable onPress={onSearch} style={styles.searchButton}>
-          <MaterialIcons name="search" size={24} color="royalblue" />
+          <MaterialIcons name="search" size={24} color="#1f6feb" />
         </Pressable>
         <Pressable onPress={onRemove} style={styles.removeButton}>
           <MaterialIcons

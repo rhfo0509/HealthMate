@@ -80,7 +80,7 @@ function DietScreen() {
   if (isLoading) {
     return (
       <View style={styles.loader}>
-        <ActivityIndicator size="large" color="royalblue" />
+        <ActivityIndicator size="large" color="#1f6feb" />
       </View>
     );
   }
@@ -90,7 +90,7 @@ function DietScreen() {
       <CalendarHeader
         markedDates={posts.map((post) => ({
           date: post.createdAt?.toDate(),
-          dots: [{ color: "royalblue", selectedColor: "royalblue" }],
+          dots: [{ color: "#1f6feb", selectedColor: "#1f6feb" }],
         }))}
         selectedDate={selectedDate}
         onSelectDate={setSelectedDate}

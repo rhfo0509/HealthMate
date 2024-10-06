@@ -35,7 +35,7 @@ function MemberDetailTab() {
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: "royalblue",
+        tabBarActiveTintColor: "#1f6feb",
         tabBarLabelStyle: { color: "black" },
       }}
     >

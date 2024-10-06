@@ -44,7 +44,7 @@ function Root() {
   if (loading) {
     return (
       <View style={styles.loader}>
-        <ActivityIndicator size="large" color="royalblue" />
+        <ActivityIndicator size="large" color="#1f6feb" />
       </View>
     );
   }

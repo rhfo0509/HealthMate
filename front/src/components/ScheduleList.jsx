@@ -56,7 +56,7 @@ function ScheduleList({ schedules, ListHeaderComponent }) {
                 paddingHorizontal: 30,
                 alignItems: "center",
                 justifyContent: "center",
-                backgroundColor: "crimson",
+                backgroundColor: "#d9534f",
               }}
             />
           </SwipeableQuickActions>

@@ -129,7 +129,7 @@ function RoutineScreen() {
     return (
       <View style={styles.container}>
         <View style={styles.loading}>
-          <ActivityIndicator size="large" color="royalblue" />
+          <ActivityIndicator size="large" color="#1f6feb" />
         </View>
       </View>
     );
@@ -230,7 +230,7 @@ function RoutineScreen() {
               onPress={() => removeLastSet(exerciseIndex)}
               disabled={exercise.sets.length === 1}
             >
-              <Text style={{ color: "royalblue" }}>세트 삭제</Text>
+              <Text style={{ color: "#1f6feb" }}>세트 삭제</Text>
             </Pressable>
           </View>
         </View>
@@ -256,7 +256,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   searchButton: {
-    backgroundColor: "royalblue",
+    backgroundColor: "#1f6feb",
     padding: 12,
     alignItems: "center",
     borderRadius: 4,
@@ -264,7 +264,7 @@ const styles = StyleSheet.create({
     marginRight: 5,
   },
   loadRoutineButton: {
-    backgroundColor: "royalblue",
+    backgroundColor: "#1f6feb",
     padding: 12,
     alignItems: "center",
     borderRadius: 4,
@@ -295,7 +295,7 @@ const styles = StyleSheet.create({
   checkboxChecked: {
     width: 20,
     height: 20,
-    backgroundColor: "royalblue",
+    backgroundColor: "#1f6feb",
     marginRight: 10,
     borderRadius: 4,
   },
@@ -329,10 +329,10 @@ const styles = StyleSheet.create({
   exerciseName: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "royalblue",
+    color: "#1f6feb",
   },
   removeExerciseButton: {
-    backgroundColor: "royalblue",
+    backgroundColor: "#1f6feb",
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderRadius: 4,
@@ -364,7 +364,7 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   addButton: {
-    backgroundColor: "royalblue",
+    backgroundColor: "#1f6feb",
     padding: 8,
     alignItems: "center",
     borderRadius: 4,
@@ -377,7 +377,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flex: 1,
     marginLeft: 10,
-    borderColor: "royalblue",
+    borderColor: "#1f6feb",
   },
   buttonRow: {
     flexDirection: "row",

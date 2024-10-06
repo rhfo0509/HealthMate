@@ -210,11 +210,7 @@ function SetupProfile() {
           />
         )}
         {loading ? (
-          <ActivityIndicator
-            size={32}
-            color="royalblue"
-            style={styles.spinner}
-          />
+          <ActivityIndicator size={32} color="#1f6feb" style={styles.spinner} />
         ) : (
           <View style={styles.buttons}>
             <CustomButton title="다음" onPress={onSubmit} hasMarginBottom />
