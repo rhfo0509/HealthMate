@@ -105,10 +105,12 @@ const FoodSearchScreen = () => {
   };
 
   const loadNextPage = () => {
+    setSelectedFood(null);
     setStartIndex((prevIndex) => prevIndex + 10);
   };
 
   const loadPreviousPage = () => {
+    setSelectedFood(null);
     setStartIndex((prevIndex) => Math.max(prevIndex - 10, 0));
   };
 
@@ -251,7 +253,7 @@ const FoodSearchScreen = () => {
             </View>
           )}
           <Pressable onPress={handleRegister} style={styles.registerButton}>
-            <Text style={styles.buttonText}>등록</Text>
+            <Text style={[styles.buttonText, { color: "#1f6feb" }]}>등록</Text>
           </Pressable>
         </View>
       )}
@@ -383,11 +385,14 @@ const styles = StyleSheet.create({
     color: "#333",
   },
   registerButton: {
-    backgroundColor: "#1f6feb",
-    padding: 12,
+    backgroundColor: "#fff",
+    padding: 8,
     alignItems: "center",
     borderRadius: 4,
+    borderWidth: 1,
+    borderColor: "#1f6feb",
     marginTop: 8,
+    marginHorizontal: 2,
   },
   buttonContainer: {
     flexDirection: "row",
