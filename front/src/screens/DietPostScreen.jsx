@@ -9,6 +9,7 @@ import {
   Keyboard,
   Animated,
   Pressable,
+  Alert,
 } from "react-native";
 import { ButtonGroup } from "react-native-elements";
 import { useNavigation, useRoute } from "@react-navigation/native";
@@ -53,6 +54,11 @@ function DietPostScreen() {
 
   // 음식 검색 화면으로 이동
   const handleSearchFood = (index, foodName) => {
+    if (!foodName) {
+      Alert.alert("알림", "음식명을 입력해주세요.");
+      return;
+    }
+
     navigation.navigate("FoodSearch", {
       index,
       foodName,
