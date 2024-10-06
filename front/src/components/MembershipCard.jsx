@@ -2,6 +2,7 @@ import React from "react";
 import { View, Text, StyleSheet, Pressable } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import Avatar from "./Avatar";
+import { LinearGradient } from "expo-linear-gradient";
 
 function MembershipCard({ membership }) {
   const navigation = useNavigation();
@@ -13,15 +14,19 @@ function MembershipCard({ membership }) {
   };
 
   return (
-    <View style={styles.card}>
-      {/* Status at the top */}
+    <LinearGradient
+      // 그라데이션 색상 설정
+      colors={["#1f6feb", "#4a90e2"]}
+      start={[0, 0]}
+      end={[1, 1]}
+      style={styles.card}
+    >
       <View style={styles.status}>
         <Text style={styles.statusText}>
-          {membership.status === "active" ? "사용중" : "만료됨"}
+          {membership.status === "active" ? "진행중" : "만료됨"}
         </Text>
       </View>
 
-      {/* Trainer's Avatar and Name */}
       <View style={styles.trainerInfo}>
         <Avatar
           source={
@@ -34,7 +39,6 @@ function MembershipCard({ membership }) {
         </Text>
       </View>
 
-      {/* Membership details */}
       <View style={styles.details}>
         <View style={styles.detailItem}>
           <Text style={styles.label}>기간</Text>
@@ -60,17 +64,15 @@ function MembershipCard({ membership }) {
         </View>
       </View>
 
-      {/* Button to navigate to MemberDetail */}
       <Pressable style={styles.button} onPress={onPress}>
         <Text style={styles.buttonText}>커뮤니티로 이동 &gt;</Text>
       </Pressable>
-    </View>
+    </LinearGradient>
   );
 }
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: "#526CC0",
     borderRadius: 8,
     padding: 16,
     margin: 4,
@@ -85,7 +87,7 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
   },
   statusText: {
-    color: "#526CC0",
+    color: "#1f6feb",
     fontWeight: "bold",
   },
   trainerInfo: {
@@ -127,7 +129,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
   },
   buttonText: {
-    color: "#526CC0",
+    color: "#1f6feb",
     fontWeight: "bold",
     fontSize: 16,
   },
