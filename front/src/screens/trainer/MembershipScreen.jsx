@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Pressable, StyleSheet, View, Text, Alert } from "react-native";
+import {
+  Pressable,
+  StyleSheet,
+  View,
+  Text,
+  Alert,
+  ScrollView,
+} from "react-native";
 import { useRoute } from "@react-navigation/native";
 import { getMembership, updateMembership } from "../../lib/memberships";
 import {
@@ -206,33 +213,57 @@ function MembershipScreen() {
       (a, b) => daysOrder.indexOf(a.day) - daysOrder.indexOf(b.day)
     );
 
-    return sortedSchedules?.map((schedule, index) => (
-      <Text key={index} style={styles.itemText}>
-        {schedule.day} {schedule.startTime}
-      </Text>
-    ));
+    return sortedSchedules?.map((schedule, index) => {
+      const [hour, minute] = schedule.startTime.split(":").map(Number);
+
+      // 1시간 더한 종료 시간 계산
+      const endHour = (hour + 1) % 24;
+      const endTime = `${String(endHour).padStart(2, "0")}:${String(
+        minute
+      ).padStart(2, "0")}`;
+
+      return (
+        <View key={index} style={styles.itemRow}>
+          <Text style={styles.itemText}>{schedule.day}</Text>
+          <Text style={styles.itemValue}>
+            {schedule.startTime} ~ {endTime}
+          </Text>
+        </View>
+      );
+    });
   };
 
   return (
     <View style={styles.block}>
-      <View style={styles.item}>
-        <Text style={styles.itemText}>시작일자: {membership?.startDate}</Text>
-      </View>
-      <View style={styles.item}>
-        <Text style={styles.itemText}>종료일자: {membership?.endDate}</Text>
-      </View>
-      <View style={styles.item}>
-        <Text style={styles.itemText}>등록횟수: {membership?.count}</Text>
-      </View>
-      <View style={styles.item}>
-        <Text style={styles.itemText}>잔여횟수: {membership?.remaining}</Text>
-      </View>
-      <View style={styles.item}>
-        <Text style={styles.itemText}>등록요일 및 시간</Text>
-        {showMembershipDays()}
-      </View>
-      <View style={styles.buttons}>
-        {membership?.status !== "expired" ? (
+      <ScrollView>
+        <View>
+          <Text style={styles.sectionTitle}>회원권 정보</Text>
+          <View style={styles.itemRow}>
+            <Text style={styles.itemText}>시작일자</Text>
+            <Text style={styles.itemValue}>{membership?.startDate}</Text>
+          </View>
+          <View style={styles.itemRow}>
+            <Text style={styles.itemText}>종료일자</Text>
+            <Text style={styles.itemValue}>{membership?.endDate}</Text>
+          </View>
+          <View style={styles.itemRow}>
+            <Text style={styles.itemText}>등록횟수</Text>
+            <Text style={styles.itemValue}>{membership?.count}</Text>
+          </View>
+          <View style={styles.itemRow}>
+            <Text style={styles.itemText}>잔여횟수</Text>
+            <Text style={styles.itemValue}>{membership?.remaining}</Text>
+          </View>
+        </View>
+
+        <View>
+          <Text style={styles.sectionTitle}>등록요일 및 시간</Text>
+          {showMembershipDays()}
+        </View>
+      </ScrollView>
+
+      <View style={styles.fixedButtons}>
+        {membership?.status !== "expired" && (
           <Pressable
             style={styles.button}
             android_ripple={{ color: "#ededed" }}
@@ -240,29 +271,29 @@ function MembershipScreen() {
               membership?.status === "active" ? onPressPause : onPressResume
             }
           >
-            <Text>
+            <Text style={styles.buttonText}>
               {membership?.status === "active" ? "일시중지" : "재개하기"}
             </Text>
           </Pressable>
-        ) : null}
-        {membership?.status !== "paused" ? (
+        )}
+        {membership?.status !== "paused" && (
           <Pressable
             style={styles.button}
             android_ripple={{ color: "#ededed" }}
             onPress={onPressExtend}
           >
-            <Text>횟수연장</Text>
+            <Text style={styles.buttonText}>횟수연장</Text>
           </Pressable>
-        ) : null}
-        {membership?.status === "active" ? (
+        )}
+        {membership?.status === "active" && (
           <Pressable
             style={styles.button}
             android_ripple={{ color: "#ededed" }}
             onPress={onPressChange}
           >
-            <Text>요일/시간변경</Text>
+            <Text style={styles.buttonText}>요일/시간변경</Text>
           </Pressable>
-        ) : null}
+        )}
       </View>
 
       <ExtendCountModal
@@ -288,31 +319,55 @@ function MembershipScreen() {
 const styles = StyleSheet.create({
   block: {
     flex: 1,
-    paddingTop: 32,
-  },
-  item: {
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
-    borderColor: "#eeeeee",
     backgroundColor: "white",
-    paddingVertical: 16,
-    paddingHorizontal: 12,
-    marginBottom: 12,
+  },
+  itemRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
     alignItems: "center",
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    marginBottom: 8,
+    backgroundColor: "#F1F5F9",
+    borderRadius: 8,
+    marginHorizontal: 16,
   },
   itemText: {
     fontSize: 16,
-    marginVertical: 8,
+    color: "#2D3748",
+    fontWeight: "bold",
   },
-  buttons: {
+  itemValue: {
+    fontSize: 16,
+    color: "#4A5568",
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#1f6feb",
+    marginVertical: 16,
+    marginLeft: 16,
+  },
+  fixedButtons: {
     flexDirection: "row",
-    alignItems: "flex",
     justifyContent: "space-around",
+    paddingVertical: 16,
+    backgroundColor: "white",
+    borderTopWidth: 1,
+    borderColor: "#e2e8f0",
+    marginHorizontal: 16,
+    gap: 8,
   },
   button: {
-    backgroundColor: "white",
+    backgroundColor: "#1f6feb",
     paddingVertical: 16,
-    paddingHorizontal: 24,
+    borderRadius: 8,
+    alignItems: "center",
+    flex: 1,
+  },
+  buttonText: {
+    color: "#fff",
+    fontSize: 16,
   },
 });
 
