@@ -10,14 +10,16 @@ import {
 } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { v4 } from "uuid";
-import { createPost } from "../lib/posts";
-import { useUserContext } from "../contexts/UserContext";
 import {
   getStorage,
   ref,
   getDownloadURL,
   uploadBytesResumable,
 } from "firebase/storage";
+import { Image, Video } from "react-native-compressor";
+
+import { createPost } from "../lib/posts";
+import { useUserContext } from "../contexts/UserContext";
 import CameraButton from "../components/CameraButton";
 import ProgressBar from "../components/ProgressBar";
 import IconRightButton from "../components/IconRightButton";
@@ -36,30 +38,35 @@ function ExercisePostScreen() {
   const [isUploading, setIsUploading] = useState(false);
 
   // 업로드 중 처리
-  const handleUpload = async (asset, storageRef) => {
-    const post = await fetch(asset.uri);
-    const postBlob = await post.blob();
-    const uploadTask = uploadBytesResumable(storageRef, postBlob);
+  const handleUpload = async (uri, storageRef) => {
+    try {
+      const post = await fetch(uri);
+      const postBlob = await post.blob();
+      const uploadTask = uploadBytesResumable(storageRef, postBlob);
 
-    return new Promise((resolve, reject) => {
-      uploadTask.on(
-        "state_changed",
-        (snapshot) => {
-          const progress =
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          setProgress(progress);
-        },
-        (error) => {
-          console.error(error);
-          setIsUploading(false);
-          reject(error);
-        },
-        async () => {
-          const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-          resolve(downloadURL);
-        }
-      );
-    });
+      return new Promise((resolve, reject) => {
+        uploadTask.on(
+          "state_changed",
+          (snapshot) => {
+            const progress =
+              (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            setProgress(progress);
+          },
+          (error) => {
+            console.error("Upload failed:", error);
+            setIsUploading(false);
+            reject(error);
+          },
+          async () => {
+            const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+            resolve(downloadURL);
+          }
+        );
+      });
+    } catch (error) {
+      console.error("Network request failed:", error);
+      throw new Error("File upload failed due to network issues.");
+    }
   };
 
   // 포스트 생성
@@ -89,7 +96,17 @@ function ExercisePostScreen() {
         getStorage(),
         `/asset/${author.id}/${v4()}.${extension}`
       );
-      URL = await handleUpload(asset, storageRef);
+
+      let compressedUri = null;
+      if (asset.type === "video") {
+        compressedUri = await Video.compress(asset.uri);
+      } else if (asset.type === "image") {
+        compressedUri = await Image.compress(asset.uri);
+      }
+
+      if (compressedUri) {
+        URL = await handleUpload(compressedUri, storageRef);
+      }
     }
 
     await handleCreatePost(URL);

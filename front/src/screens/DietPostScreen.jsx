@@ -21,7 +21,7 @@ import {
   getDownloadURL,
   uploadBytesResumable,
 } from "firebase/storage";
-
+import { Image, Video } from "react-native-compressor";
 import { createPost } from "../lib/posts";
 import { createFoods } from "../lib/foods";
 import { useUserContext } from "../contexts/UserContext";
@@ -105,29 +105,35 @@ function DietPostScreen() {
   };
 
   // 파일 업로드 처리
-  const handleUpload = async (asset, storageRef) => {
-    const post = await fetch(asset.uri);
-    const postBlob = await post.blob();
-    const uploadTask = uploadBytesResumable(storageRef, postBlob);
+  const handleUpload = async (uri, storageRef) => {
+    try {
+      const post = await fetch(uri);
+      const postBlob = await post.blob();
+      const uploadTask = uploadBytesResumable(storageRef, postBlob);
 
-    return new Promise((resolve, reject) => {
-      uploadTask.on(
-        "state_changed",
-        (snapshot) => {
-          const progress =
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          setProgress(progress);
-        },
-        (error) => {
-          setIsUploading(false);
-          reject(error);
-        },
-        async () => {
-          const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
-          resolve(downloadURL);
-        }
-      );
-    });
+      return new Promise((resolve, reject) => {
+        uploadTask.on(
+          "state_changed",
+          (snapshot) => {
+            const progress =
+              (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            setProgress(progress);
+          },
+          (error) => {
+            console.error("Upload failed:", error);
+            setIsUploading(false);
+            reject(error);
+          },
+          async () => {
+            const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
+            resolve(downloadURL);
+          }
+        );
+      });
+    } catch (error) {
+      console.error("Network request failed", error);
+      throw new Error("File upload failed due to network issues.");
+    }
   };
 
   // 게시글 생성 및 업로드
@@ -169,7 +175,17 @@ function DietPostScreen() {
         getStorage(),
         `/asset/${author.id}/${uuidv4()}.${extension}`
       );
-      URL = await handleUpload(asset, storageRef);
+
+      let compressedUri = null;
+      if (asset.type === "video") {
+        compressedUri = await Video.compress(asset.uri);
+      } else if (asset.type === "image") {
+        compressedUri = await Image.compress(asset.uri);
+      }
+
+      if (compressedUri) {
+        URL = await handleUpload(compressedUri, storageRef);
+      }
     }
 
     await handleCreatePost(URL);
