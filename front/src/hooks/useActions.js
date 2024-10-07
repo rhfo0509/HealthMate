@@ -4,12 +4,12 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import { removeComment, removeSubComment } from "../lib/comments";
 import { removeFoods } from "../lib/foods"; // removeFoods import
 
-export default function useActions({ id, content, postId, parentId }) {
+export default function useActions({ id, content, postId, parentId, foods }) {
   const { showActionSheetWithOptions } = useActionSheet();
   const navigation = useNavigation();
 
   const edit = () => {
-    navigation.navigate("Modify", { id, content, postId, parentId });
+    navigation.navigate("Modify", { id, content, postId, parentId, foods });
   };
 
   const remove = async () => {

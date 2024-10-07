@@ -13,8 +13,8 @@ import { useRoute, useNavigation } from "@react-navigation/native";
 const FoodSearchScreen = () => {
   const route = useRoute();
   const navigation = useNavigation();
-  const { index, foodName, postType, relatedUserId, result } = route.params;
-
+  const { index, foodName, postType, relatedUserId, result, postId } =
+    route.params;
   const [loading, setLoading] = useState(true);
   const [foods, setFoods] = useState([]);
   const [startIndex, setStartIndex] = useState(0);
@@ -94,13 +94,21 @@ const FoodSearchScreen = () => {
         ).toFixed(2),
       };
 
-      navigation.navigate("DietPost", {
-        selectedFood: selectedFoodData,
-        index,
-        postType,
-        relatedUserId,
-        result,
-      });
+      if (postId) {
+        navigation.navigate("Modify", {
+          selectedFood: selectedFoodData,
+          index,
+          id: postId,
+        });
+      } else {
+        navigation.navigate("DietPost", {
+          selectedFood: selectedFoodData,
+          index,
+          postType,
+          relatedUserId,
+          result,
+        });
+      }
     }
   };
 

@@ -7,6 +7,7 @@ import {
   addDoc,
   deleteDoc,
   serverTimestamp,
+  updateDoc,
 } from "firebase/firestore";
 import { initFirebase } from "../../firebaseConfig";
 
@@ -34,6 +35,17 @@ export async function removeFoods(postId) {
   if (!snapshot.empty) {
     const doc = snapshot.docs[0];
     await deleteDoc(doc.ref);
+  }
+}
+
+// 특정 postId에 해당하는 foods 문서를 업데이트하는 함수
+export async function updateFoods(postId, foods) {
+  const q = query(foodsCollection, where("postId", "==", postId));
+  const snapshot = await getDocs(q);
+
+  if (!snapshot.empty) {
+    const doc = snapshot.docs[0];
+    await updateDoc(doc.ref, { foods });
   }
 }
 

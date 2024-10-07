@@ -7,7 +7,6 @@ import {
   Pressable,
   ActivityIndicator,
   Modal,
-  useWindowDimensions,
 } from "react-native";
 import Avatar from "./Avatar";
 import { useNavigation } from "@react-navigation/native";
@@ -21,7 +20,6 @@ import FoodItem from "./FoodItem";
 
 function PostCard({ author, URL, content, createdAt, id, isDetailMode }) {
   const navigation = useNavigation();
-  const { width } = useWindowDimensions();
   const date = useMemo(
     () =>
       createdAt ? new Date(createdAt.seconds * 1000).toLocaleString() : "",
@@ -62,18 +60,16 @@ function PostCard({ author, URL, content, createdAt, id, isDetailMode }) {
 
   useEffect(() => {
     const fetchFoods = async () => {
-      if (isDetailMode) {
-        try {
-          const foodDocs = await getFoods(id);
-          if (foodDocs.length > 0) {
-            setFoods(foodDocs[0].foods || []);
-          } else {
-            setFoods([]);
-          }
-        } catch (error) {
-          console.error("Error fetching foods:", error);
+      try {
+        const foodDocs = await getFoods(id);
+        if (foodDocs.length > 0) {
+          setFoods(foodDocs[0].foods || []);
+        } else {
           setFoods([]);
         }
+      } catch (error) {
+        console.error("Error fetching foods:", error);
+        setFoods([]);
       }
     };
 

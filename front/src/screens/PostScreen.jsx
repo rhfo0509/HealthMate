@@ -11,17 +11,20 @@ import {
   query,
   onSnapshot,
   orderBy,
+  doc,
 } from "firebase/firestore";
 import { getComments } from "../lib/comments";
 
 function PostScreen() {
   const route = useRoute();
   const navigation = useNavigation();
+  const firestore = getFirestore();
+
+  const { author, URL, content: initialContent, createdAt, id } = route.params;
+  const commentsCollection = collection(firestore, `posts/${id}/comments`);
 
   const [comments, setComments] = useState([]);
-  const { author, URL, content, createdAt, id } = route.params;
-  const firestore = getFirestore();
-  const commentsCollection = collection(firestore, `posts/${id}/comments`);
+  const [content, setContent] = useState(initialContent);
 
   // comments 컬렉션에 변화 발생시
   useEffect(() => {
@@ -37,6 +40,19 @@ function PostScreen() {
       unsubscribe();
     };
   }, []);
+
+  // posts 컬렉션에 변화 발생시
+  useEffect(() => {
+    const unsubscribe = onSnapshot(doc(firestore, "posts", id), (doc) => {
+      if (doc.exists()) {
+        const data = doc.data();
+        setContent(data.content);
+      }
+    });
+    return () => {
+      unsubscribe();
+    };
+  }, [content]);
 
   useEffect(() => {
     getComments(id).then(setComments);

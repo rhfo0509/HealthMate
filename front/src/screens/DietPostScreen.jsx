@@ -236,7 +236,7 @@ function DietPostScreen() {
 
   return (
     <View style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollContent}>
+      <ScrollView>
         <ButtonGroup
           onPress={setSelectedIndex}
           selectedIndex={selectedIndex}
@@ -269,7 +269,7 @@ function DietPostScreen() {
         ))}
 
         <Pressable style={styles.addButton} onPress={addFood}>
-          <MaterialIcons name="add-circle-outline" size={24} color="blue" />
+          <MaterialIcons name="add-circle-outline" size={24} color="#1f6feb" />
           <Text style={styles.addText}>음식 추가</Text>
         </Pressable>
 
@@ -302,7 +302,8 @@ const styles = StyleSheet.create({
   addText: {
     marginLeft: 5,
     color: "#1f6feb",
-    fontSize: 15,
+    fontSize: 16,
+    marginTop: 1,
   },
   uploadingContainer: {
     flex: 1,
