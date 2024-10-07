@@ -13,7 +13,10 @@
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "runtimeVersion": {
+        "policy": "appVersion"
+      }
     },
     "android": {
       "googleServicesFile": "./google-services.json",
@@ -21,7 +24,8 @@
         "foregroundImage": "./src/assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.rhfo0509.HealthMate"
+      "package": "com.rhfo0509.HealthMate",
+      "runtimeVersion": "1.0.0"
     },
     "web": {
       "favicon": "./src/assets/favicon.png"
@@ -29,7 +33,16 @@
     "plugins": [
       "@react-native-firebase/app",
       "@react-native-firebase/auth",
-      "expo-video"
-    ]
+      "expo-video",
+      "react-native-compressor"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "59074ce7-d5e8-407c-8e38-584c7c3f29ff"
+      }
+    },
+    "updates": {
+      "url": "https://u.expo.dev/59074ce7-d5e8-407c-8e38-584c7c3f29ff"
+    }
   }
 }
