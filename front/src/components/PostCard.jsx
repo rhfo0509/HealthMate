@@ -5,8 +5,9 @@ import {
   Text,
   Image,
   Pressable,
-  Modal,
   ActivityIndicator,
+  Modal,
+  useWindowDimensions,
 } from "react-native";
 import Avatar from "./Avatar";
 import { useNavigation } from "@react-navigation/native";
@@ -15,10 +16,12 @@ import { MaterialIcons } from "@expo/vector-icons";
 import useActions from "../hooks/useActions";
 import VideoView from "./VideoView";
 import { getRole } from "../lib/users";
-import { getFoods } from "../lib/foods"; // getFoods 함수 임포트
+import { getFoods } from "../lib/foods";
+import FoodItem from "./FoodItem";
 
 function PostCard({ author, URL, content, createdAt, id, isDetailMode }) {
   const navigation = useNavigation();
+  const { width } = useWindowDimensions();
   const date = useMemo(
     () =>
       createdAt ? new Date(createdAt.seconds * 1000).toLocaleString() : "",
@@ -29,7 +32,7 @@ function PostCard({ author, URL, content, createdAt, id, isDetailMode }) {
   const [role, setRole] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [show, setShow] = useState(false);
-  const [foods, setFoods] = useState([]); // foods 상태 추가
+  const [foods, setFoods] = useState([]);
 
   const onPressPost = () => {
     navigation.navigate("Post", {
@@ -42,7 +45,7 @@ function PostCard({ author, URL, content, createdAt, id, isDetailMode }) {
     });
   };
 
-  const { onPressMore } = useActions({ id, content });
+  const { onPressMore } = useActions({ id, content, foods });
 
   const isVideo = (URL) => /\.(mp4|mov|avi)/i.test(URL);
 
@@ -57,16 +60,15 @@ function PostCard({ author, URL, content, createdAt, id, isDetailMode }) {
     fetchRole();
   }, [author.id]);
 
-  // foods 데이터를 가져오는 useEffect 추가
   useEffect(() => {
     const fetchFoods = async () => {
       if (isDetailMode) {
         try {
-          const foodDocs = await getFoods(id); // postId를 기준으로 foods 가져오기
+          const foodDocs = await getFoods(id);
           if (foodDocs.length > 0) {
-            setFoods(foodDocs[0].foods || []); // 가져온 데이터에서 foods 배열 설정
+            setFoods(foodDocs[0].foods || []);
           } else {
-            setFoods([]); // 데이터가 없는 경우 빈 배열 설정
+            setFoods([]);
           }
         } catch (error) {
           console.error("Error fetching foods:", error);
@@ -100,6 +102,7 @@ function PostCard({ author, URL, content, createdAt, id, isDetailMode }) {
           </Pressable>
         )}
       </View>
+
       <Pressable
         style={[
           styles.contentContainer,
@@ -115,10 +118,9 @@ function PostCard({ author, URL, content, createdAt, id, isDetailMode }) {
             <Pressable onPress={() => setShow(true)} disabled={!isDetailMode}>
               <Image
                 source={{ uri: URL }}
-                style={[
-                  styles.media,
-                  isDetailMode && { width: "100%", aspectRatio: 16 / 9 },
-                ]}
+                resizeMethod="resize"
+                resizeMode="contain"
+                style={[styles.media, isDetailMode && { width: "100%" }]}
               />
             </Pressable>
             <Modal
@@ -145,32 +147,17 @@ function PostCard({ author, URL, content, createdAt, id, isDetailMode }) {
           >
             {content}
           </Text>
-          {isDetailMode &&
-            foods.length > 0 && ( // foods가 있을 때만 표시
-              <View style={styles.foodsContainer}>
-                {foods.map((food, index) => (
-                  <View key={food.id || index} style={styles.foodItem}>
-                    <Text style={styles.foodName}>{food.name}</Text>
-                    <View style={styles.nutritionRow}>
-                      <Text style={[styles.nutrient, styles.calories]}>
-                        칼 {parseFloat(food.calories).toFixed(2)}
-                      </Text>
-                      <Text style={[styles.nutrient, styles.carbs]}>
-                        탄 {parseFloat(food.carbs).toFixed(2)}
-                      </Text>
-                      <Text style={[styles.nutrient, styles.protein]}>
-                        단 {parseFloat(food.protein).toFixed(2)}
-                      </Text>
-                      <Text style={[styles.nutrient, styles.fat]}>
-                        지 {parseFloat(food.fat).toFixed(2)}
-                      </Text>
-                    </View>
-                  </View>
-                ))}
-              </View>
-            )}
+
+          {isDetailMode && foods.length > 0 && (
+            <View style={styles.foodsContainer}>
+              {foods.map((food, index) => (
+                <FoodItem key={index} food={food} />
+              ))}
+            </View>
+          )}
         </View>
       </Pressable>
+
       <View style={styles.footer}>
         <Text style={styles.date}>{date}</Text>
       </View>
@@ -217,12 +204,12 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   media: {
+    alignSelf: "center",
     width: 180,
     height: 180,
     marginLeft: 16,
     borderRadius: 10,
     marginBottom: 16,
-    backgroundColor: "#f0f0f0",
   },
   textContainer: {
     flex: 1,
@@ -249,41 +236,6 @@ const styles = StyleSheet.create({
     padding: 10,
     backgroundColor: "#f9f9f9",
     borderRadius: 8,
-  },
-  foodItem: {
-    marginBottom: 8,
-    borderBottomWidth: 1,
-    borderBottomColor: "#e0e0e0",
-    paddingBottom: 8,
-  },
-  foodName: {
-    fontSize: 14,
-    fontWeight: "500",
-    color: "#333",
-  },
-  nutritionRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginTop: 4,
-  },
-  nutrient: {
-    marginRight: 6,
-    paddingHorizontal: 4,
-    borderRadius: 4,
-    fontSize: 14,
-    color: "#fff",
-  },
-  calories: {
-    backgroundColor: "#ffab91",
-  },
-  carbs: {
-    backgroundColor: "#81d4fa",
-  },
-  protein: {
-    backgroundColor: "#aed581",
-  },
-  fat: {
-    backgroundColor: "#ffcc80",
   },
 });
 

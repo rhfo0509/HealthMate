@@ -12,8 +12,8 @@ function VideoView({ URL, isDetailMode }) {
       ref={video}
       style={{
         alignSelf: "center",
-        width: isDetailMode ? width : 180, // isDetailMode에 따른 스타일 지정
-        height: isDetailMode ? (width / 16) * 9 : 180, // 이미지 스타일 동일하게
+        width: isDetailMode ? width - 16 : 180,
+        height: isDetailMode ? (width / 16) * 9 : 180,
         marginLeft: isDetailMode ? 0 : 16,
         marginBottom: 16,
       }}
