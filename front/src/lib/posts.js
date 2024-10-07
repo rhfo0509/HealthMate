@@ -63,8 +63,6 @@ export async function removePost(id) {
   await deleteDoc(doc(postsCollection, id));
 }
 
-export async function updatePost({ id, content }) {
-  await updateDoc(doc(postsCollection, id), {
-    content,
-  });
+export async function updatePost(id, data) {
+  await updateDoc(doc(postsCollection, id), data);
 }

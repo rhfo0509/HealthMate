@@ -13,10 +13,7 @@ function ModifyScreen() {
 
   const onSubmit = useCallback(() => {
     if (!params.postId) {
-      updatePost({
-        id: params.id,
-        content,
-      });
+      updatePost(params.id, { content });
     } else if (params.parentId) {
       updateSubComment({
         postId: params.postId,
