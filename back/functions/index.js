@@ -14,7 +14,7 @@ exports.cleanup = onSchedule("every day 15:00", async (event) => {
 
     // 오늘 이전의 스케줄만 가져옴
     const schedulesSnapshot = await schedulesRef
-      .where("date", "<", today)
+      .where("date", "<=", today)
       .get();
 
     const batch = admin.firestore().batch();
