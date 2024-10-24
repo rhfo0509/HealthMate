@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { useNavigation } from "@react-navigation/native";
 import { Pressable, Text } from "react-native";
-import CalendarView from "../../components/CalendarView";
-import { useUserContext } from "../../contexts/UserContext";
+import { useNavigation } from "@react-navigation/native";
 import { format } from "date-fns";
-import ScheduleList from "../../components/ScheduleList";
 import {
   getFirestore,
   collection,
@@ -12,25 +9,26 @@ import {
   where,
   onSnapshot,
 } from "firebase/firestore";
-import { getTrainerSchedules } from "../../lib/schedules";
-import IconRightButton from "../../components/IconRightButton";
+
+import { useUserContext } from "../contexts/UserContext";
+import { getTrainerSchedules } from "../lib/schedules";
+import IconRightButton from "../components/IconRightButton";
+import CalendarView from "../components/CalendarView";
+import ScheduleList from "../components/ScheduleList";
 
 function CalendarScreen() {
   const navigation = useNavigation();
   const { user } = useUserContext();
-  const firestore = getFirestore();
-  const schedulesCollection = collection(firestore, "schedules");
   const [scheduleList, setScheduleList] = useState([]);
   const [selectedDate, setSelectedDate] = useState(
     format(new Date(), "yyyy-MM-dd")
   );
 
-  // 최초로 CalendarScreen 접근 시
-  useEffect(() => {
-    getTrainerSchedules(user.id).then(setScheduleList);
-  }, []);
+  const firestore = getFirestore();
+  const schedulesCollection = collection(firestore, "schedules");
 
-  // schedules 컬렉션에 변화 발생시
+  // 최초 화면 접근 시 로그인한 트레이너의 일정을 받아오고
+  // 이후 schedules 컬렉션에 변화 발생시 실행
   useEffect(() => {
     const q = query(schedulesCollection, where("trainerId", "==", user.id));
     const unsubscribe = onSnapshot(q, (snapshot) => {

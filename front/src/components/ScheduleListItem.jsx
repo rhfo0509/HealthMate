@@ -113,7 +113,7 @@ function ScheduleListItem({ schedule }) {
   };
 
   return (
-    <View style={styles.block}>
+    <View style={styles.container}>
       <View style={styles.leftContainer}>
         <Avatar
           source={member?.photoURL && { uri: member?.photoURL }}
@@ -150,7 +150,7 @@ function ScheduleListItem({ schedule }) {
 }
 
 const styles = StyleSheet.create({
-  block: {
+  container: {
     backgroundColor: "#fff",
     flexDirection: "row",
     alignItems: "center",

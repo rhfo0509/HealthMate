@@ -42,7 +42,7 @@ function NotifyScreen() {
   }, []);
 
   return (
-    <View style={styles.block}>
+    <View style={styles.container}>
       <FlatList
         inverted
         data={notifications}
@@ -67,7 +67,7 @@ const renderItem = ({ item }) => (
 );
 
 const styles = StyleSheet.create({
-  block: {
+  container: {
     flex: 1,
   },
   separator: {

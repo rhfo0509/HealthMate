@@ -8,11 +8,11 @@ import {
   ScrollView,
 } from "react-native";
 import { useRoute } from "@react-navigation/native";
-import { getMembership, updateMembership } from "../../lib/memberships";
+import { getMembership, updateMembership } from "../lib/memberships";
 import {
   createSchedulesWithMembership,
   removeSchedulesWithMember,
-} from "../../lib/schedules";
+} from "../lib/schedules";
 import { addDays, format, max } from "date-fns";
 import {
   getFirestore,
@@ -21,8 +21,8 @@ import {
   where,
   onSnapshot,
 } from "firebase/firestore";
-import ExtendCountModal from "../../components/ExtendCountModal";
-import ChangeScheduleModal from "../../components/ChangeScheduleModal";
+import ExtendCountModal from "../components/ExtendCountModal";
+import ChangeScheduleModal from "../components/ChangeScheduleModal";
 
 function MembershipScreen() {
   const [showFirst, setShowFirst] = useState(false);
@@ -234,7 +234,7 @@ function MembershipScreen() {
   };
 
   return (
-    <View style={styles.block}>
+    <View style={styles.container}>
       <ScrollView>
         <View>
           <Text style={styles.sectionTitle}>회원권 정보</Text>
@@ -317,7 +317,7 @@ function MembershipScreen() {
 }
 
 const styles = StyleSheet.create({
-  block: {
+  container: {
     flex: 1,
     backgroundColor: "white",
   },

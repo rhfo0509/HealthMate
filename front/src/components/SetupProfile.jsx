@@ -92,7 +92,7 @@ function SetupProfile() {
   };
 
   return (
-    <View style={styles.block}>
+    <View style={styles.container}>
       <Pressable onPress={onSelectImage}>
         <Avatar
           source={response && { uri: response.assets[0].uri }}
@@ -223,7 +223,7 @@ function SetupProfile() {
 }
 
 const styles = StyleSheet.create({
-  block: {
+  container: {
     alignItems: "center",
     marginTop: 24,
     paddingHorizontal: 16,

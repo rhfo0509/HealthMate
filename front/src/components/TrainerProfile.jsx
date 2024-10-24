@@ -82,7 +82,7 @@ function TrainerProfile({ user }) {
   }, [user.id]);
 
   return (
-    <View style={styles.block}>
+    <View style={styles.container}>
       <MemberList
         ListHeaderComponent={
           <>
@@ -128,7 +128,7 @@ function TrainerProfile({ user }) {
 }
 
 const styles = StyleSheet.create({
-  block: {
+  container: {
     flex: 1,
   },
   userInfo: {

@@ -32,7 +32,7 @@ function CommentScreen() {
   }, [navigation, onSubmit]);
 
   return (
-    <View style={styles.block}>
+    <View style={styles.container}>
       <TextInput
         style={styles.input}
         multiline={true}
@@ -46,7 +46,7 @@ function CommentScreen() {
 }
 
 const styles = StyleSheet.create({
-  block: {
+  container: {
     flex: 1,
   },
   input: {

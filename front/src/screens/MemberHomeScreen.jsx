@@ -2,18 +2,17 @@ import React, { useState, useEffect } from "react";
 import { Pressable, StyleSheet, View, Text, Modal, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
-import { MaterialIcons } from "@expo/vector-icons";
-import { useUserContext } from "../../contexts/UserContext";
-import Avatar from "../../components/Avatar";
-import { getMemberSchedules } from "../../lib/schedules";
-import { getMembership } from "../../lib/memberships";
+import { useUserContext } from "../contexts/UserContext";
+import Avatar from "../components/Avatar";
+import { getMemberSchedules } from "../lib/schedules";
+import { getMembership } from "../lib/memberships";
 import { format, isAfter } from "date-fns";
 import { ko } from "date-fns/locale";
-import { getUser } from "../../lib/users";
-import IconRightButton from "../../components/IconRightButton";
+import { getUser } from "../lib/users";
+import IconRightButton from "../components/IconRightButton";
 import { TextInput } from "react-native";
-import { createNotification } from "../../lib/notifications";
-import MembershipCard from "../../components/MembershipCard";
+import { createNotification } from "../lib/notifications";
+import MembershipCard from "../components/MembershipCard";
 
 function MemberHomeScreen() {
   const navigation = useNavigation();
@@ -206,7 +205,7 @@ function MemberHomeScreen() {
   }
 
   return (
-    <View style={styles.block}>
+    <View style={styles.container}>
       <View style={styles.title}>
         <Text style={styles.titleText}>나의 회원권</Text>
       </View>
@@ -398,7 +397,7 @@ function MemberHomeScreen() {
 }
 
 const styles = StyleSheet.create({
-  block: {
+  container: {
     flex: 1,
     justifyContent: "space-between",
     backgroundColor: "white",

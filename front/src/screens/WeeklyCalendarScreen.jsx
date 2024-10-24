@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, Pressable, StyleSheet, ScrollView } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { useUserContext } from "../../contexts/UserContext";
+import { useUserContext } from "../contexts/UserContext";
 import {
   getFirestore,
   collection,
@@ -9,8 +9,8 @@ import {
   where,
   onSnapshot,
 } from "firebase/firestore";
-import { getTrainerSchedules } from "../../lib/schedules";
-import { getMembersByTrainer } from "../../lib/users";
+import { getTrainerSchedules } from "../lib/schedules";
+import { getMembersByTrainer } from "../lib/users";
 import { startOfWeek, endOfWeek, format, addDays } from "date-fns";
 import { ko } from "date-fns/locale";
 

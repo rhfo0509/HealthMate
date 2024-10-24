@@ -18,7 +18,7 @@ function SettingScreen() {
   };
 
   return (
-    <View style={styles.block}>
+    <View style={styles.container}>
       <Pressable onPress={onEditProfile} style={styles.item}>
         <Text style={styles.itemText}>회원정보 수정</Text>
       </Pressable>
@@ -30,7 +30,7 @@ function SettingScreen() {
 }
 
 const styles = StyleSheet.create({
-  block: {
+  container: {
     flex: 1,
     paddingTop: 32,
   },

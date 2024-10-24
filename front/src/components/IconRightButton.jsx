@@ -4,7 +4,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 
 function IconRightButton({ name, color = "#1f6feb", onPress }) {
   return (
-    <View style={styles.block}>
+    <View style={styles.container}>
       <Pressable
         style={styles.circle}
         onPress={onPress}
@@ -17,7 +17,7 @@ function IconRightButton({ name, color = "#1f6feb", onPress }) {
 }
 
 const styles = StyleSheet.create({
-  block: {
+  container: {
     borderRadius: 24,
     overflow: "hidden",
   },

@@ -3,7 +3,6 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 import { differenceInYears, parse } from "date-fns";
 import { useNavigation } from "@react-navigation/native";
 import Avatar from "./Avatar";
-import { getRole } from "../lib/users";
 
 function MemberListItem({ member }) {
   const {
@@ -17,19 +16,11 @@ function MemberListItem({ member }) {
     remaining,
   } = member;
   const navigation = useNavigation();
-  const [role, setRole] = useState("");
-
-  useEffect(() => {
-    (async () => {
-      const result = await getRole(member.id);
-      setRole(result);
-    })();
-  }, []);
 
   const onPress = () => {
     navigation.navigate("MemberDetail", {
       relatedUser: member,
-      role,
+      role: "trainer",
     });
   };
 
@@ -44,7 +35,7 @@ function MemberListItem({ member }) {
 
   return (
     <Pressable
-      style={styles.block}
+      style={styles.container}
       android_ripple={{ color: "#ededed" }}
       onPress={onPress}
     >
@@ -71,7 +62,7 @@ function MemberListItem({ member }) {
 }
 
 const styles = StyleSheet.create({
-  block: {
+  container: {
     backgroundColor: "white",
     padding: 16,
     borderRadius: 12,

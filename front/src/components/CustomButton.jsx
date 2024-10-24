@@ -4,7 +4,7 @@ import { StyleSheet, View, Pressable, Text, Platform } from "react-native";
 function CustomButton({ onPress, title, hasMarginBottom, theme = "primary" }) {
   const isPrimary = theme === "primary";
   return (
-    <View style={[styles.block, hasMarginBottom && styles.margin]}>
+    <View style={[styles.container, hasMarginBottom && styles.margin]}>
       <Pressable
         onPress={onPress}
         style={({ pressed }) => [

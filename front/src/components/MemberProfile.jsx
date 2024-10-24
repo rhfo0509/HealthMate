@@ -78,7 +78,7 @@ function MemberProfile({ user }) {
   };
 
   return (
-    <View style={styles.block}>
+    <View style={styles.container}>
       <View style={styles.userInfo}>
         <Avatar source={user.photoURL && { uri: user.photoURL }} size={64} />
         <Text style={styles.username}>
@@ -137,7 +137,7 @@ function MemberProfile({ user }) {
 }
 
 const styles = StyleSheet.create({
-  block: {
+  container: {
     flex: 1,
     backgroundColor: "white",
   },

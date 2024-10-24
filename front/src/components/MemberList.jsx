@@ -32,7 +32,7 @@ function MemberList({ members, memberships, ListHeaderComponent }) {
   return (
     <SwipeableFlatList
       data={membersWithStatus}
-      style={styles.block}
+      style={styles.container}
       renderItem={({ item }) => <MemberListItem member={item} />}
       keyExtractor={(member) => member.id}
       ListHeaderComponent={ListHeaderComponent}
@@ -77,7 +77,7 @@ function MemberList({ members, memberships, ListHeaderComponent }) {
 }
 
 const styles = StyleSheet.create({
-  block: { flex: 1 },
+  container: { flex: 1 },
 });
 
 export default MemberList;

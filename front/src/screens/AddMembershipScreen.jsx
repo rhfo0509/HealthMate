@@ -15,12 +15,12 @@ import {
   addMemberToTrainer,
   getMember,
   getMembersByTrainer,
-} from "../../lib/users";
-import { createMembership, getMembership } from "../../lib/memberships";
-import { useUserContext } from "../../contexts/UserContext";
-import BorderedInput from "../../components/BorderedInput";
-import IconRightButton from "../../components/IconRightButton";
-import { createSchedulesWithMembership } from "../../lib/schedules";
+} from "../lib/users";
+import { createMembership, getMembership } from "../lib/memberships";
+import { useUserContext } from "../contexts/UserContext";
+import BorderedInput from "../components/BorderedInput";
+import IconRightButton from "../components/IconRightButton";
+import { createSchedulesWithMembership } from "../lib/schedules";
 
 function AddMembershipScreen() {
   const navigation = useNavigation();

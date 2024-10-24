@@ -1,28 +1,29 @@
 import React, { useEffect, useState } from "react";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { ActivityIndicator, View, StyleSheet } from "react-native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+
 import { useUserContext } from "../contexts/UserContext";
 import { getUser } from "../lib/users";
 import { subscribeAuth } from "../lib/auth";
-import MainTab from "./MainTab";
 
 // Screens
-import SignInScreen from "../screens/SignInScreen";
-import WelcomeScreen from "../screens/WelcomeScreen";
+import MainTab from "./MainTab";
 import DietPostScreen from "../screens/DietPostScreen";
 import ExercisePostScreen from "../screens/ExercisePostScreen";
 import RoutineScreen from "../screens/RoutineScreen";
+import PostScreen from "../screens/PostScreen";
+import ModifyScreen from "../screens/ModifyScreen";
+import CommentScreen from "../screens/CommentScreen";
+import FoodSearchScreen from "../screens/FoodSearchScreen";
 import ExerciseSearchScreen from "../screens/ExerciseSearchScreen";
 import MyRoutineScreen from "../screens/MyRoutineScreen";
-import FoodSearchScreen from "../screens/FoodSearchScreen";
-import CommentScreen from "../screens/CommentScreen";
-import ModifyScreen from "../screens/ModifyScreen";
-import SettingScreen from "../screens/SettingScreen";
-import PostScreen from "../screens/PostScreen";
-import AddMembershipScreen from "../screens/trainer/AddMembershipScreen";
-import MembershipScreen from "../screens/trainer/MembershipScreen";
 import NotifyScreen from "../screens/NotifyScreen";
+import AddMembershipScreen from "../screens/AddMembershipScreen";
+import MembershipScreen from "../screens/MembershipScreen";
+import SettingScreen from "../screens/SettingScreen";
 import EditProfileScreen from "../screens/EditProfileScreen";
+import SignInScreen from "../screens/SignInScreen";
+import WelcomeScreen from "../screens/WelcomeScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -30,6 +31,7 @@ function Root() {
   const { user, setUser } = useUserContext();
   const [loading, setLoading] = useState(true);
 
+  // 앱을 재시작해도 로그인한 상태를 유지
   useEffect(() => {
     const unsubscribe = subscribeAuth(async (currentUser) => {
       if (currentUser) {
@@ -43,7 +45,7 @@ function Root() {
 
   if (loading) {
     return (
-      <View style={styles.loader}>
+      <View style={styles.loading}>
         <ActivityIndicator size="large" color="#1f6feb" />
       </View>
     );
@@ -75,24 +77,9 @@ function Root() {
             options={{ title: "오늘의 운동루틴" }}
           />
           <Stack.Screen
-            name="MyRoutine"
-            component={MyRoutineScreen}
-            options={{ title: "나의 루틴" }}
-          />
-          <Stack.Screen
-            name="ExerciseSearch"
-            component={ExerciseSearchScreen}
-            options={{ title: "검색 결과" }}
-          />
-          <Stack.Screen
-            name="FoodSearch"
-            component={FoodSearchScreen}
-            options={{ title: "검색 결과" }}
-          />
-          <Stack.Screen
-            name="Comment"
-            component={CommentScreen}
-            options={{ title: "댓글 작성" }}
+            name="Post"
+            component={PostScreen}
+            options={{ title: "게시글" }}
           />
           <Stack.Screen
             name="Modify"
@@ -100,19 +87,29 @@ function Root() {
             options={{ title: "수정" }}
           />
           <Stack.Screen
-            name="Setting"
-            component={SettingScreen}
-            options={{ title: "설정" }}
+            name="Comment"
+            component={CommentScreen}
+            options={{ title: "댓글 작성" }}
           />
           <Stack.Screen
-            name="EditProfile"
-            component={EditProfileScreen}
-            options={{ title: "회원정보 수정" }}
+            name="FoodSearch"
+            component={FoodSearchScreen}
+            options={{ title: "음식 검색 결과" }}
           />
           <Stack.Screen
-            name="Post"
-            component={PostScreen}
-            options={{ title: "게시글" }}
+            name="ExerciseSearch"
+            component={ExerciseSearchScreen}
+            options={{ title: "운동 검색 결과" }}
+          />
+          <Stack.Screen
+            name="MyRoutine"
+            component={MyRoutineScreen}
+            options={{ title: "나의 루틴" }}
+          />
+          <Stack.Screen
+            name="Notify"
+            component={NotifyScreen}
+            options={{ title: "알림" }}
           />
           <Stack.Screen
             name="AddMembership"
@@ -125,9 +122,14 @@ function Root() {
             options={{ title: "회원권 관리" }}
           />
           <Stack.Screen
-            name="Notify"
-            component={NotifyScreen}
-            options={{ title: "알림" }}
+            name="Setting"
+            component={SettingScreen}
+            options={{ title: "설정" }}
+          />
+          <Stack.Screen
+            name="EditProfile"
+            component={EditProfileScreen}
+            options={{ title: "회원정보 수정" }}
           />
         </>
       ) : (
@@ -150,7 +152,7 @@ function Root() {
 }
 
 const styles = StyleSheet.create({
-  loader: {
+  loading: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",

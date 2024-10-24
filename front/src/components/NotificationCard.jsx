@@ -82,7 +82,7 @@ function NotificationCard({
   };
 
   return (
-    <View style={styles.block}>
+    <View style={styles.container}>
       <View style={styles.messageContainer}>
         <Text style={styles.messageText}>{`${message}`}</Text>
 
@@ -125,7 +125,7 @@ function NotificationCard({
 }
 
 const styles = StyleSheet.create({
-  block: {
+  container: {
     flex: 1,
     padding: 16,
     backgroundColor: "#ffffff",

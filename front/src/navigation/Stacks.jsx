@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { useUserContext } from "../contexts/UserContext";
 import { ActivityIndicator, View, StyleSheet } from "react-native";
-import CalendarScreen from "../screens/trainer/CalendarScreen";
-import WeeklyCalendarScreen from "../screens/trainer/WeeklyCalendarScreen";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+
+import { useUserContext } from "../contexts/UserContext";
 import { getRole } from "../lib/users";
-import MemberHomeScreen from "../screens/member/MemberHomeScreen";
-import MyProfileScreen from "../screens/MyProfileScreen";
+
 import MemberDetailTab from "./MemberDetailTab";
+import CalendarScreen from "../screens/CalendarScreen";
+import WeeklyCalendarScreen from "../screens/WeeklyCalendarScreen";
+import MyProfileScreen from "../screens/MyProfileScreen";
+import MemberHomeScreen from "../screens/MemberHomeScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -16,6 +18,7 @@ function HomeStack() {
   const [role, setRole] = useState("");
   const [isLoading, setIsLoading] = useState(true);
 
+  // user의 role(member/trainer) 확인 후 서로 다른 화면 제공
   useEffect(() => {
     (async () => {
       try {
@@ -31,7 +34,7 @@ function HomeStack() {
 
   if (isLoading) {
     return (
-      <View style={styles.loader}>
+      <View style={styles.loading}>
         <ActivityIndicator size="large" color="#1f6feb" />
       </View>
     );
@@ -68,7 +71,7 @@ function MyProfileStack() {
 }
 
 const styles = StyleSheet.create({
-  loader: {
+  loading: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",

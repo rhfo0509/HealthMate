@@ -22,7 +22,7 @@ function ScheduleList({ schedules, ListHeaderComponent }) {
     <>
       <SwipeableFlatList
         data={schedules}
-        style={styles.block}
+        style={styles.container}
         renderItem={({ item }) => <ScheduleListItem schedule={item} />}
         keyExtractor={(schedule) => schedule.id}
         ListHeaderComponent={ListHeaderComponent}
@@ -67,7 +67,7 @@ function ScheduleList({ schedules, ListHeaderComponent }) {
 }
 
 const styles = StyleSheet.create({
-  block: { flex: 1 },
+  container: { flex: 1 },
 });
 
 export default ScheduleList;

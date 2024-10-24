@@ -10,6 +10,7 @@ function MembershipCard({ membership }) {
   const onPress = () => {
     navigation.navigate("MemberDetail", {
       relatedUser: membership.trainer,
+      role: "member",
     });
   };
 

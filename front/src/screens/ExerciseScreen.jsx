@@ -85,14 +85,14 @@ function ExerciseScreen() {
 
   if (isLoading) {
     return (
-      <View style={styles.loader}>
+      <View style={styles.loading}>
         <ActivityIndicator size="large" color="#1f6feb" />
       </View>
     );
   }
 
   return (
-    <View style={styles.block}>
+    <View style={styles.container}>
       <CalendarHeader
         markedDates={markedDates}
         selectedDate={selectedDate}
@@ -128,11 +128,11 @@ const renderItem = ({ item }) => (
 );
 
 const styles = StyleSheet.create({
-  block: {
+  container: {
     flex: 1,
     backgroundColor: "#fff",
   },
-  loader: {
+  loading: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",

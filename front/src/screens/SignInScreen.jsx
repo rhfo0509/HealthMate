@@ -1,13 +1,21 @@
 import React, { useState } from "react";
-import { Alert, Keyboard, StyleSheet, Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
-import SignForm from "../components/SignForm";
-import SignButtons from "../components/SignButtons";
+import {
+  SafeAreaView,
+  Alert,
+  Keyboard,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
+
+import { useUserContext } from "../contexts/UserContext";
 import { logIn, signUp } from "../lib/auth";
 import { getUser } from "../lib/users";
-import { useUserContext } from "../contexts/UserContext";
+import SignForm from "../components/SignForm";
+import SignButtons from "../components/SignButtons";
 
 function SignInScreen({ navigation, route }) {
+  const { setUser } = useUserContext();
   const { isSignUp } = route.params ?? {};
   const [form, setForm] = useState({
     email: "",
@@ -15,10 +23,11 @@ function SignInScreen({ navigation, route }) {
     confirmPassword: "",
   });
   const [loading, setLoading] = useState();
-  const { setUser } = useUserContext();
+
   const createChangeTextHandler = (name) => (value) => {
     setForm({ ...form, [name]: value });
   };
+
   const onSubmit = async () => {
     Keyboard.dismiss();
     const { email, password } = form;
@@ -47,7 +56,7 @@ function SignInScreen({ navigation, route }) {
     }
   };
   return (
-    <SafeAreaView style={styles.fullScreen}>
+    <SafeAreaView style={styles.container}>
       <Text style={styles.title}>HealthMate</Text>
       <Text style={styles.description}>
         회원과 트레이너를 위한 PT 관리 플랫폼
@@ -70,7 +79,7 @@ function SignInScreen({ navigation, route }) {
 }
 
 const styles = StyleSheet.create({
-  fullScreen: {
+  container: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",

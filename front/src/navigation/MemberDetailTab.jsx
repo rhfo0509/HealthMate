@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
-import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { useRoute, useNavigation } from "@react-navigation/native";
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+
 import DashboardScreen from "../screens/DashboardScreen";
 import DietScreen from "../screens/DietScreen";
 import ExerciseScreen from "../screens/ExerciseScreen";
@@ -16,14 +17,15 @@ function MemberDetailTab() {
   useEffect(() => {
     navigation.setOptions({
       title:
-        role === "member"
+        role === "trainer"
           ? `${relatedUser.displayName} 회원`
           : `${relatedUser.displayName} 트레이너`,
       headerRight: () =>
-        role === "member" ? (
+        role === "trainer" ? (
           <IconRightButton
             name="remember-me"
             onPress={() =>
+              // 회원권 관리 페이지로 이동
               navigation.push("Membership", { memberId: relatedUser.id })
             }
           />

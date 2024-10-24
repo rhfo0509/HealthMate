@@ -82,7 +82,7 @@ function PostScreen() {
   };
 
   return (
-    <View style={styles.block}>
+    <View style={styles.container}>
       <FlatList
         style={{ backgroundColor: "white" }}
         data={comments}
@@ -105,7 +105,7 @@ function PostScreen() {
 }
 
 const styles = StyleSheet.create({
-  block: {
+  container: {
     flex: 1,
   },
   separator: {

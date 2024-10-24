@@ -108,7 +108,7 @@ function EditProfileScreen() {
   if (loading) {
     return (
       <View style={styles.container}>
-        <View style={styles.loader}>
+        <View style={styles.loading}>
           <ActivityIndicator size="large" color="#1f6feb" />
         </View>
       </View>
@@ -299,7 +299,7 @@ const styles = StyleSheet.create({
   spinner: {
     marginTop: 32,
   },
-  loader: {
+  loading: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
