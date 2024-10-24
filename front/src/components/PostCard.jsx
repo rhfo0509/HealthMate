@@ -8,30 +8,34 @@ import {
   ActivityIndicator,
   Modal,
 } from "react-native";
-import Avatar from "./Avatar";
 import { useNavigation } from "@react-navigation/native";
-import { useUserContext } from "../contexts/UserContext";
 import { MaterialIcons } from "@expo/vector-icons";
+
+import { useUserContext } from "../contexts/UserContext";
 import useActions from "../hooks/useActions";
-import VideoView from "./VideoView";
 import { getRole } from "../lib/users";
 import { getFoods } from "../lib/foods";
+import Avatar from "./Avatar";
+import VideoView from "./VideoView";
 import FoodItem from "./FoodItem";
 
 function PostCard({ author, URL, content, createdAt, id, isDetailMode }) {
   const navigation = useNavigation();
+  const { user } = useUserContext();
+
+  const [role, setRole] = useState("");
+  const [foods, setFoods] = useState([]);
+  const [show, setShow] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // 작성 날짜 memoization
   const date = useMemo(
     () =>
       createdAt ? new Date(createdAt.seconds * 1000).toLocaleString() : "",
     [createdAt]
   );
-  const { user } = useUserContext();
-  const isMyPost = user.id === author.id;
-  const [role, setRole] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
-  const [show, setShow] = useState(false);
-  const [foods, setFoods] = useState([]);
 
+  // 게시글 상세 화면으로 이동
   const onPressPost = () => {
     navigation.navigate("Post", {
       author,
@@ -45,24 +49,22 @@ function PostCard({ author, URL, content, createdAt, id, isDetailMode }) {
 
   const { onPressMore } = useActions({ id, content, foods });
 
-  const isVideo = (URL) => /\.(mp4|mov|avi)/i.test(URL);
-
+  // 작성자 역할 가져오기
   useEffect(() => {
-    const fetchRole = async () => {
+    (async () => {
       setIsLoading(true);
       const result = await getRole(author.id);
       setRole(result);
       setIsLoading(false);
-    };
-
-    fetchRole();
+    })();
   }, [author.id]);
 
+  // 게시글에 포함된 음식 데이터 가져오기
   useEffect(() => {
     const fetchFoods = async () => {
       try {
         const foodDocs = await getFoods(id);
-        if (foodDocs.length > 0) {
+        if (foodDocs.length) {
           setFoods(foodDocs[0].foods || []);
         } else {
           setFoods([]);
@@ -92,7 +94,7 @@ function PostCard({ author, URL, content, createdAt, id, isDetailMode }) {
             )}
           </View>
         </View>
-        {isMyPost && (
+        {user.id === author.id && (
           <Pressable hitSlop={8} onPress={onPressMore}>
             <MaterialIcons name="more-vert" size={24} color="#757575" />
           </Pressable>
@@ -107,7 +109,7 @@ function PostCard({ author, URL, content, createdAt, id, isDetailMode }) {
         onPress={onPressPost}
         disabled={isDetailMode}
       >
-        {isVideo(URL) ? (
+        {/\.(mp4|mov|avi)/i.test(URL) ? (
           <VideoView URL={URL} isDetailMode={isDetailMode} />
         ) : URL ? (
           <View>

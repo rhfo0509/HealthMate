@@ -1,5 +1,5 @@
-import { StyleSheet, Text, View, Animated } from "react-native";
 import React, { useEffect, useRef } from "react";
+import { StyleSheet, Text, View, Animated } from "react-native";
 
 const ProgressBar = ({ totalStep, currStep }) => {
   const animationValue = useRef(new Animated.Value(0)).current;

@@ -1,4 +1,3 @@
-import { useNavigation, useRoute } from "@react-navigation/native";
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import {
   StyleSheet,
@@ -8,16 +7,19 @@ import {
   ScrollView,
   Alert,
 } from "react-native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { MaterialIcons } from "@expo/vector-icons";
-import IconRightButton from "../components/IconRightButton";
+
 import { updatePost } from "../lib/posts";
 import { updateComment, updateSubComment } from "../lib/comments";
 import { updateFoods } from "../lib/foods";
+import IconRightButton from "../components/IconRightButton";
 import FoodInput from "../components/FoodInput";
 
 function ModifyScreen() {
   const navigation = useNavigation();
   const { params } = useRoute();
+  const inputRef = useRef(null);
 
   const {
     id,
@@ -29,10 +31,10 @@ function ModifyScreen() {
     index: selectedFoodIndex,
   } = params;
 
-  const inputRef = useRef(null);
   const [content, setContent] = useState(initialContent);
   const [foods, setFoods] = useState(initialFoods);
 
+  // selectedFood 변경 시 해당 음식 데이터로 업데이트
   useEffect(() => {
     if (selectedFood && typeof selectedFoodIndex === "number") {
       const updatedFoods = [...foods];
@@ -47,6 +49,7 @@ function ModifyScreen() {
     }
   }, [selectedFood, selectedFoodIndex]);
 
+  // 음식 데이터 변경 핸들러
   const handleInputChange = (index, field, value) => {
     const updatedFoods = [...foods];
     updatedFoods[index][field] =
@@ -54,6 +57,7 @@ function ModifyScreen() {
     setFoods(updatedFoods);
   };
 
+  // 새로운 음식 추가
   const addFood = () => {
     setFoods([
       ...foods,
@@ -61,10 +65,12 @@ function ModifyScreen() {
     ]);
   };
 
+  // 음식 삭제
   const removeFood = (index) => {
     setFoods(foods.filter((_, i) => i !== index));
   };
 
+  // 음식 검색 핸들러 -> FoodSearch 화면으로 이동
   const handleSearchFood = (index, foodName) => {
     if (!foodName) {
       Alert.alert("알림", "음식명을 입력해주세요.");
@@ -77,13 +83,17 @@ function ModifyScreen() {
     });
   };
 
+  // 게시글, 댓글, 대댓글 처리
   const onSubmit = useCallback(async () => {
     if (!postId) {
+      // 게시글 업데이트
       await updatePost(id, { content });
+      // 음식 데이터가 변경된 경우 업데이트
       if (JSON.stringify(initialFoods) !== JSON.stringify(foods)) {
         await updateFoods(id, foods);
       }
     } else if (parentId) {
+      // 대댓글 업데이트
       await updateSubComment({
         postId,
         commentId: parentId,
@@ -91,6 +101,7 @@ function ModifyScreen() {
         content,
       });
     } else {
+      // 댓글 업데이트
       await updateComment({
         postId,
         commentId: id,

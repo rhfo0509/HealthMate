@@ -9,11 +9,13 @@ import {
   ScrollView,
 } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
+
 import { useUserContext } from "../contexts/UserContext";
-import IconRightButton from "../components/IconRightButton";
 import { createRoutine, updateRoutine } from "../lib/routines";
+import IconRightButton from "../components/IconRightButton";
 
 function RoutineScreen() {
+  const navigation = useNavigation();
   const {
     relatedUserId,
     selectedExercise,
@@ -22,14 +24,14 @@ function RoutineScreen() {
     isEditing,
   } = useRoute().params || {};
   const { user } = useUserContext();
-  const navigation = useNavigation();
-  const [isUploading, setIsUploading] = useState(false);
+
   const [exercises, setExercises] = useState([]);
-  const [isSaveToMyRoutine, setIsSaveToMyRoutine] = useState(false);
+  const [isSaveToMyRoutine, setIsSaveToMyRoutine] = useState(false); // 루틴 저장 여부
   const [routineName, setRoutineName] = useState("");
+  const [isUploading, setIsUploading] = useState(false);
 
   useEffect(() => {
-    // 기존 루틴 데이터가 있다면 상태에 설정
+    // 기존 루틴 데이터가 있다면 상태에 미리 설정
     if (selectedRoutine) {
       setExercises(selectedRoutine.exercises);
       setRoutineName(selectedRoutine.routineName || "");
@@ -38,10 +40,12 @@ function RoutineScreen() {
 
   useEffect(() => {
     if (selectedExercise) {
+      // 선택된 운동이 있을 경우, 중복되지 않으면 운동 목록에 추가
       const exists = exercises.some(
         (exercise) => exercise.name === selectedExercise
       );
       if (!exists) {
+        // 운동 목록에 새로운 운동 추가
         setExercises((prev) => [
           ...prev,
           {
@@ -54,6 +58,7 @@ function RoutineScreen() {
     }
   }, [selectedExercise]);
 
+  // 루틴 저장 또는 업데이트 처리 함수
   const onSubmit = useCallback(async () => {
     setIsUploading(true);
 
@@ -68,8 +73,10 @@ function RoutineScreen() {
 
     try {
       if (isEditing) {
+        // 루틴 수정
         await updateRoutine(selectedRoutine.id, routineData);
       } else {
+        // 새로운 루틴 생성
         await createRoutine(routineData);
       }
       navigation.pop();
@@ -95,6 +102,7 @@ function RoutineScreen() {
     });
   }, [navigation, onSubmit, isUploading]);
 
+  // 세트 변경 핸들러
   const handleSetChange = (exerciseIndex, setIndex, field, value) => {
     setExercises((prev) => {
       const updated = [...prev];
@@ -103,6 +111,7 @@ function RoutineScreen() {
     });
   };
 
+  // 세트 추가 함수
   const addSet = (exerciseIndex) => {
     setExercises((prev) => {
       const updated = [...prev];
@@ -111,6 +120,7 @@ function RoutineScreen() {
     });
   };
 
+  // 마지막 세트 삭제 함수
   const removeLastSet = (exerciseIndex) => {
     setExercises((prev) => {
       const updated = [...prev];
@@ -121,6 +131,7 @@ function RoutineScreen() {
     });
   };
 
+  // 운동 항목 삭제 함수
   const removeExercise = (exerciseIndex) => {
     setExercises((prev) => prev.filter((_, i) => i !== exerciseIndex));
   };
@@ -137,6 +148,7 @@ function RoutineScreen() {
 
   return (
     <ScrollView style={styles.container}>
+      {/* 운동 추가 및 루틴 불러오기 버튼 */}
       <View style={styles.buttonContainer}>
         <Pressable
           style={styles.searchButton}
@@ -154,6 +166,7 @@ function RoutineScreen() {
         </Pressable>
       </View>
 
+      {/* 루틴 저장 옵션 */}
       <View style={styles.saveRoutineContainer}>
         <Pressable
           style={styles.checkbox}
@@ -179,6 +192,7 @@ function RoutineScreen() {
         )}
       </View>
 
+      {/* 선택된 운동 및 세트 정보 표시 */}
       {exercises.map((exercise, exerciseIndex) => (
         <View key={exerciseIndex} style={styles.exerciseContainer}>
           <View style={styles.exerciseHeader}>
@@ -191,6 +205,7 @@ function RoutineScreen() {
             </Pressable>
           </View>
 
+          {/* 세트 입력 필드 */}
           {exercise.sets.map((set, setIndex) => (
             <View key={setIndex} style={styles.setContainer}>
               <Text style={styles.setLabel}>세트 {setIndex + 1}</Text>
@@ -218,6 +233,8 @@ function RoutineScreen() {
               <Text style={styles.unitText}>회</Text>
             </View>
           ))}
+
+          {/* 세트 추가/삭제 버튼 */}
           <View style={styles.buttonRow}>
             <Pressable
               style={styles.addButton}

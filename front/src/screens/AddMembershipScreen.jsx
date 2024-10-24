@@ -11,20 +11,22 @@ import { useNavigation } from "@react-navigation/native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { CheckBox } from "react-native-elements";
 import { getDoc } from "firebase/firestore";
+
+import { useUserContext } from "../contexts/UserContext";
 import {
   addMemberToTrainer,
   getMember,
   getMembersByTrainer,
 } from "../lib/users";
 import { createMembership, getMembership } from "../lib/memberships";
-import { useUserContext } from "../contexts/UserContext";
+import { createSchedulesWithMembership } from "../lib/schedules";
 import BorderedInput from "../components/BorderedInput";
 import IconRightButton from "../components/IconRightButton";
-import { createSchedulesWithMembership } from "../lib/schedules";
 
 function AddMembershipScreen() {
   const navigation = useNavigation();
   const { user: trainer } = useUserContext();
+
   const [memberName, setMemberName] = useState("");
   const [memberPhoneNumber, setMemberPhoneNumber] = useState("");
   const [memberId, setMemberId] = useState(null);
@@ -32,10 +34,9 @@ function AddMembershipScreen() {
   const [isMemberVerified, setIsMemberVerified] = useState(false);
   const [membershipInfo, setMembershipInfo] = useState({
     startDate: new Date(),
-    count: "10", // Default count set to 10
+    count: "10",
     schedules: [],
   });
-
   const [newSchedule, setNewSchedule] = useState({
     days: {
       월: { checked: false, time: null },
@@ -47,13 +48,13 @@ function AddMembershipScreen() {
       일: { checked: false, time: null },
     },
   });
-
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [showTimePicker, setShowTimePicker] = useState({
     visible: false,
     day: null,
   });
 
+  // 회원 검색 함수
   const onSearchMember = async () => {
     const profile = {
       displayName: memberName,
@@ -61,6 +62,8 @@ function AddMembershipScreen() {
     };
     const member = await getMember(profile);
     const existingMembers = await getMembersByTrainer(trainer.id);
+
+    // 이미 트레이너의 회원으로 등록되었는지 확인
     const isAlreadyRegistered = existingMembers.some(
       (existingMember) =>
         existingMember.displayName === memberName &&
@@ -72,6 +75,7 @@ function AddMembershipScreen() {
       return;
     }
 
+    // 회원이 다른 트레이너의 회원인지 확인
     if (member) {
       const membership = await getMembership(member.id);
 
@@ -83,22 +87,26 @@ function AddMembershipScreen() {
       setIsMemberVerified(true);
       setMemberId(member.id);
       Alert.alert("알림", "회원이 확인되었습니다.");
-    } else {
+    }
+    // 회원이 존재하는지 확인
+    else {
       Alert.alert("알림", "해당 회원이 존재하지 않습니다.");
     }
   };
 
+  // 회원권 및 일정 생성
   const onSubmit = async () => {
-    // Validate that all checked days have a time selected
     const invalidSchedules = Object.entries(newSchedule.days).some(
       ([, { checked, time }]) => checked && !time
     );
 
+    // 체크된 요일에 시간이 없는 경우 Alert
     if (invalidSchedules) {
       Alert.alert("알림", "체크된 요일의 시간을 모두 입력해 주세요.");
       return;
     }
 
+    // 회원권 정보 포맷팅
     const formattedMembershipInfo = {
       ...membershipInfo,
       count: +membershipInfo.count,
@@ -114,46 +122,42 @@ function AddMembershipScreen() {
         })),
     };
 
-    // Add member to trainer
-    await addMemberToTrainer(trainer.id, memberId);
+    try {
+      // 트레이너에 회원 추가
+      await addMemberToTrainer(trainer.id, memberId);
 
-    // Create membership separately
-    createMembership({
-      ...formattedMembershipInfo,
-      memberId,
-      trainerId: trainer.id,
-    })
-      .then((membershipDoc) => {
-        return getDoc(membershipDoc);
-      })
-      .then((snapshot) => {
-        return createSchedulesWithMembership({
-          ...snapshot.data(),
-          id: snapshot.id,
-        });
-      })
-      .then(() => {
-        Alert.alert("알림", "회원권과 스케줄이 성공적으로 생성되었습니다.", [
-          {
-            text: "확인",
-            onPress: () => navigation.goBack(),
-          },
-        ]);
-      })
-      .catch((error) => {
-        console.error("회원권 생성 중 오류 발생:", error);
+      // 회원권 생성
+      const membershipDoc = await createMembership({
+        ...formattedMembershipInfo,
+        memberId,
+        trainerId: trainer.id,
+      });
+      const snapshot = await getDoc(membershipDoc);
+
+      // 생성된 회원권의 정보를 이용해 스케줄 생성
+      await createSchedulesWithMembership({
+        ...snapshot.data(),
+        id: snapshot.id,
       });
 
-    // Reset state after successful submission
+      Alert.alert("알림", "회원권과 스케줄이 성공적으로 생성되었습니다.", [
+        { text: "확인", onPress: () => navigation.goBack() },
+      ]);
+
+      // 성공 후 상태 초기화
+      resetForm();
+    } catch (error) {
+      console.error("회원권 생성 중 오류 발생:", error);
+    }
+  };
+
+  // 폼 리셋 함수
+  const resetForm = () => {
     setMemberName("");
     setMemberPhoneNumber("");
     setShowMembershipFields(false);
     setIsMemberVerified(false);
-    setMembershipInfo({
-      startDate: new Date(),
-      count: "10",
-      schedules: [],
-    });
+    setMembershipInfo({ startDate: new Date(), count: "10", schedules: [] });
     setNewSchedule({
       days: {
         월: { checked: false, time: null },
@@ -167,6 +171,7 @@ function AddMembershipScreen() {
     });
   };
 
+  // 요일 토글 함수
   const toggleDay = (day) => {
     setNewSchedule((prev) => ({
       ...prev,
@@ -279,9 +284,9 @@ function AddMembershipScreen() {
                   <Pressable
                     style={[
                       styles.timePickerButton,
-                      !checked && styles.disabledButton, // Disable time picker when day is not checked
+                      !checked && styles.disabledButton,
                     ]}
-                    onPress={() => checked && showTimePickerForDay(day)} // Only show time picker if checked
+                    onPress={() => checked && showTimePickerForDay(day)}
                   >
                     <Text style={styles.datePickerText}>
                       {time
@@ -344,11 +349,11 @@ const styles = StyleSheet.create({
   },
   button: {
     padding: 12,
-    borderRadius: 8,
+    borderRadius: 4,
     alignItems: "center",
   },
   activeButton: {
-    backgroundColor: "#3182ce",
+    backgroundColor: "#1f6feb",
   },
   buttonText: {
     color: "#ffffff",

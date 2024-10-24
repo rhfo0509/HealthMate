@@ -1,7 +1,8 @@
 import React from "react";
-import { Calendar, LocaleConfig } from "react-native-calendars";
 import { StyleSheet } from "react-native";
+import { Calendar, LocaleConfig } from "react-native-calendars";
 
+// 캘린더 한글화
 LocaleConfig.locales["ko"] = {
   monthNames: [
     "1월",

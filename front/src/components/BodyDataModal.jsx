@@ -9,18 +9,19 @@ import {
   Alert,
 } from "react-native";
 import { format } from "date-fns";
+
+import { useUserContext } from "../contexts/UserContext";
 import { createBodyData, updateBodyData } from "../lib/bodyData";
 import { updateUser, getUser } from "../lib/users";
-import { useUserContext } from "../contexts/UserContext";
 
 function BodyDataModal({ memberId, show, setShow, editData, latestData }) {
   const { setUser } = useUserContext();
   const [date, setDate] = useState(new Date());
   const [bodyData, setBodyData] = useState({ weight: "", SMM: "", PBF: "" });
 
-  // 수정할 데이터가 있으면 미리 값을 설정
   useEffect(() => {
     if (editData) {
+      // 수정 이전 값 미리 setting
       setDate(editData.date.toDate()); // 날짜는 변경 불가 (읽기 전용)
       setBodyData({
         weight: String(editData.weight),
@@ -28,7 +29,7 @@ function BodyDataModal({ memberId, show, setShow, editData, latestData }) {
         PBF: String(editData.PBF),
       });
     } else {
-      setDate(new Date()); // 새 데이터 등록 시 현재 날짜 설정
+      setDate(new Date()); // 새 데이터 등록 시 현재 날짜로 설정
       setBodyData({ weight: "", SMM: "", PBF: "" });
     }
   }, [editData]);
@@ -36,6 +37,7 @@ function BodyDataModal({ memberId, show, setShow, editData, latestData }) {
   // 숫자 입력만 허용
   const handleNumericInput = (value) => value.replace(/[^0-9.]/g, "");
 
+  // 체성분 데이터 저장 함수
   const onSave = async () => {
     const { weight, SMM, PBF } = bodyData;
     if (!weight || !SMM || !PBF) {
@@ -53,14 +55,15 @@ function BodyDataModal({ memberId, show, setShow, editData, latestData }) {
 
     try {
       if (editData) {
+        // 기존 데이터를 수정하는 경우
         await updateBodyData(editData.id, data);
 
-        // 수정하는 데이터가 최신 데이터일 경우 updateUser 호출
+        // 만약 수정하는 데이터가 최신 데이터라면 updateUser 호출
         if (latestData && editData.id === latestData.id) {
           await updateUser({ userId: memberId, updateField: { bodyData } });
         }
       } else {
-        // 새로 등록하는 경우
+        // 새로 생성하는 경우
         await createBodyData(data);
         await updateUser({ userId: memberId, updateField: { bodyData } });
       }
@@ -85,7 +88,6 @@ function BodyDataModal({ memberId, show, setShow, editData, latestData }) {
           <Text style={styles.title}>
             {editData ? "체성분 수정" : "체성분 등록"}
           </Text>
-          {/* 날짜는 텍스트로만 표시하고 수정 불가 */}
           <View style={styles.dateContainer}>
             <Text style={styles.selectText}>{format(date, "yyyy-MM-dd")}</Text>
           </View>

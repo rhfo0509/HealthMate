@@ -16,7 +16,7 @@ initFirebase();
 const firestore = getFirestore();
 const foodsCollection = collection(firestore, "foods");
 
-// foods 데이터를 추가하는 함수
+// 음식 데이터 생성 함수
 export function createFoods({ userId, relatedUserId, postId, foods }) {
   return addDoc(foodsCollection, {
     userId,
@@ -27,7 +27,7 @@ export function createFoods({ userId, relatedUserId, postId, foods }) {
   });
 }
 
-// 특정 postId에 해당하는 foods 문서를 삭제하는 함수
+// 특정 게시글에 해당하는 음식 데이터 삭제 함수
 export async function removeFoods(postId) {
   const q = query(foodsCollection, where("postId", "==", postId));
   const snapshot = await getDocs(q);
@@ -38,7 +38,7 @@ export async function removeFoods(postId) {
   }
 }
 
-// 특정 postId에 해당하는 foods 문서를 업데이트하는 함수
+// 특정 게시글에 해당하는 음식 데이터 업데이트 함수
 export async function updateFoods(postId, foods) {
   const q = query(foodsCollection, where("postId", "==", postId));
   const snapshot = await getDocs(q);
@@ -49,7 +49,7 @@ export async function updateFoods(postId, foods) {
   }
 }
 
-// 특정 postId에 해당하는 foods 문서를 가져오는 함수
+// 특정 게시글에 해당하는 음식 데이터 가져오는 함수
 export async function getFoods(postId) {
   const q = query(foodsCollection, where("postId", "==", postId));
   const snapshot = await getDocs(q);

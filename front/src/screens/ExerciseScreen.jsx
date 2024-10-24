@@ -1,16 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { StyleSheet, View, FlatList, Text } from "react-native";
 import { useRoute } from "@react-navigation/native";
-import {
-  StyleSheet,
-  View,
-  FlatList,
-  ActivityIndicator,
-  Text,
-} from "react-native";
-import CalendarHeader from "../components/CalendarHeader";
-import WriteButton from "../components/WriteButton";
-import PostCard from "../components/PostCard";
-import { useUserContext } from "../contexts/UserContext";
 import { isSameDay, format } from "date-fns";
 import {
   getFirestore,
@@ -20,7 +10,11 @@ import {
   onSnapshot,
   orderBy,
 } from "firebase/firestore";
-import { getPosts } from "../lib/posts";
+
+import { useUserContext } from "../contexts/UserContext";
+import CalendarHeader from "../components/CalendarHeader";
+import WriteButton from "../components/WriteButton";
+import PostCard from "../components/PostCard";
 
 function ExerciseScreen() {
   const route = useRoute();
@@ -30,23 +24,6 @@ function ExerciseScreen() {
   const postsCollection = collection(firestore, "posts");
   const [posts, setPosts] = useState([]);
   const [selectedDate, setSelectedDate] = useState(new Date());
-  const [isLoading, setIsLoading] = useState(true); // 로딩 상태 추가
-
-  // 최초로 ExerciseScreen 접근 시
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const posts = await getPosts(author.id, relatedUserId, postType);
-        setPosts(posts);
-      } catch (error) {
-        console.error("Error fetching posts: ", error);
-      } finally {
-        setIsLoading(false); // 데이터를 불러온 후 로딩 상태 해제
-      }
-    };
-
-    fetchData();
-  }, [author.id, relatedUserId, postType]);
 
   // posts 컬렉션에 변화 발생시
   useEffect(() => {
@@ -82,14 +59,6 @@ function ExerciseScreen() {
       format(selectedDate, "yyyy-MM-dd")
     );
   });
-
-  if (isLoading) {
-    return (
-      <View style={styles.loading}>
-        <ActivityIndicator size="large" color="#1f6feb" />
-      </View>
-    );
-  }
 
   return (
     <View style={styles.container}>
@@ -131,11 +100,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#fff",
-  },
-  loading: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
   },
   noPostsContainer: {
     flex: 1,

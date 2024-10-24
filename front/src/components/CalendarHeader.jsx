@@ -2,11 +2,8 @@ import React, { useState } from "react";
 import { View, Text, Pressable } from "react-native";
 import CalendarStrip from "react-native-calendar-strip";
 import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
-import { format } from "date-fns";
 
 function CalendarHeader({ markedDates, selectedDate, onSelectDate }) {
-  const [showDatePicker, setShowDatePicker] = useState(false);
-
   // 날짜 선택 모달 열기
   const openDatePicker = () => {
     DateTimePickerAndroid.open({

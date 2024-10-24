@@ -144,7 +144,7 @@ function ExercisePostScreen() {
   // 업로드 중 화면
   if (isUploading) {
     return (
-      <View style={styles.uploadingContainer}>
+      <View style={styles.uploading}>
         <ProgressBar totalStep={100} currStep={progress} />
         <Text style={styles.uploadingText}>업로드 중입니다...</Text>
       </View>
@@ -187,7 +187,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 16,
   },
-  uploadingContainer: {
+  uploading: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",

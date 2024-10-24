@@ -227,7 +227,7 @@ function DietPostScreen() {
   // 업로드 중 표시
   if (isUploading) {
     return (
-      <View style={styles.uploadingContainer}>
+      <View style={styles.uploading}>
         <ProgressBar totalStep={100} currStep={progress} />
         <Text style={styles.uploadingText}>업로드 중입니다...</Text>
       </View>
@@ -305,7 +305,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginTop: 1,
   },
-  uploadingContainer: {
+  uploading: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",

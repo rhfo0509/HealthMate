@@ -8,11 +8,6 @@ import {
   ScrollView,
 } from "react-native";
 import { useRoute } from "@react-navigation/native";
-import { getMembership, updateMembership } from "../lib/memberships";
-import {
-  createSchedulesWithMembership,
-  removeSchedulesWithMember,
-} from "../lib/schedules";
 import { addDays, format, max } from "date-fns";
 import {
   getFirestore,
@@ -21,12 +16,16 @@ import {
   where,
   onSnapshot,
 } from "firebase/firestore";
+
+import { getMembership, updateMembership } from "../lib/memberships";
+import {
+  createSchedulesWithMembership,
+  removeSchedules,
+} from "../lib/schedules";
 import ExtendCountModal from "../components/ExtendCountModal";
 import ChangeScheduleModal from "../components/ChangeScheduleModal";
 
 function MembershipScreen() {
-  const [showFirst, setShowFirst] = useState(false);
-  const [showSecond, setShowSecond] = useState(false);
   const route = useRoute();
   const { memberId } = route.params;
   const [membership, setMembership] = useState({});
@@ -40,9 +39,14 @@ function MembershipScreen() {
     토: { checked: false, startTime: null },
     일: { checked: false, startTime: null },
   });
+  const [showFirst, setShowFirst] = useState(false);
+  const [showSecond, setShowSecond] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
   const firestore = getFirestore();
   const membershipsCollection = collection(firestore, "memberships");
 
+  // 선택한 회원의 회원권 정보를 실시간으로 가져옴
   useEffect(() => {
     const q = query(membershipsCollection, where("memberId", "==", memberId));
     const unsubscribe = onSnapshot(q, (snapshot) => {
@@ -57,10 +61,7 @@ function MembershipScreen() {
     };
   }, [memberId]);
 
-  useEffect(() => {
-    getMembership(memberId).then(setMembership);
-  }, [memberId]);
-
+  // 회원권 일시중지
   const onPressPause = () => {
     Alert.alert(
       null,
@@ -69,12 +70,11 @@ function MembershipScreen() {
         { text: "아니오", style: "cancel" },
         {
           text: "네",
-          onPress: () => {
-            updateMembership(membership.id, { status: "paused" }).then(() => {
-              getMembership(memberId)
-                .then(setMembership)
-                .then(() => removeSchedulesWithMember(memberId));
-            });
+          onPress: async () => {
+            await updateMembership(membership.id, { status: "paused" });
+            const updatedMembership = await getMembership(memberId);
+            setMembership(updatedMembership);
+            await removeSchedules(memberId); // 일정 삭제
           },
         },
       ],
@@ -82,6 +82,7 @@ function MembershipScreen() {
     );
   };
 
+  // 회원권 재개
   const onPressResume = () => {
     Alert.alert(
       null,
@@ -90,15 +91,14 @@ function MembershipScreen() {
         { text: "아니오", style: "cancel" },
         {
           text: "네",
-          onPress: () => {
-            updateMembership(membership.id, {
+          onPress: async () => {
+            await updateMembership(membership.id, {
               status: "active",
-              startDate: format(new Date(), "yyyy-MM-dd"),
-            }).then(() => {
-              getMembership(memberId)
-                .then(setMembership)
-                .then(() => createSchedulesWithMembership(membership));
+              startDate: format(new Date(), "yyyy-MM-dd"), // 재개일을 현재 날짜로 설정
             });
+            const updatedMembership = await getMembership(memberId);
+            setMembership(updatedMembership);
+            await createSchedulesWithMembership(updatedMembership); // 일정 생성
           },
         },
       ],
@@ -106,6 +106,7 @@ function MembershipScreen() {
     );
   };
 
+  // 회원권 연장
   const onPressExtend = () => {
     setShowFirst(true);
   };
@@ -121,13 +122,17 @@ function MembershipScreen() {
         },
         {
           text: "네",
-          onPress: () => {
-            updateMembership(membership.id, {
-              status: "active",
-              count: +membership.count + +membershipCount,
-              remaining: +membership.remaining + +membershipCount,
-            }).then(() => {
-              createSchedulesWithMembership({
+          onPress: async () => {
+            try {
+              // 회원권 정보 업데이트
+              await updateMembership(membership.id, {
+                status: "active",
+                count: +membership.count + +membershipCount,
+                remaining: +membership.remaining + +membershipCount,
+              });
+
+              // 새로운 스케줄 생성
+              await createSchedulesWithMembership({
                 ...membership,
                 remaining: membershipCount,
                 startDate: format(
@@ -135,9 +140,15 @@ function MembershipScreen() {
                   "yyyy-MM-dd"
                 ),
               });
-            });
-            setMembershipCount("");
-            setShowFirst(false);
+
+              setMembershipCount("");
+              setShowFirst(false);
+
+              Alert.alert("성공", "횟수 연장이 성공적으로 완료되었습니다.");
+            } catch (error) {
+              console.error("연장 중 오류 발생:", error);
+              Alert.alert("오류", "연장 처리 중 문제가 발생했습니다.");
+            }
           },
         },
       ],
@@ -145,6 +156,7 @@ function MembershipScreen() {
     );
   };
 
+  // 회원권 요일/시간 변경
   const onPressChange = () => {
     const days = { ...membershipDays };
     membership.schedules.forEach((schedule) => {
@@ -162,32 +174,32 @@ function MembershipScreen() {
       null,
       "정말로 변경하시겠습니까?",
       [
-        {
-          text: "아니오",
-          style: "cancel",
-        },
+        { text: "아니오", style: "cancel" },
         {
           text: "네",
-          onPress: () => {
-            removeSchedulesWithMember(memberId)
-              .then(() => {
-                const updatedSchedules = Object.entries(membershipDays)
-                  .filter(([_, data]) => data.checked)
-                  .map(([day, data]) => ({
-                    day,
-                    startTime: data.startTime,
-                  }));
-                updateMembership(membership.id, {
-                  schedules: updatedSchedules,
-                });
-              })
-              .then(async () => {
-                const updatedMembership = await getMembership(memberId);
-                createSchedulesWithMembership(updatedMembership).then(() =>
-                  setMembership(updatedMembership)
-                );
-              });
-            setShowSecond(false);
+          onPress: async () => {
+            try {
+              setIsLoading(true);
+
+              await removeSchedules(memberId); // 기존 일정 삭제
+              const updatedSchedules = Object.entries(membershipDays)
+                .filter(([_, data]) => data.checked)
+                .map(([day, data]) => ({ day, startTime: data.startTime }));
+
+              await updateMembership(membership.id, {
+                schedules: updatedSchedules,
+              }); // 새로운 일정 업데이트
+              const updatedMembership = await getMembership(memberId);
+              await createSchedulesWithMembership(updatedMembership);
+
+              setMembership(updatedMembership);
+              Alert.alert("성공", "요일/시간이 변경되었습니다.");
+            } catch (error) {
+              console.error("요일/시간 변경 중 오류 발생:", error);
+            } finally {
+              setIsLoading(false);
+              setShowSecond(false);
+            }
           },
         },
       ],
@@ -207,6 +219,7 @@ function MembershipScreen() {
     setShowSecond(false);
   };
 
+  // 등록요일 및 시간 출력
   const showMembershipDays = () => {
     const daysOrder = ["월", "화", "수", "목", "금", "토", "일"];
     const sortedSchedules = membership?.schedules?.sort(
@@ -215,9 +228,7 @@ function MembershipScreen() {
 
     return sortedSchedules?.map((schedule, index) => {
       const [hour, minute] = schedule.startTime.split(":").map(Number);
-
-      // 1시간 더한 종료 시간 계산
-      const endHour = (hour + 1) % 24;
+      const endHour = (hour + 1) % 24; // 1시간 뒤 종료 시간 계산
       const endTime = `${String(endHour).padStart(2, "0")}:${String(
         minute
       ).padStart(2, "0")}`;
@@ -299,7 +310,6 @@ function MembershipScreen() {
       <ExtendCountModal
         visible={showFirst}
         onClose={() => setShowFirst(false)}
-        membership={membership}
         membershipCount={membershipCount}
         setMembershipCount={setMembershipCount}
         onSave={onSaveExtend}
@@ -311,6 +321,7 @@ function MembershipScreen() {
         onSave={onSaveChange}
         membershipDays={membershipDays}
         setMembershipDays={setMembershipDays}
+        isLoading={isLoading}
       />
     </View>
   );

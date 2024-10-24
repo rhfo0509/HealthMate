@@ -6,12 +6,9 @@ import {
   Pressable,
   ActivityIndicator,
 } from "react-native";
-import Avatar from "./Avatar";
 import { useNavigation } from "@react-navigation/native";
-import { useUserContext } from "../contexts/UserContext";
-import { MaterialIcons } from "@expo/vector-icons";
-import useActions from "../hooks/useActions";
 import { FlatList } from "react-native-gesture-handler";
+import { MaterialIcons } from "@expo/vector-icons";
 import {
   getFirestore,
   collection,
@@ -19,8 +16,12 @@ import {
   onSnapshot,
   orderBy,
 } from "firebase/firestore";
+
+import { useUserContext } from "../contexts/UserContext";
+import useActions from "../hooks/useActions";
 import { getSubComments } from "../lib/comments";
 import { getRole } from "../lib/users";
+import Avatar from "./Avatar";
 
 function CommentCard({ createdAt, content, id, author, postId, parentId }) {
   const navigation = useNavigation();

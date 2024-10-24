@@ -1,9 +1,9 @@
 import React from "react";
 import { View, Pressable, StyleSheet, Alert } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useActionSheet } from "@expo/react-native-action-sheet";
 import * as ImagePicker from "expo-image-picker";
-import { useNavigation } from "@react-navigation/native";
 
 const imagePickerOption = {
   mediaTypes: ImagePicker.MediaTypeOptions.All,

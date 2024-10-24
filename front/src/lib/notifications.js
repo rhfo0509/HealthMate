@@ -17,6 +17,7 @@ initFirebase();
 const firestore = getFirestore();
 const notificationsCollection = collection(firestore, "notifications");
 
+// 알림 생성 함수
 export async function createNotification({
   senderId,
   receiverId,
@@ -33,6 +34,7 @@ export async function createNotification({
   });
 }
 
+// 알림 가져오는 함수
 export async function getNotifications(userId) {
   let q = query(
     notificationsCollection,
@@ -47,6 +49,7 @@ export async function getNotifications(userId) {
   return notifications;
 }
 
+// 알림 업데이트 함수
 export async function updateNotification(id) {
   await updateDoc(doc(notificationsCollection, id), {
     clicked: true,

@@ -1,5 +1,6 @@
 import React from "react";
 import { View, StyleSheet, Text, Pressable, Alert } from "react-native";
+
 import { removeSchedule, updateSchedule } from "../lib/schedules";
 import { createNotification, updateNotification } from "../lib/notifications";
 
@@ -12,69 +13,64 @@ function NotificationCard({
   data,
   clicked,
 }) {
+  // 수락/거절 후 알림 및 스케줄 업데이트 함수
+  const handleNotification = (isAccept) => {
+    if (isAccept) {
+      data.updatedField
+        ? updateSchedule(data.scheduleId, data.updatedField)
+        : removeSchedule(data.scheduleId, false);
+
+      // 성공적으로 처리된 후 알림 생성
+      createNotification({
+        senderId: receiverId,
+        receiverId: senderId,
+        message: data.updatedField
+          ? `일정이 성공적으로 변경되었습니다. (${data.updatedField.date} ${data.updatedField.startTime})`
+          : "일정이 성공적으로 취소되었습니다.",
+        data: null,
+      });
+    } else {
+      // 거절 시 알림 생성
+      createNotification({
+        senderId: receiverId,
+        receiverId: senderId,
+        message: data.updatedField
+          ? "일정 변경 신청이 반려되었습니다."
+          : "일정 삭제 신청이 반려되었습니다.",
+        data: null,
+      });
+    }
+
+    // 알림 상태 업데이트
+    updateNotification(id);
+  };
+
+  // 수락 버튼 클릭 시 처리
   const onPressAccept = () => {
     Alert.alert(
       null,
       "수락하시겠습니까?",
       [
-        {
-          text: "아니오",
-          style: "cancel",
-        },
+        { text: "아니오", style: "cancel" },
         {
           text: "네",
-          onPress: () => {
-            data.updatedField
-              ? updateSchedule(data.scheduleId, data.updatedField)
-              : removeSchedule(data.scheduleId, false);
-            updateNotification(id);
-            data.updatedField
-              ? createNotification({
-                  senderId: receiverId,
-                  receiverId: senderId,
-                  message: `일정이 성공적으로 변경되었습니다. (${data.updatedField.date} ${data.updatedField.startTime})`,
-                  data: null,
-                })
-              : createNotification({
-                  senderId: receiverId,
-                  receiverId: senderId,
-                  message: `일정이 성공적으로 취소되었습니다.`,
-                  data: null,
-                });
-          },
+          onPress: () => handleNotification(true),
         },
       ],
       { cancelable: true }
     );
   };
 
+  // 거절 버튼 클릭 시 처리
   const onPressRefuse = () => {
     Alert.alert(
       null,
       "거절하시겠습니까?",
       [
-        {
-          text: "아니오",
-          style: "cancel",
-        },
+        { text: "아니오", style: "cancel" },
         {
           text: "네",
-          onPress: () => {
-            updateNotification(id);
-            data.updatedField
-              ? createNotification({
-                  senderId: receiverId,
-                  receiverId: senderId,
-                  message: `일정 변경 신청이 반려되었습니다.`,
-                  data: null,
-                })
-              : createNotification({
-                  senderId: receiverId,
-                  receiverId: senderId,
-                  message: `일정 삭제 신청이 반려되었습니다.`,
-                  data: null,
-                });
-          },
+          onPress: () => handleNotification(false),
         },
       ],
       { cancelable: true }
@@ -84,7 +80,7 @@ function NotificationCard({
   return (
     <View style={styles.container}>
       <View style={styles.messageContainer}>
-        <Text style={styles.messageText}>{`${message}`}</Text>
+        <Text style={styles.messageText}>{message}</Text>
 
         {data?.updatedField && (
           <Text style={styles.infoText}>
@@ -93,7 +89,9 @@ function NotificationCard({
           </Text>
         )}
 
-        {data && <Text style={styles.reasonText}>사유: {data.reason}</Text>}
+        {data?.reason && (
+          <Text style={styles.reasonText}>사유: {data.reason}</Text>
+        )}
 
         <Text style={styles.dateText}>
           {createdAt.toDate().toLocaleString()}

@@ -1,11 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, View, Text } from "react-native";
 import RNPickerSelect from "react-native-picker-select";
-import { getMembersByTrainer } from "../lib/users";
-import Avatar from "./Avatar";
-import MemberList from "./MemberList";
-import MemberSearchBar from "./MemberSearchBar";
-import AddMemberButton from "./AddMemberButton";
 import {
   getFirestore,
   collection,
@@ -13,13 +8,20 @@ import {
   where,
   onSnapshot,
 } from "firebase/firestore";
+
+import { getMembersByTrainer } from "../lib/users";
 import { getMembershipsByTrainer } from "../lib/memberships";
+import Avatar from "./Avatar";
+import MemberList from "./MemberList";
+import MemberSearchBar from "./MemberSearchBar";
+import AddMemberButton from "./AddMemberButton";
 
 function TrainerProfile({ user }) {
   const [memberList, setMemberList] = useState([]);
   const [filteredMemberList, setFilteredMemberList] = useState([]);
   const [membershipList, setMembershipList] = useState([]);
   const [sortBy, setSortBy] = useState("name");
+
   const firestore = getFirestore();
   const membershipsCollection = collection(firestore, "memberships");
 
@@ -60,10 +62,12 @@ function TrainerProfile({ user }) {
     let sortedMembers = [...memberList];
     let sortedMemberships = [...membershipList];
 
+    // 이름순 정렬
     if (sortBy === "name") {
       sortedMembers.sort((a, b) => a.displayName.localeCompare(b.displayName));
       setMemberList(sortedMembers);
     }
+    // 잔여횟수순 정렬
     if (sortBy === "remaining") {
       sortedMemberships.sort((a, b) => a.remaining - b.remaining);
       const sortedMemberIds = sortedMemberships.map(
@@ -75,11 +79,6 @@ function TrainerProfile({ user }) {
       setMemberList(sortedMembersWithStatus);
     }
   }, [sortBy]);
-
-  useEffect(() => {
-    getMembersByTrainer(user.id).then(setMemberList);
-    getMembershipsByTrainer(user.id).then(setMembershipList);
-  }, [user.id]);
 
   return (
     <View style={styles.container}>
@@ -117,9 +116,7 @@ function TrainerProfile({ user }) {
             </View>
           </>
         }
-        members={
-          filteredMemberList.length > 0 ? filteredMemberList : memberList
-        }
+        members={filteredMemberList.length ? filteredMemberList : memberList}
         memberships={membershipList}
       />
       <AddMemberButton />

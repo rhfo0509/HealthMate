@@ -1,10 +1,10 @@
 import React from "react";
 import { View, Pressable, StyleSheet } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native"; // 네비게이션 훅 추가
+import { useNavigation } from "@react-navigation/native";
 
 function AddMemberButton() {
-  const navigation = useNavigation(); // 네비게이션 객체 사용
+  const navigation = useNavigation();
 
   const onPress = () => {
     navigation.navigate("AddMembership");

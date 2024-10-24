@@ -9,13 +9,15 @@ import {
 } from "react-native";
 import { format } from "date-fns";
 import { MaterialIcons } from "@expo/vector-icons";
+
+import { useUserContext } from "../contexts/UserContext";
 import { removeBodyData } from "../lib/bodyData";
 import { updateUser, getUser } from "../lib/users";
-import { useUserContext } from "../contexts/UserContext";
 
 function BodyHistory({ bodyData, setShow, setEditData, memberId }) {
   const { setUser } = useUserContext();
 
+  // 체성분 데이터 삭제 핸들러
   const handleDelete = (id, index) => {
     Alert.alert(
       "알림",
@@ -31,9 +33,10 @@ function BodyHistory({ bodyData, setShow, setEditData, memberId }) {
 
               // 최신 데이터인지 확인
               if (index === 0) {
-                const nextData = bodyData[1]; // 최신 데이터가 삭제되면 그 다음 데이터 가져오기
+                // 최신 데이터가 삭제되면 그 다음 데이터 가져오기
+                const nextData = bodyData[1];
                 if (nextData) {
-                  // 다음 데이터를 updateUser에 반영
+                  // 다음 데이터를 updateUser를 통해 반영
                   await updateUser({
                     userId: memberId,
                     updateField: {
@@ -45,7 +48,7 @@ function BodyHistory({ bodyData, setShow, setEditData, memberId }) {
                     },
                   });
                 } else {
-                  // 데이터가 없는 경우
+                  // 삭제 이후 체성분 데이터가 없는 경우
                   await updateUser({
                     userId: memberId,
                     updateField: { bodyData: null },
@@ -65,11 +68,13 @@ function BodyHistory({ bodyData, setShow, setEditData, memberId }) {
     );
   };
 
+  // 체성분 데이터 수정 핸들러
   const handleEdit = (item) => {
     setEditData(item);
     setShow(true);
   };
 
+  // 체성분 항목 컴포넌트
   const renderItem = ({ item, index }) => {
     let weightDiff = 0;
     let SMMDiff = 0;

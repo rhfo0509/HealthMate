@@ -18,6 +18,7 @@ initFirebase();
 const firestore = getFirestore();
 const postsCollection = collection(firestore, "posts");
 
+// 게시글 생성 함수
 export async function createPost({
   author,
   URL,
@@ -43,6 +44,7 @@ export async function createPost({
   return docRef;
 }
 
+// 게시글 가져오는 함수
 export async function getPosts(authorId, relatedUserId, postType) {
   let q = query(
     postsCollection,
@@ -59,10 +61,12 @@ export async function getPosts(authorId, relatedUserId, postType) {
   return posts;
 }
 
+// 게시글 삭제 함수
 export async function removePost(id) {
   await deleteDoc(doc(postsCollection, id));
 }
 
+// 게시글 업데이트 함수
 export async function updatePost(id, data) {
   await updateDoc(doc(postsCollection, id), data);
 }

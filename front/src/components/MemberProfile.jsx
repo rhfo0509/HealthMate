@@ -17,8 +17,6 @@ import BodyChart from "./BodyChart";
 import BodyHistory from "./BodyHistory";
 
 function MemberProfile({ user }) {
-  const firestore = getFirestore();
-  const bodyDataCollection = collection(firestore, "bodyData");
   const [show, setShow] = useState(false);
   const [editData, setEditData] = useState(null);
   const [mode, setMode] = useState("weight");
@@ -27,6 +25,9 @@ function MemberProfile({ user }) {
   const [PBFData, setPBFData] = useState([]);
   const [bodyData, setBodyData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  const firestore = getFirestore();
+  const bodyDataCollection = collection(firestore, "bodyData");
 
   useEffect(() => {
     const q = query(
@@ -66,14 +67,12 @@ function MemberProfile({ user }) {
       setIsLoading(false);
     });
 
-    return () => {
-      unsubscribe();
-    };
+    return () => unsubscribe();
   }, [user.id]);
 
   // 등록 모드로 모달을 열 때는 editData를 null로 설정
   const handleAddData = () => {
-    setEditData(null); // 새로 등록할 때는 editData를 null로 설정
+    setEditData(null);
     setShow(true);
   };
 
@@ -89,7 +88,7 @@ function MemberProfile({ user }) {
       <View style={styles.chartInfo}>
         <BodyChartButtons
           setMode={setMode}
-          setShow={handleAddData} // 등록 모드에서는 handleAddData 호출
+          setShow={handleAddData}
           latestData={{
             weight: bodyData[0]?.weight,
             SMM: bodyData[0]?.SMM,
@@ -106,7 +105,7 @@ function MemberProfile({ user }) {
       </View>
 
       {isLoading ? (
-        <View style={styles.loadingContainer}>
+        <View style={styles.loading}>
           <ActivityIndicator size="large" color="#64B5F6" />
         </View>
       ) : bodyData.length === 0 ? (
@@ -169,7 +168,7 @@ const styles = StyleSheet.create({
     color: "#757575",
     textAlign: "center",
   },
-  loadingContainer: {
+  loading: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",

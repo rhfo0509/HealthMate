@@ -1,8 +1,9 @@
 import React from "react";
 import { View, Text, StyleSheet, Pressable } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import Avatar from "./Avatar";
 import { LinearGradient } from "expo-linear-gradient";
+
+import Avatar from "./Avatar";
 
 function MembershipCard({ membership }) {
   const navigation = useNavigation();
@@ -14,9 +15,18 @@ function MembershipCard({ membership }) {
     });
   };
 
+  if (!membership) {
+    return (
+      <View style={styles.noMembership}>
+        <Text style={styles.noMembershipText}>
+          아직 회원권이 존재하지 않습니다.
+        </Text>
+      </View>
+    );
+  }
+
   return (
     <LinearGradient
-      // 그라데이션 색상 설정
       colors={["#1f6feb", "#4a90e2"]}
       start={[0, 0]}
       end={[1, 1]}
@@ -73,6 +83,15 @@ function MembershipCard({ membership }) {
 }
 
 const styles = StyleSheet.create({
+  noMembership: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  noMembershipText: {
+    fontSize: 18,
+    color: "gray",
+  },
   card: {
     borderRadius: 8,
     padding: 16,

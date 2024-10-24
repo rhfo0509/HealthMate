@@ -1,6 +1,4 @@
-import { useNavigation, useRoute } from "@react-navigation/native";
 import React, { useState } from "react";
-import { format } from "date-fns";
 import {
   ActivityIndicator,
   Pressable,
@@ -9,28 +7,30 @@ import {
   Text,
   TouchableOpacity,
 } from "react-native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
-import { logOut } from "../lib/auth";
-import { createUser } from "../lib/users";
-import BorderedInput from "./BorderedInput";
-import CustomButton from "./CustomButton";
-import { useUserContext } from "../contexts/UserContext";
 import * as ImagePicker from "expo-image-picker";
+import { format } from "date-fns";
 import {
   getStorage,
   ref,
   getDownloadURL,
   uploadBytesResumable,
 } from "firebase/storage";
+
+import { useUserContext } from "../contexts/UserContext";
+import { logOut } from "../lib/auth";
+import { createUser } from "../lib/users";
+import BorderedInput from "./BorderedInput";
+import CustomButton from "./CustomButton";
 import Avatar from "./Avatar";
 
 function SetupProfile() {
   const navigation = useNavigation();
   const { params } = useRoute();
   const { uid } = params || {};
-  const storage = getStorage();
-
   const { setUser } = useUserContext();
+
   const [show, setShow] = useState(false);
   const [response, setResponse] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -41,11 +41,15 @@ function SetupProfile() {
   const [gender, setGender] = useState("");
   const [role, setRole] = useState("");
 
+  // Firebase Storage 인스턴스
+  const storage = getStorage();
+
   const onSubmit = async () => {
     setLoading(true);
 
     let photoURL = null;
 
+    // 프로필 사진을 등록한 경우
     if (response) {
       const asset = response.assets[0];
       const extension = asset.uri.split(".").pop();
@@ -56,6 +60,7 @@ function SetupProfile() {
         photoURL = await getDownloadURL(storageRef);
       });
     }
+
     const user = {
       id: uid,
       displayName,
@@ -64,6 +69,8 @@ function SetupProfile() {
       gender,
       photoURL,
     };
+
+    // users 컬렉션에 사용자 추가 및 전역으로 user 상태 관리
     createUser(user, role);
     setUser(user);
   };
@@ -73,6 +80,7 @@ function SetupProfile() {
     navigation.goBack();
   };
 
+  // 이미지 선택 함수
   const onSelectImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -86,7 +94,7 @@ function SetupProfile() {
     }
   };
 
-  const onDateSelected = (event, date) => {
+  const onDateSelected = (_, date) => {
     setShow(false);
     setBirthDate(date);
   };
@@ -113,7 +121,6 @@ function SetupProfile() {
           onChangeText={setPhoneNumber}
           keyboardType="number-pad"
         />
-        {/* 성별 선택 섹션 */}
         <View style={styles.section}>
           <Text style={styles.label}>성별</Text>
           <View style={styles.buttonGroup}>
@@ -151,7 +158,6 @@ function SetupProfile() {
             </TouchableOpacity>
           </View>
         </View>
-        {/* 회원/트레이너 선택 섹션 */}
         <View style={styles.section}>
           <Text style={styles.label}>구분</Text>
           <View style={styles.buttonGroup}>
@@ -189,7 +195,6 @@ function SetupProfile() {
             </TouchableOpacity>
           </View>
         </View>
-        {/* 생년월일 선택 섹션 */}
         <View style={styles.section}>
           <Text style={styles.label}>생년월일</Text>
           <TouchableOpacity

@@ -1,4 +1,3 @@
-// components/ExtendCountModal.js
 import React from "react";
 import {
   View,
@@ -7,13 +6,11 @@ import {
   Pressable,
   Modal,
   StyleSheet,
-  Alert,
 } from "react-native";
 
 function ExtendCountModal({
   visible,
   onClose,
-  membership,
   membershipCount,
   setMembershipCount,
   onSave,

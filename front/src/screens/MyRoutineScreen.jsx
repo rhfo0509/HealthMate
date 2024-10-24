@@ -1,4 +1,3 @@
-// MyRoutineScreen.js
 import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
@@ -9,15 +8,17 @@ import {
   Alert,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { getRoutines, removeRoutine } from "../lib/routines";
-import { useUserContext } from "../contexts/UserContext";
 import { format } from "date-fns";
+
+import { useUserContext } from "../contexts/UserContext";
+import { getRoutines, removeRoutine } from "../lib/routines";
 
 function MyRoutineScreen() {
   const { user } = useUserContext();
   const navigation = useNavigation();
   const [routines, setRoutines] = useState([]);
 
+  // 사용자 루틴을 가져와 상태에 설정
   useEffect(() => {
     const fetchRoutines = async () => {
       const myRoutines = await getRoutines(user.id);
@@ -26,14 +27,15 @@ function MyRoutineScreen() {
     fetchRoutines();
   }, [user.id]);
 
+  // 선택된 루틴 데이터를 RoutineScreen으로 전달하는 핸들러
   const handleRoutineSelect = (routine) => {
-    // 선택된 루틴 데이터를 RoutineScreen으로 전달
     navigation.navigate("Routine", {
       selectedRoutine: routine,
       isEditing: false,
     });
   };
 
+  // 루틴 삭제 핸들러
   const handleRoutineDelete = async (routineId) => {
     try {
       await removeRoutine(routineId);
@@ -43,6 +45,7 @@ function MyRoutineScreen() {
     }
   };
 
+  // 루틴 삭제 확인 알림창
   const confirmDeleteRoutine = (routineId, routineName) => {
     Alert.alert("루틴 삭제", `"${routineName}" 루틴을 삭제하시겠습니까?`, [
       {
@@ -57,6 +60,7 @@ function MyRoutineScreen() {
     ]);
   };
 
+  // 루틴 항목 렌더링
   const renderRoutineItem = ({ item }) => {
     const formattedDate = item.createdAt
       ? format(new Date(item.createdAt.seconds * 1000), "yyyy년 MM월 dd일")

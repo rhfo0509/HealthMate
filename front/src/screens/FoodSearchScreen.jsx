@@ -15,22 +15,26 @@ const FoodSearchScreen = () => {
   const navigation = useNavigation();
   const { index, foodName, postType, relatedUserId, result, postId } =
     route.params;
-  const [loading, setLoading] = useState(true);
-  const [foods, setFoods] = useState([]);
-  const [startIndex, setStartIndex] = useState(0);
-  const [selectedFood, setSelectedFood] = useState(null);
-  const [servingAmount, setServingAmount] = useState("1");
-  const [customAmount, setCustomAmount] = useState("");
-  const [isCustomInputActive, setIsCustomInputActive] = useState(false);
 
+  const [foods, setFoods] = useState([]); // 검색된 음식 데이터를 저장
+  const [startIndex, setStartIndex] = useState(0); // 페이지네이션을 위한 시작 인덱스
+  const [selectedFood, setSelectedFood] = useState(null); // 선택된 음식 항목
+  const [servingAmount, setServingAmount] = useState("1"); // 섭취량 (기본값 1)
+  const [customAmount, setCustomAmount] = useState(""); // 사용자가 직접 입력한 섭취량
+  const [isCustomInputActive, setIsCustomInputActive] = useState(false); // 섭취량 직접 입력 활성화 여부
+  const [loading, setLoading] = useState(true);
+
+  // 음식 데이터 load
   useEffect(() => {
     const loadFoodData = async () => {
       try {
+        // 음식 JSON 데이터를 가져와 필터링
         const response = require("../assets/food.json");
         const filteredFoods = response.filter((food) =>
           food.DESC_KOR.includes(foodName)
         );
 
+        // 검색된 음식 데이터를 우선순위에 따라 정렬
         const sortedFoods = filteredFoods.sort((a, b) => {
           const aExact = a.DESC_KOR === foodName;
           const bExact = b.DESC_KOR === foodName;
@@ -59,6 +63,7 @@ const FoodSearchScreen = () => {
     loadFoodData();
   }, [foodName]);
 
+  // 음식 선택 핸들러
   const handleFoodSelect = (food) => {
     if (selectedFood === food) {
       setSelectedFood(null);
@@ -71,6 +76,7 @@ const FoodSearchScreen = () => {
     }
   };
 
+  // 음식 등록 핸들러
   const handleRegister = () => {
     if (selectedFood) {
       const servingSize = parseFloat(servingAmount);
@@ -95,12 +101,14 @@ const FoodSearchScreen = () => {
       };
 
       if (postId) {
+        // 기존 게시글을 수정하는 경우
         navigation.navigate("Modify", {
           selectedFood: selectedFoodData,
           index,
           id: postId,
         });
       } else {
+        // 새로운 게시글인 경우
         navigation.navigate("DietPost", {
           selectedFood: selectedFoodData,
           index,
@@ -112,27 +120,30 @@ const FoodSearchScreen = () => {
     }
   };
 
+  // 다음 페이지 로드
   const loadNextPage = () => {
     setSelectedFood(null);
     setStartIndex((prevIndex) => prevIndex + 10);
   };
 
+  // 이전 페이지 로드
   const loadPreviousPage = () => {
     setSelectedFood(null);
     setStartIndex((prevIndex) => Math.max(prevIndex - 10, 0));
   };
 
-  const isAtStart = startIndex === 0;
-  const isAtEnd = startIndex + 10 >= foods.length;
+  const isAtStart = startIndex === 0; // 첫 페이지 여부
+  const isAtEnd = startIndex + 10 >= foods.length; // 마지막 페이지 여부
 
   if (loading) {
     return (
-      <View style={styles.loadingContainer}>
+      <View style={styles.loading}>
         <ActivityIndicator size="large" color="#1f6feb" />
       </View>
     );
   }
 
+  // 검색 결과가 없는 경우
   if (!loading && foods.length === 0) {
     return (
       <View style={styles.noResultsContainer}>
@@ -183,6 +194,7 @@ const FoodSearchScreen = () => {
           </Pressable>
         )}
       />
+      {/* 선택된 음식에 대해 섭취량 입력 */}
       {selectedFood && (
         <View style={styles.servingContainer}>
           <Text style={styles.servingLabel}>섭취량</Text>
@@ -291,7 +303,7 @@ const styles = StyleSheet.create({
     padding: 12,
     backgroundColor: "#fff",
   },
-  loadingContainer: {
+  loading: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",

@@ -1,8 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { StyleSheet, View, FlatList } from "react-native";
-import { useUserContext } from "../contexts/UserContext";
-import { getNotifications } from "../lib/notifications";
-import NotificationCard from "../components/NotificationCard";
 import {
   getFirestore,
   collection,
@@ -12,9 +9,13 @@ import {
   where,
 } from "firebase/firestore";
 
+import { useUserContext } from "../contexts/UserContext";
+import NotificationCard from "../components/NotificationCard";
+
 function NotifyScreen() {
   const { user } = useUserContext();
   const [notifications, setNotifications] = useState([]);
+
   const firestore = getFirestore();
   const notificationsCollection = collection(firestore, "notifications");
 
@@ -35,10 +36,6 @@ function NotifyScreen() {
     return () => {
       unsubscribe();
     };
-  }, []);
-
-  useEffect(() => {
-    getNotifications(user.id).then(setNotifications);
   }, []);
 
   return (

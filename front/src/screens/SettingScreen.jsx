@@ -1,8 +1,9 @@
 import React from "react";
 import { Pressable, StyleSheet, View, Text } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+
 import { useUserContext } from "../contexts/UserContext";
 import { logOut } from "../lib/auth";
-import { useNavigation } from "@react-navigation/native";
 
 function SettingScreen() {
   const { setUser } = useUserContext();

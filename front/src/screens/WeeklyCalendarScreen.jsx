@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, Pressable, StyleSheet, ScrollView } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { useUserContext } from "../contexts/UserContext";
+import { startOfWeek, endOfWeek, format, addDays } from "date-fns";
+import { ko } from "date-fns/locale";
 import {
   getFirestore,
   collection,
@@ -9,34 +10,35 @@ import {
   where,
   onSnapshot,
 } from "firebase/firestore";
-import { getTrainerSchedules } from "../lib/schedules";
-import { getMembersByTrainer } from "../lib/users";
-import { startOfWeek, endOfWeek, format, addDays } from "date-fns";
-import { ko } from "date-fns/locale";
 
-const HOURS_IN_DAY = Array.from({ length: 14 }, (_, i) => i + 9); // 9시부터 22시까지
+import { useUserContext } from "../contexts/UserContext";
+import { getMembersByTrainer } from "../lib/users";
+
+// 9시부터 22시까지 30분 단위의 시간대를 생성
+const HOURS_IN_DAY = Array.from({ length: 14 }, (_, i) => i + 9);
 
 function WeeklyCalendarScreen() {
   const navigation = useNavigation();
   const { user } = useUserContext();
-  const firestore = getFirestore();
   const [memberList, setMemberList] = useState([]);
   const [scheduleList, setScheduleList] = useState([]);
+
+  const firestore = getFirestore();
 
   const thisWeekStart = startOfWeek(new Date(), { weekStartsOn: 1 });
   const thisWeekEnd = endOfWeek(new Date(), { weekStartsOn: 1 });
 
   useEffect(() => {
-    const fetchData = async () => {
+    // 일정 컴포넌트의 배경색 지정을 위해 MemberList를 불러옴
+    (async () => {
       setMemberList(await getMembersByTrainer(user.id));
-      setScheduleList(await getTrainerSchedules(user.id));
-    };
-    fetchData();
+    })();
 
     const q = query(
       collection(firestore, "schedules"),
       where("trainerId", "==", user.id)
     );
+
     const unsubscribe = onSnapshot(q, (snapshot) => {
       setScheduleList(
         snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
@@ -57,6 +59,7 @@ function WeeklyCalendarScreen() {
     });
   }, [navigation]);
 
+  // 날짜와 시간을 합치는 함수
   const combineDateAndTime = (dateStr, timeStr) => {
     const date = new Date(dateStr);
     const [hours, minutes] = timeStr.split(":").map(Number);
@@ -64,12 +67,14 @@ function WeeklyCalendarScreen() {
     return date;
   };
 
+  // 회원의 색상과 이름을 포함한 객체 배열 생성
   const members = memberList?.map((member) => ({
     id: member.id,
     name: member.displayName,
     color: "#" + Math.floor(Math.random() * 16777215).toString(16),
   }));
 
+  // 주간 일정 필터링 및 매핑
   const events = scheduleList
     ?.filter(
       ({ date }) =>
@@ -88,8 +93,10 @@ function WeeklyCalendarScreen() {
       };
     });
 
+  // 일정이 hh:30 인 경우 상단에 30 픽셀의 마진을 추가
   const getTopOffset = (startDate) => (startDate.getMinutes() === 30 ? 30 : 0);
 
+  // 특정한 날짜와 시간에 해당하는 이벤트를 필터링하여 반환
   const getEventsForTime = (day, hour) =>
     events.filter(
       ({ startDate }) =>

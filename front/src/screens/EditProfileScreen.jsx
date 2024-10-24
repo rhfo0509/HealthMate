@@ -9,11 +9,9 @@ import {
   TextInput,
   Alert,
 } from "react-native";
-import { useUserContext } from "../contexts/UserContext";
 import { useNavigation } from "@react-navigation/native";
-import Avatar from "../components/Avatar";
-import * as ImagePicker from "expo-image-picker";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
+import * as ImagePicker from "expo-image-picker";
 import { format } from "date-fns";
 import {
   getStorage,
@@ -21,14 +19,16 @@ import {
   getDownloadURL,
   uploadBytesResumable,
 } from "firebase/storage";
-import IconRightButton from "../components/IconRightButton";
+
+import { useUserContext } from "../contexts/UserContext";
 import { updateUser } from "../lib/users";
 // import { changePassword } from "../lib/auth";
+import Avatar from "../components/Avatar";
+import IconRightButton from "../components/IconRightButton";
 
 function EditProfileScreen() {
   const navigation = useNavigation();
   const { user, setUser } = useUserContext();
-  const storage = getStorage();
 
   const [displayName, setDisplayName] = useState(user.displayName);
   const [phoneNumber, setPhoneNumber] = useState(user.phoneNumber);
@@ -40,6 +40,9 @@ function EditProfileScreen() {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [loading, setLoading] = useState(false);
 
+  const storage = getStorage();
+
+  // 이미지 선택 함수
   const onSelectImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -53,13 +56,15 @@ function EditProfileScreen() {
     }
   };
 
-  const onDateSelected = (event, date) => {
+  // 날짜 선택 시 datetimepicker 호출
+  const onDateSelected = (_, date) => {
     setShowDatePicker(false);
     if (date) {
       setBirthDate(date);
     }
   };
 
+  // 프로필 업데이트 함수
   const onSubmit = async () => {
     if (password !== confirmPassword) {
       Alert.alert("알림", "비밀번호가 일치하지 않습니다.");
@@ -68,6 +73,7 @@ function EditProfileScreen() {
     setLoading(true);
     let photoURL = user.photoURL;
 
+    // 새로운 프로필 이미지가 선택된 경우
     if (response) {
       const asset = response.assets[0];
       const extension = asset.uri.split(".").pop();
@@ -295,9 +301,6 @@ const styles = StyleSheet.create({
   },
   buttons: {
     marginTop: 24,
-  },
-  spinner: {
-    marginTop: 32,
   },
   loading: {
     flex: 1,

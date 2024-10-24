@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet } from "react-native";
-import PostCard from "../components/PostCard";
+import { View, StyleSheet, FlatList } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import CommentCard from "../components/CommentCard";
-import IconRightButton from "../components/IconRightButton";
-import { FlatList } from "react-native-gesture-handler";
 import {
   getFirestore,
   collection,
@@ -13,18 +9,22 @@ import {
   orderBy,
   doc,
 } from "firebase/firestore";
+
 import { getComments } from "../lib/comments";
+import PostCard from "../components/PostCard";
+import CommentCard from "../components/CommentCard";
+import IconRightButton from "../components/IconRightButton";
 
 function PostScreen() {
   const route = useRoute();
   const navigation = useNavigation();
-  const firestore = getFirestore();
-
   const { author, URL, content: initialContent, createdAt, id } = route.params;
-  const commentsCollection = collection(firestore, `posts/${id}/comments`);
 
   const [comments, setComments] = useState([]);
   const [content, setContent] = useState(initialContent);
+
+  const firestore = getFirestore();
+  const commentsCollection = collection(firestore, `posts/${id}/comments`);
 
   // comments 컬렉션에 변화 발생시
   useEffect(() => {
@@ -53,10 +53,6 @@ function PostScreen() {
       unsubscribe();
     };
   }, [content]);
-
-  useEffect(() => {
-    getComments(id).then(setComments);
-  }, []);
 
   useEffect(() => {
     navigation.setOptions({

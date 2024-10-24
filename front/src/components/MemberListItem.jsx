@@ -1,22 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { differenceInYears, parse } from "date-fns";
 import { useNavigation } from "@react-navigation/native";
+
 import Avatar from "./Avatar";
 
 function MemberListItem({ member }) {
-  const {
-    id,
-    displayName,
-    birthDate,
-    gender,
-    photoURL,
-    status,
-    count,
-    remaining,
-  } = member;
   const navigation = useNavigation();
+  const { displayName, birthDate, gender, photoURL, status, count, remaining } =
+    member;
 
+  // 회원 컴포넌트 클릭 시 커뮤니티 화면으로 이동
   const onPress = () => {
     navigation.navigate("MemberDetail", {
       relatedUser: member,
@@ -24,6 +18,7 @@ function MemberListItem({ member }) {
     });
   };
 
+  // 생년월일을 기반으로 나이를 계산하는 함수
   const calculateAge = (birthDate) => {
     const diff =
       differenceInYears(
@@ -33,6 +28,17 @@ function MemberListItem({ member }) {
     return diff;
   };
 
+  // 회원 상태 텍스트 표시 함수
+  const getStatusText = () => {
+    if (status === "active") {
+      return `${remaining} / ${count}회 남음`;
+    } else if (status === "paused") {
+      return "중단됨";
+    } else {
+      return "만료됨";
+    }
+  };
+
   return (
     <Pressable
       style={styles.container}
@@ -40,7 +46,7 @@ function MemberListItem({ member }) {
       onPress={onPress}
     >
       <View style={styles.content}>
-        <Avatar source={photoURL && { uri: photoURL }} size={56} />
+        <Avatar source={photoURL && { uri: photoURL }} size={48} />
         <View style={styles.infoContainer}>
           <Text style={styles.nameText}>{displayName}</Text>
           <Text style={styles.subText}>
@@ -48,13 +54,7 @@ function MemberListItem({ member }) {
           </Text>
         </View>
         <View style={styles.statusContainer}>
-          <Text style={styles.statusText}>
-            {status === "active"
-              ? `${remaining} / ${count}회 남음`
-              : status === "paused"
-              ? "중단됨"
-              : "만료됨"}
-          </Text>
+          <Text style={styles.statusText}>{getStatusText()}</Text>
         </View>
       </View>
     </Pressable>

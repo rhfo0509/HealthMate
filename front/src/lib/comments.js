@@ -16,6 +16,7 @@ initFirebase();
 
 const firestore = getFirestore();
 
+// 댓글 생성 함수
 export function createComment({ content, author, postId }) {
   return addDoc(collection(firestore, `posts/${postId}/comments`), {
     author,
@@ -24,6 +25,7 @@ export function createComment({ content, author, postId }) {
   });
 }
 
+// 대댓글 생성 함수
 export function createSubComment({ content, author, postId, commentId }) {
   return addDoc(
     collection(firestore, `posts/${postId}/comments/${commentId}/subcomments`),
@@ -35,6 +37,7 @@ export function createSubComment({ content, author, postId, commentId }) {
   );
 }
 
+// 게시글에 달린 댓글 불러오는 함수
 export async function getComments(postId) {
   let q = query(
     collection(firestore, `posts/${postId}/comments`),
@@ -48,6 +51,7 @@ export async function getComments(postId) {
   return comments;
 }
 
+// 댓글에 달린 대댓글 불러오는 함수
 export async function getSubComments({ postId, commentId }) {
   let q = query(
     collection(firestore, `posts/${postId}/comments/${commentId}/subcomments`),
@@ -61,12 +65,14 @@ export async function getSubComments({ postId, commentId }) {
   return subcomments;
 }
 
+// 댓글 삭제 함수
 export async function removeComment({ postId, commentId }) {
   await deleteDoc(
     doc(collection(firestore, `posts/${postId}/comments`), commentId)
   );
 }
 
+// 대댓글 삭제 함수
 export async function removeSubComment({ postId, commentId, subCommentId }) {
   await deleteDoc(
     doc(
@@ -79,6 +85,7 @@ export async function removeSubComment({ postId, commentId, subCommentId }) {
   );
 }
 
+// 댓글 업데이트 함수
 export async function updateComment({ postId, commentId, content }) {
   await updateDoc(
     doc(collection(firestore, `posts/${postId}/comments`), commentId),
@@ -88,6 +95,7 @@ export async function updateComment({ postId, commentId, content }) {
   );
 }
 
+// 대댓글 업데이트 함수
 export async function updateSubComment({
   postId,
   commentId,

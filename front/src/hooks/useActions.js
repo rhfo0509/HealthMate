@@ -1,8 +1,9 @@
 import { useActionSheet } from "@expo/react-native-action-sheet";
+import { useNavigation } from "@react-navigation/native";
+
 import { removePost } from "../lib/posts";
-import { useNavigation, useRoute } from "@react-navigation/native";
 import { removeComment, removeSubComment } from "../lib/comments";
-import { removeFoods } from "../lib/foods"; // removeFoods import
+import { removeFoods } from "../lib/foods";
 
 export default function useActions({ id, content, postId, parentId, foods }) {
   const { showActionSheetWithOptions } = useActionSheet();

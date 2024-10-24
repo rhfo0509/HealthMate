@@ -1,27 +1,30 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { StyleSheet, View, TextInput } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import IconRightButton from "../components/IconRightButton";
+
 import { useUserContext } from "../contexts/UserContext";
 import { createComment, createSubComment } from "../lib/comments";
+import IconRightButton from "../components/IconRightButton";
 
 function CommentScreen() {
   const route = useRoute();
   const navigation = useNavigation();
   const { postId, commentId } = route.params;
-  const [content, setContent] = useState("");
   const { user: author } = useUserContext();
 
+  const [content, setContent] = useState("");
+
+  // 댓글, 대댓글 처리
   const onSubmit = useCallback(async () => {
     navigation.pop();
 
-    // 댓글을 등록한 경우
+    // 댓글 등록
     if (!commentId) {
       createComment({ content, author, postId });
       return;
     }
 
-    // 대댓글을 등록한 경우
+    // 대댓글 등록
     createSubComment({ content, author, postId, commentId });
   }, [postId, commentId, author, content, navigation]);
 

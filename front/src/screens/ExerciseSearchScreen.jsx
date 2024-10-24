@@ -8,7 +8,8 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import exerciseData from "../assets/exercise.json"; // JSON 파일에서 데이터 가져오기
+
+import exerciseData from "../assets/exercise.json";
 
 function ExerciseSearchScreen() {
   const route = useRoute();
@@ -33,13 +34,14 @@ function ExerciseSearchScreen() {
     "대퇴사두",
   ];
 
+  // 카테고리 및 검색어에 따른 운동 목록 필터링
   useEffect(() => {
     const allExercises = Object.entries(exerciseData).flatMap(
       ([category, exercises]) =>
         exercises.map((exercise) => ({ name: exercise, category }))
     );
 
-    // 카테고리에 따라 운동 목록을 필터링하고 검색어를 추가로 적용
+    // 카테고리에 따른 운동 목록 필터링
     const filteredByCategory =
       selectedCategory === "전체"
         ? allExercises
@@ -47,7 +49,7 @@ function ExerciseSearchScreen() {
             (exercise) => exercise.category === selectedCategory
           );
 
-    // 검색어에 따라 운동 목록을 필터링
+    // 검색어에 따른 운동 목록 필터링
     const finalFiltered = searchQuery.trim()
       ? filteredByCategory.filter((exercise) =>
           exercise.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -59,6 +61,7 @@ function ExerciseSearchScreen() {
     );
   }, [selectedCategory, searchQuery]);
 
+  // 개별 운동 항목 렌더링
   const renderExerciseItem = ({ item }) => (
     <TouchableOpacity
       style={styles.exerciseItem}
@@ -78,6 +81,7 @@ function ExerciseSearchScreen() {
 
   return (
     <View style={styles.container}>
+      {/* 운동 검색 입력 필드 */}
       <View style={styles.searchContainer}>
         <TextInput
           style={styles.searchInput}
@@ -86,6 +90,7 @@ function ExerciseSearchScreen() {
           onChangeText={setSearchQuery}
         />
       </View>
+      {/* 운동 카테고리 필터 */}
       <View style={styles.categoryContainer}>
         <FlatList
           horizontal
@@ -112,6 +117,7 @@ function ExerciseSearchScreen() {
           keyExtractor={(item) => item}
         />
       </View>
+      {/* 운동 목록 렌더링 */}
       <FlatList
         data={filteredExercises}
         renderItem={renderExerciseItem}

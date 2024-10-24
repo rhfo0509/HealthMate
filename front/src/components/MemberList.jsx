@@ -8,13 +8,14 @@ import {
 
 import { useUserContext } from "../contexts/UserContext";
 import { removeMemberByTrainer } from "../lib/users";
-import { removeSchedulesWithMember } from "../lib/schedules";
-import { removeMembershipWithMember } from "../lib/memberships";
+import { removeSchedules } from "../lib/schedules";
+import { removeMembership } from "../lib/memberships";
 import MemberListItem from "./MemberListItem";
 
 function MemberList({ members, memberships, ListHeaderComponent }) {
   const { user } = useUserContext();
 
+  // 회원권 상태, 횟수, 잔여횟수가 추가된 회원 목록
   const membersWithStatus = members.map((member) => {
     const membership = memberships.find(
       (membership) => membership.memberId === member.id
@@ -33,10 +34,11 @@ function MemberList({ members, memberships, ListHeaderComponent }) {
   return (
     <SwipeableFlatList
       data={membersWithStatus}
-      style={styles.container}
+      style={styles.memberList}
       renderItem={({ item }) => <MemberListItem member={item} />}
       keyExtractor={(member) => member.id}
       ListHeaderComponent={ListHeaderComponent}
+      // 오른쪽으로 스와이프 시 삭제 버튼 렌더링
       renderRightActions={({ item }) => (
         <SwipeableQuickActions>
           <SwipeableQuickActionButton
@@ -52,8 +54,9 @@ function MemberList({ members, memberships, ListHeaderComponent }) {
                   {
                     text: "확인",
                     onPress: async () => {
-                      removeSchedulesWithMember(item.id);
-                      removeMembershipWithMember(user.id, item.id);
+                      // 회원 스케줄, 회원권, 회원 정보 일괄 삭제
+                      removeSchedules(item.id);
+                      removeMembership(user.id, item.id);
                       removeMemberByTrainer(user.id, item.id);
                     },
                   },
@@ -78,7 +81,7 @@ function MemberList({ members, memberships, ListHeaderComponent }) {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1 },
+  memberList: { flex: 1 },
 });
 
 export default MemberList;

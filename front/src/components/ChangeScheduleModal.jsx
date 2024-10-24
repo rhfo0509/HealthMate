@@ -1,4 +1,3 @@
-// components/ChangeScheduleModal.js
 import React, { useState } from "react";
 import { View, Text, Pressable, Modal, StyleSheet } from "react-native";
 import { CheckBox } from "react-native-elements";
@@ -10,10 +9,10 @@ function ChangeScheduleModal({
   onSave,
   membershipDays,
   setMembershipDays,
+  isLoading,
 }) {
   const [showPicker, setShowPicker] = useState({ visible: false, day: null });
 
-  // Handle time selection
   const handleTimeChange = (event, selectedTime) => {
     if (event.type === "dismissed") {
       setShowPicker({ visible: false, day: null });
@@ -76,11 +75,20 @@ function ChangeScheduleModal({
           <View style={styles.modalButtons}>
             <Pressable
               onPress={onSave}
-              style={[styles.modalButton, { backgroundColor: "#1f6feb" }]}
+              disabled={isLoading}
+              style={[
+                styles.modalButton,
+                { backgroundColor: "#1f6feb" },
+                isLoading && styles.disabledButton,
+              ]}
             >
               <Text style={{ color: "#fff" }}>등록</Text>
             </Pressable>
-            <Pressable onPress={onClose} style={styles.modalButton}>
+            <Pressable
+              onPress={onClose}
+              disabled={isLoading}
+              style={[styles.modalButton, isLoading && styles.disabledButton]}
+            >
               <Text style={{ color: "#1f6feb" }}>취소</Text>
             </Pressable>
           </View>

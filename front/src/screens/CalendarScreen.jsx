@@ -12,7 +12,6 @@ import {
 } from "firebase/firestore";
 
 import { useUserContext } from "../contexts/UserContext";
-import { getTrainerSchedules } from "../lib/schedules";
 import IconRightButton from "../components/IconRightButton";
 import CalendarView from "../components/CalendarView";
 import ScheduleList from "../components/ScheduleList";
