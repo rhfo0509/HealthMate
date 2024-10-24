@@ -1,15 +1,16 @@
 import React from "react";
 import { Alert, StyleSheet } from "react-native";
-import MemberListItem from "./MemberListItem";
 import {
   SwipeableFlatList,
   SwipeableQuickActionButton,
   SwipeableQuickActions,
 } from "react-native-swipe-list";
-import { removeMemberByTrainer } from "../lib/users";
+
 import { useUserContext } from "../contexts/UserContext";
+import { removeMemberByTrainer } from "../lib/users";
 import { removeSchedulesWithMember } from "../lib/schedules";
 import { removeMembershipWithMember } from "../lib/memberships";
+import MemberListItem from "./MemberListItem";
 
 function MemberList({ members, memberships, ListHeaderComponent }) {
   const { user } = useUserContext();
@@ -51,7 +52,7 @@ function MemberList({ members, memberships, ListHeaderComponent }) {
                   {
                     text: "확인",
                     onPress: async () => {
-                      removeSchedulesWithMember(user.id, item.id);
+                      removeSchedulesWithMember(item.id);
                       removeMembershipWithMember(user.id, item.id);
                       removeMemberByTrainer(user.id, item.id);
                     },
