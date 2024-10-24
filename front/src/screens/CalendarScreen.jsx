@@ -8,6 +8,7 @@ import {
   query,
   where,
   onSnapshot,
+  orderBy,
 } from "firebase/firestore";
 
 import { useUserContext } from "../contexts/UserContext";
@@ -30,7 +31,12 @@ function CalendarScreen() {
   // 최초 화면 접근 시 로그인한 트레이너의 일정을 받아오고
   // 이후 schedules 컬렉션에 변화 발생시 실행
   useEffect(() => {
-    const q = query(schedulesCollection, where("trainerId", "==", user.id));
+    const q = query(
+      schedulesCollection,
+      where("trainerId", "==", user.id),
+      orderBy("date"),
+      orderBy("startTime")
+    );
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const schedules = snapshot.docs.map((doc) => ({
         id: doc.id,
@@ -42,18 +48,6 @@ function CalendarScreen() {
       unsubscribe();
     };
   }, []);
-
-  // 날짜별 -> 시간별로 일정 정렬
-  useEffect(() => {
-    scheduleList.sort((a, b) => {
-      // 먼저 날짜를 비교하여 오름차순으로 정렬
-      if (a.date < b.date) return -1;
-      if (a.date > b.date) return 1;
-      // 날짜가 동일한 경우 시작시간을 비교하여 오름차순으로 정렬
-      if (a.startTime < b.startTime) return -1;
-      if (a.startTime > b.startTime) return 1;
-    });
-  }, [scheduleList]);
 
   useEffect(() => {
     navigation.setOptions({
@@ -68,9 +62,7 @@ function CalendarScreen() {
             <Text style={{ color: "#1f6feb" }}>주간 일정 보기</Text>
           </Pressable>
           <IconRightButton
-            onPress={() => {
-              navigation.navigate("Notify");
-            }}
+            onPress={() => navigation.navigate("Notify")}
             name="notifications-none"
           />
         </>
@@ -78,11 +70,13 @@ function CalendarScreen() {
     });
   }, [navigation]);
 
+  // 캘린더에서 일정이 있는 날짜에 대해 marked 처리
   const markedDates = scheduleList.reduce((acc, cur) => {
     acc[cur.date] = { marked: true };
     return acc;
   }, {});
 
+  // 일정을 날짜별로 분류
   const filteredScheduleList = scheduleList.filter(
     (schedule) => schedule.date === selectedDate
   );
