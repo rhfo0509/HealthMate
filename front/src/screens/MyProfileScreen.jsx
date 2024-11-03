@@ -7,6 +7,7 @@ import { getRole } from "../lib/users";
 import IconRightButton from "../components/IconRightButton";
 import TrainerProfile from "../components/TrainerProfile";
 import MemberProfile from "../components/MemberProfile";
+import MemberStatTab from "../navigation/MemberStatTab";
 
 function MyProfileScreen() {
   const navigation = useNavigation();
@@ -53,7 +54,10 @@ function MyProfileScreen() {
   return role === "trainer" ? (
     <TrainerProfile user={user} />
   ) : (
-    <MemberProfile user={user} />
+    <>
+      <MemberProfile user={user} />
+      <MemberStatTab user={user} />
+    </>
   );
 }
 
