@@ -2,7 +2,7 @@ import React from "react";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 
 import BodyStatScreen from "../screens/BodyStatScreen";
-import NutritionStatScreen from "../screens/NutritionStatScreen";
+import CalorieStatScreen from "../screens/CalorieStatScreen";
 import ExerciseStatScreen from "../screens/ExerciseStatScreen";
 
 const StatTab = createMaterialTopTabNavigator();
@@ -23,9 +23,9 @@ function MemberStatTab({ user }) {
         options={{ tabBarLabel: "체성분 통계" }}
       />
       <StatTab.Screen
-        name="NutritionStat"
-        component={NutritionStatScreen}
-        options={{ tabBarLabel: "영양성분 통계" }}
+        name="CalorieStat"
+        component={CalorieStatScreen}
+        options={{ tabBarLabel: "칼로리 통계" }}
       />
       <StatTab.Screen
         name="ExerciseStat"

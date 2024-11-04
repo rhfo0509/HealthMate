@@ -47,7 +47,7 @@ function NutritionSection({ foods, selectedDate, totals, recommendedIntake }) {
       ) : (
         <View style={styles.infoContainer}>
           <Text style={styles.infoText}>
-            체성분을 등록한 후에 차트가 표시됩니다.
+            음식의 영양성분을 등록한 후에 차트가 표시됩니다.
           </Text>
         </View>
       )}

@@ -20,19 +20,7 @@ function ExerciseSearchScreen() {
   const [filteredExercises, setFilteredExercises] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState("전체");
 
-  const categories = [
-    "전체",
-    "가슴",
-    "등",
-    "어깨",
-    "삼두",
-    "이두",
-    "전완",
-    "복근",
-    "둔근",
-    "햄스트링",
-    "대퇴사두",
-  ];
+  const categories = ["전체", "등", "어깨", "팔", "가슴", "다리", "코어"];
 
   // 카테고리 및 검색어에 따른 운동 목록 필터링
   useEffect(() => {
