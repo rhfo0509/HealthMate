@@ -4,16 +4,13 @@ import { PieChart } from "react-native-gifted-charts";
 
 const NutritionPieChart = ({ title, total, recommended, color }) => {
   const createPieData = (total, recommended, color) => {
-    // total이 recommended를 초과할 경우 recommended와 동일하게 표시
-    const displayTotal = total > recommended ? recommended : total;
-
     return [
       {
-        value: parseFloat(displayTotal),
+        value: parseFloat(total),
         color: color,
       },
       {
-        value: parseFloat(recommended - displayTotal),
+        value: +total > +recommended ? 0 : parseFloat(recommended - total),
         color: "#e0e0e0", // 남은 섭취량은 회색으로
       },
     ];
@@ -28,7 +25,7 @@ const NutritionPieChart = ({ title, total, recommended, color }) => {
       <PieChart
         data={createPieData(total, recommended, color)}
         radius={80}
-        innerRadius={60}
+        innerRadius={70}
         centerLabelComponent={() => (
           <View style={styles.centerLabelWrapper}>
             <Text style={styles.centerLabel}>
