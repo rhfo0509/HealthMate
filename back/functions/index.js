@@ -1,5 +1,5 @@
 const { onSchedule } = require("firebase-functions/v2/scheduler");
-const { format } = require("date-fns");
+const { format, subDays } = require("date-fns");
 const admin = require("firebase-admin");
 const logger = require("firebase-functions/logger");
 
