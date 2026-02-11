@@ -16,7 +16,9 @@ import {
   where,
   onSnapshot,
 } from "firebase/firestore";
+import { httpsCallable } from "firebase/functions";
 
+import { getFirebaseFunctions } from "../../firebaseConfig";
 import { getMembership, updateMembership } from "../lib/memberships";
 import {
   createSchedulesWithMembership,
@@ -61,7 +63,7 @@ function MembershipScreen() {
     };
   }, [memberId]);
 
-  // 회원권 일시중지
+  // 회원권 일시중지 (Cloud Function 호출)
   const onPressPause = () => {
     Alert.alert(
       null,
@@ -71,10 +73,14 @@ function MembershipScreen() {
         {
           text: "네",
           onPress: async () => {
-            await updateMembership(membership.id, { status: "paused" });
-            const updatedMembership = await getMembership(memberId);
-            setMembership(updatedMembership);
-            await removeSchedules(memberId); // 일정 삭제
+            try {
+              const functions = getFirebaseFunctions();
+              const pause = httpsCallable(functions, "pauseMembership");
+              await pause({ membershipId: membership.id, memberId });
+            } catch (error) {
+              console.error("일시중지 중 오류 발생:", error);
+              Alert.alert("오류", "일시중지 처리 중 문제가 발생했습니다.");
+            }
           },
         },
       ],
@@ -82,7 +88,7 @@ function MembershipScreen() {
     );
   };
 
-  // 회원권 재개
+  // 회원권 재개 (Cloud Function 호출)
   const onPressResume = () => {
     Alert.alert(
       null,
@@ -92,13 +98,14 @@ function MembershipScreen() {
         {
           text: "네",
           onPress: async () => {
-            await updateMembership(membership.id, {
-              status: "active",
-              startDate: format(new Date(), "yyyy-MM-dd"), // 재개일을 현재 날짜로 설정
-            });
-            const updatedMembership = await getMembership(memberId);
-            setMembership(updatedMembership);
-            await createSchedulesWithMembership(updatedMembership); // 일정 생성
+            try {
+              const functions = getFirebaseFunctions();
+              const resume = httpsCallable(functions, "resumeMembership");
+              await resume({ membershipId: membership.id, memberId });
+            } catch (error) {
+              console.error("재개 중 오류 발생:", error);
+              Alert.alert("오류", "재개 처리 중 문제가 발생했습니다.");
+            }
           },
         },
       ],
@@ -181,21 +188,22 @@ function MembershipScreen() {
             try {
               setIsLoading(true);
 
-              await removeSchedules(memberId); // 기존 일정 삭제
               const updatedSchedules = Object.entries(membershipDays)
                 .filter(([_, data]) => data.checked)
                 .map(([day, data]) => ({ day, startTime: data.startTime }));
 
-              await updateMembership(membership.id, {
-                schedules: updatedSchedules,
-              }); // 새로운 일정 업데이트
-              const updatedMembership = await getMembership(memberId);
-              await createSchedulesWithMembership(updatedMembership);
+              const functions = getFirebaseFunctions();
+              const change = httpsCallable(functions, "changeMembershipSchedule");
+              await change({
+                membershipId: membership.id,
+                memberId,
+                newSchedules: updatedSchedules,
+              });
 
-              setMembership(updatedMembership);
               Alert.alert("성공", "요일/시간이 변경되었습니다.");
             } catch (error) {
               console.error("요일/시간 변경 중 오류 발생:", error);
+              Alert.alert("오류", "요일/시간 변경 중 문제가 발생했습니다.");
             } finally {
               setIsLoading(false);
               setShowSecond(false);

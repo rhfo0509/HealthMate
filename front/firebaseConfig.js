@@ -1,5 +1,6 @@
 import { initializeApp, getApps, getApp } from "firebase/app";
 import { getReactNativePersistence, initializeAuth } from "firebase/auth";
+import { getFunctions } from "firebase/functions";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const firebaseConfig = {
@@ -9,6 +10,8 @@ const firebaseConfig = {
   projectId: process.env.EXPO_PUBLIC_FIREBASE_PROJECT_ID,
   storageBucket: process.env.EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET,
 };
+
+let functions = null;
 
 export const initFirebase = () => {
   let app = null;
@@ -25,4 +28,12 @@ export const initFirebase = () => {
   } else {
     app = getApp();
   }
+  functions = getFunctions(app);
+};
+
+export const getFirebaseFunctions = () => {
+  if (!functions) {
+    initFirebase();
+  }
+  return functions;
 };

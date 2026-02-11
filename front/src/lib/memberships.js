@@ -1,30 +1,26 @@
 import {
   getFirestore,
   collection,
-  addDoc,
   getDocs,
-  serverTimestamp,
   query,
-  deleteDoc,
+  where,
   updateDoc,
   doc,
-  where,
 } from "firebase/firestore";
-import { initFirebase } from "../../firebaseConfig";
+import { httpsCallable } from "firebase/functions";
+import { initFirebase, getFirebaseFunctions } from "../../firebaseConfig";
 
 initFirebase();
 
 const firestore = getFirestore();
 const membershipsCollection = collection(firestore, "memberships");
 
-// 회원권 생성 함수
+// 회원권 생성 함수 (Cloud Function 호출)
 export async function createMembership(membership) {
-  return await addDoc(membershipsCollection, {
-    ...membership,
-    remaining: membership.count,
-    status: "active",
-    createdAt: serverTimestamp(),
-  });
+  const functions = getFirebaseFunctions();
+  const create = httpsCallable(functions, "createMembership");
+  const result = await create({ membership });
+  return result.data;
 }
 
 // 회원권 가져오는 함수
@@ -44,49 +40,25 @@ export async function getMembershipsByTrainer(trainerId) {
   return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
 }
 
-// 회원권 잔여 횟수 1 차감 함수
+// 회원권 잔여 횟수 1 차감 함수 (Cloud Function 호출)
 export async function decreaseMembershipCount(trainerId, memberId) {
-  const q = query(
-    membershipsCollection,
-    where("trainerId", "==", trainerId),
-    where("memberId", "==", memberId)
-  );
-  const snapshot = await getDocs(q);
-  if (snapshot.empty) {
-    console.log("해당 회원에게 회원권이 존재하지 않습니다.");
-    return;
-  }
-
-  const membershipDoc = snapshot.docs[0];
-  const remaining = membershipDoc.data().remaining - 1;
-  await updateDoc(membershipDoc.ref, { remaining });
-
-  if (remaining === 0) {
-    await updateMembership(membershipDoc.id, { status: "expired" });
-    console.log("잔여횟수가 0이기 때문에 상태를 expired로 변경");
-  }
-  console.log("회원권 잔여횟수 차감 완료");
+  const functions = getFirebaseFunctions();
+  const decrease = httpsCallable(functions, "decreaseMembershipCount");
+  const result = await decrease({ trainerId, memberId });
+  return result.data;
 }
 
-// 회원권 삭제 함수
+// 회원권 삭제 함수 (Cloud Function 호출)
 export async function removeMembership(trainerId, memberId) {
-  const q = query(
-    membershipsCollection,
-    where("trainerId", "==", trainerId),
-    where("memberId", "==", memberId)
-  );
-  const snapshot = await getDocs(q);
-  if (snapshot.empty) {
-    console.log("해당 회원에게 회원권이 존재하지 않습니다.");
-    return;
-  }
-  await deleteDoc(snapshot.docs[0].ref);
-  console.log("회원 및 회원권 삭제 완료");
+  const functions = getFirebaseFunctions();
+  const remove = httpsCallable(functions, "removeMembership");
+  await remove({ trainerId, memberId });
 }
 
-// 회원권 업데이트 함수
+// 회원권 업데이트 함수 (Cloud Function 호출)
 export async function updateMembership(id, updateField) {
-  await updateDoc(doc(membershipsCollection, id), {
-    ...updateField,
-  });
+  const functions = getFirebaseFunctions();
+  const update = httpsCallable(functions, "updateMembership");
+  const result = await update({ membershipId: id, updateField });
+  return result.data;
 }
