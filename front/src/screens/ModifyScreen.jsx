@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
+﻿import React, { useState, useEffect, useCallback, useRef } from "react";
 import {
   StyleSheet,
   TextInput,
@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { MaterialIcons } from "@expo/vector-icons";
+import { colors } from "../styles/theme";
 
 import { updatePost } from "../lib/posts";
 import { updateComment, updateSubComment } from "../lib/comments";
@@ -145,7 +146,7 @@ function ModifyScreen() {
         ))}
       {foods.length > 0 && (
         <Pressable style={styles.addButton} onPress={addFood}>
-          <MaterialIcons name="add-circle-outline" size={24} color="#1f6feb" />
+          <MaterialIcons name="add-circle-outline" size={24} color={colors.primary[500]} />
           <Text style={styles.addText}>음식 추가</Text>
         </Pressable>
       )}
@@ -156,7 +157,7 @@ function ModifyScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: colors.surface,
   },
   input: {
     padding: 16,
@@ -169,7 +170,7 @@ const styles = StyleSheet.create({
   },
   addText: {
     marginLeft: 5,
-    color: "#1f6feb",
+    color: colors.primary[500],
     fontSize: 16,
     marginTop: 1,
   },

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+﻿import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -11,6 +11,7 @@ import { useNavigation } from "@react-navigation/native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { CheckBox } from "react-native-elements";
 import { getDoc } from "firebase/firestore";
+import { colors } from "../styles/theme";
 
 import { useUserContext } from "../contexts/UserContext";
 import {
@@ -335,13 +336,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: "#f1f5f9",
+    backgroundColor: colors.surface,
   },
   header: {
     fontSize: 20,
     fontWeight: "bold",
     marginBottom: 15,
-    color: "#2d3748",
+    color: colors.gray[900],
   },
   inputWrapper: {
     marginBottom: 20,
@@ -353,14 +354,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   activeButton: {
-    backgroundColor: "#1f6feb",
+    backgroundColor: colors.primary[500],
   },
   buttonText: {
-    color: "#ffffff",
+    color: colors.background,
     fontWeight: "bold",
   },
   disabledButton: {
-    backgroundColor: "#cbd5e0",
+    backgroundColor: colors.border.dark,
   },
   inlineInputs: {
     flexDirection: "row",
@@ -370,7 +371,7 @@ const styles = StyleSheet.create({
   label: {
     width: 70,
     fontSize: 16,
-    color: "#2d3748",
+    color: colors.gray[900],
     marginRight: 10,
   },
   datePickerButton: {
@@ -379,18 +380,18 @@ const styles = StyleSheet.create({
     height: 48,
     borderRadius: 4,
     borderWidth: 1,
-    borderColor: "#cbd5e0",
-    backgroundColor: "#ffffff",
+    borderColor: colors.border.dark,
+    backgroundColor: colors.background,
     justifyContent: "center",
   },
   datePickerText: {
-    color: "#4a5568",
+    color: colors.gray[700],
   },
   subHeader: {
     fontSize: 16,
     fontWeight: "600",
     marginVertical: 10,
-    color: "#4a5568",
+    color: colors.gray[700],
   },
   scheduleHeader: {
     flexDirection: "row",
@@ -404,7 +405,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     padding: 8,
     borderRadius: 4,
-    backgroundColor: "#e2e8f0",
+    backgroundColor: colors.border.light,
   },
   checkBox: {
     backgroundColor: "transparent",
@@ -415,14 +416,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginRight: 15,
     marginBottom: 5,
-    color: "#2d3748",
+    color: colors.gray[900],
   },
   timePickerButton: {
     padding: 10,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: "#cbd5e0",
-    backgroundColor: "#ffffff",
+    borderColor: colors.border.dark,
+    backgroundColor: colors.background,
     flex: 1,
     alignItems: "center",
   },

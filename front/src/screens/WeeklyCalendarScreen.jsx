@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+﻿import React, { useEffect, useState } from "react";
 import { View, Text, Pressable, StyleSheet, ScrollView } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { startOfWeek, endOfWeek, format, addDays } from "date-fns";
@@ -10,6 +10,7 @@ import {
   where,
   onSnapshot,
 } from "firebase/firestore";
+import { colors } from "../styles/theme";
 
 import { useUserContext } from "../contexts/UserContext";
 import { getMembersByTrainer } from "../lib/users";
@@ -53,7 +54,7 @@ function WeeklyCalendarScreen() {
       title: "주간 일정",
       headerRight: () => (
         <Pressable onPress={() => navigation.navigate("Calendar")}>
-          <Text style={{ color: "#1f6feb" }}>월간 일정 보기</Text>
+          <Text style={{ color: colors.primary[500] }}>월간 일정 보기</Text>
         </Pressable>
       ),
     });
@@ -158,7 +159,7 @@ function WeeklyCalendarScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: colors.surface,
   },
   row: {
     flexDirection: "row",
@@ -172,11 +173,11 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     alignItems: "center",
     borderBottomWidth: 1,
-    borderBottomColor: "#ddd",
+    borderBottomColor: colors.border.main,
   },
   timeText: {
     fontSize: 14,
-    color: "#666",
+    color: colors.text.secondary,
   },
   headerTextPlaceholder: {
     height: 60,
@@ -188,19 +189,19 @@ const styles = StyleSheet.create({
   headerTextContainer: {
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#f0f0f0",
+    backgroundColor: colors.gray[100],
     borderBottomWidth: 1,
-    borderBottomColor: "#ccc",
+    borderBottomColor: colors.border.dark,
     height: 60,
   },
   dateText: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "#333",
+    color: colors.text.primary,
   },
   dayText: {
     fontSize: 12,
-    color: "#666",
+    color: colors.text.secondary,
   },
   event: {
     padding: 6,

@@ -1,8 +1,9 @@
-import React from "react";
+﻿import React from "react";
 import { View, Text, Pressable, Alert } from "react-native";
 import { isSameDay } from "date-fns";
 import { MaterialIcons } from "@expo/vector-icons";
 
+import { colors } from "../styles/theme";
 function RoutinesSection({
   routines,
   selectedDate,
@@ -89,7 +90,7 @@ function RoutinesSection({
             }}
             style={styles.editButton}
           >
-            <MaterialIcons name="edit" size={24} color="#1f6feb" />
+            <MaterialIcons name="edit" size={24} color={colors.primary[500]} />
           </Pressable>
         )}
       </View>
@@ -172,7 +173,7 @@ const styles = {
   sectionTitle: {
     fontSize: 20,
     fontWeight: "bold",
-    color: "#333",
+    color: colors.text.primary,
   },
   editButton: {
     padding: 5,
@@ -181,7 +182,7 @@ const styles = {
     flexDirection: "row",
     flexWrap: "wrap",
     padding: 16,
-    backgroundColor: "#f4f6f9",
+    backgroundColor: colors.surface,
     borderRadius: 8,
     marginBottom: 12,
   },
@@ -192,18 +193,18 @@ const styles = {
   },
   summaryLabel: {
     fontSize: 14,
-    color: "#777",
+    color: colors.text.secondary,
     marginBottom: 4,
   },
   summaryValue: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "#333",
+    color: colors.text.primary,
   },
   routinesContainer: {
     marginTop: 12,
     padding: 10,
-    backgroundColor: "#f9f9f9",
+    backgroundColor: colors.surface,
     borderRadius: 8,
   },
   routineItem: {
@@ -218,14 +219,14 @@ const styles = {
     width: 20,
     height: 20,
     borderWidth: 1,
-    borderColor: "#ddd",
+    borderColor: colors.border.main,
     marginRight: 10,
     borderRadius: 4,
   },
   checkboxChecked: {
     width: 20,
     height: 20,
-    backgroundColor: "#1f6feb",
+    backgroundColor: colors.primary[500],
     marginRight: 10,
     borderRadius: 4,
   },
@@ -243,7 +244,7 @@ const styles = {
     paddingHorizontal: 4,
     borderRadius: 4,
     fontSize: 14,
-    color: "#fff",
+    color: colors.background,
   },
   exerciseName: {
     backgroundColor: "#ffab91",
@@ -260,7 +261,7 @@ const styles = {
   },
   infoText: {
     fontSize: 16,
-    color: "#666",
+    color: colors.text.secondary,
     textAlign: "center",
   },
 };

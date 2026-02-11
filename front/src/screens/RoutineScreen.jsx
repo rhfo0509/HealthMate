@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+﻿import React, { useCallback, useEffect, useState } from "react";
 import {
   StyleSheet,
   View,
@@ -9,6 +9,7 @@ import {
   ScrollView,
 } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
+import { colors } from "../styles/theme";
 
 import { useUserContext } from "../contexts/UserContext";
 import { createRoutine, updateRoutine } from "../lib/routines";
@@ -140,7 +141,7 @@ function RoutineScreen() {
     return (
       <View style={styles.container}>
         <View style={styles.loading}>
-          <ActivityIndicator size="large" color="#1f6feb" />
+          <ActivityIndicator size="large" color={colors.primary[500]} />
         </View>
       </View>
     );
@@ -187,7 +188,7 @@ function RoutineScreen() {
             placeholder="루틴 이름 입력"
             value={routineName}
             onChangeText={setRoutineName}
-            placeholderTextColor="#a3a3a3"
+            placeholderTextColor={colors.gray[400]}
           />
         )}
       </View>
@@ -217,7 +218,7 @@ function RoutineScreen() {
                 onChangeText={(value) =>
                   handleSetChange(exerciseIndex, setIndex, "weight", value)
                 }
-                placeholderTextColor="#a3a3a3"
+                placeholderTextColor={colors.gray[400]}
               />
               <Text style={styles.unitText}>kg</Text>
               <TextInput
@@ -228,7 +229,7 @@ function RoutineScreen() {
                 onChangeText={(value) =>
                   handleSetChange(exerciseIndex, setIndex, "reps", value)
                 }
-                placeholderTextColor="#a3a3a3"
+                placeholderTextColor={colors.gray[400]}
               />
               <Text style={styles.unitText}>회</Text>
             </View>
@@ -247,7 +248,7 @@ function RoutineScreen() {
               onPress={() => removeLastSet(exerciseIndex)}
               disabled={exercise.sets.length === 1}
             >
-              <Text style={{ color: "#1f6feb" }}>세트 삭제</Text>
+              <Text style={{ color: colors.primary[500] }}>세트 삭제</Text>
             </Pressable>
           </View>
         </View>
@@ -259,7 +260,7 @@ function RoutineScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f4f6f9",
+    backgroundColor: colors.surface,
     padding: 16,
   },
   loading: {
@@ -273,7 +274,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   searchButton: {
-    backgroundColor: "#1f6feb",
+    backgroundColor: colors.primary[500],
     padding: 12,
     alignItems: "center",
     borderRadius: 4,
@@ -281,7 +282,7 @@ const styles = StyleSheet.create({
     marginRight: 5,
   },
   loadRoutineButton: {
-    backgroundColor: "#1f6feb",
+    backgroundColor: colors.primary[500],
     padding: 12,
     alignItems: "center",
     borderRadius: 4,
@@ -289,7 +290,7 @@ const styles = StyleSheet.create({
     marginLeft: 5,
   },
   buttonText: {
-    color: "#fff",
+    color: colors.background,
     fontSize: 14,
   },
   saveRoutineContainer: {
@@ -305,36 +306,36 @@ const styles = StyleSheet.create({
     width: 20,
     height: 20,
     borderWidth: 1,
-    borderColor: "#ddd",
+    borderColor: colors.border.main,
     marginRight: 10,
     borderRadius: 4,
   },
   checkboxChecked: {
     width: 20,
     height: 20,
-    backgroundColor: "#1f6feb",
+    backgroundColor: colors.primary[500],
     marginRight: 10,
     borderRadius: 4,
   },
   saveRoutineText: {
-    color: "#333",
+    color: colors.text.primary,
     marginBottom: 3,
   },
   routineNameInput: {
     flex: 1,
     height: 40,
-    borderColor: "#e0e0e0",
+    borderColor: colors.border.main,
     borderWidth: 1,
     borderRadius: 4,
     paddingHorizontal: 10,
     marginLeft: 10,
-    backgroundColor: "#f9f9f9",
+    backgroundColor: colors.surface,
   },
   exerciseContainer: {
     marginTop: 10,
     padding: 15,
     borderRadius: 10,
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.background,
     marginBottom: 20,
   },
   exerciseHeader: {
@@ -346,10 +347,10 @@ const styles = StyleSheet.create({
   exerciseName: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "#1f6feb",
+    color: colors.primary[500],
   },
   removeExerciseButton: {
-    backgroundColor: "#1f6feb",
+    backgroundColor: colors.primary[500],
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderRadius: 4,
@@ -363,25 +364,25 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "600",
     marginRight: 10,
-    color: "#333",
+    color: colors.text.primary,
   },
   input: {
     flex: 1,
     height: 40,
-    borderColor: "#e0e0e0",
+    borderColor: colors.border.main,
     borderWidth: 1,
     borderRadius: 4,
     paddingHorizontal: 10,
     marginRight: 5,
-    backgroundColor: "#f9f9f9",
+    backgroundColor: colors.surface,
   },
   unitText: {
     fontSize: 14,
-    color: "#333",
+    color: colors.text.primary,
     marginRight: 10,
   },
   addButton: {
-    backgroundColor: "#1f6feb",
+    backgroundColor: colors.primary[500],
     padding: 8,
     alignItems: "center",
     borderRadius: 4,
@@ -394,7 +395,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flex: 1,
     marginLeft: 10,
-    borderColor: "#1f6feb",
+    borderColor: colors.primary[500],
   },
   buttonRow: {
     flexDirection: "row",

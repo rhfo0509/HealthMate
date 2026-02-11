@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
 
     label: {
         ...typography.body,
-        fontFamily: 'SUIT-SemiBold',
+        fontFamily: 'Paperlogy-SemiBold',
         color: colors.text.primary,
         marginBottom: spacing.sm,
     },
@@ -109,7 +109,7 @@ const styles = StyleSheet.create({
     input: {
         flex: 1,
         ...typography.body,
-        fontFamily: 'SUIT-Regular',
+        fontFamily: 'Paperlogy-Regular',
         color: colors.text.primary,
         paddingVertical: 0, // Reset default padding
     },

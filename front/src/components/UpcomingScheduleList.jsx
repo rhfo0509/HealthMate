@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+﻿import React, { useState } from "react";
 import {
   View,
   Text,
@@ -14,6 +14,7 @@ import { ko } from "date-fns/locale";
 
 import { createNotification } from "../lib/notifications";
 import Avatar from "./Avatar";
+import { colors } from "../styles/theme";
 
 function UpcomingScheduleList({ scheduleList, user }) {
   const [showFirst, setShowFirst] = useState([false, false, false]);
@@ -223,7 +224,7 @@ function UpcomingScheduleList({ scheduleList, user }) {
                   </View>
                   <TextInput
                     style={styles.input}
-                    placeholder="변경 사유를 입력하세요."
+                    placeholder="변경 사유를 입력하세요"
                     value={reason}
                     onChangeText={setReason}
                   />
@@ -232,16 +233,16 @@ function UpcomingScheduleList({ scheduleList, user }) {
                       onPress={() => onSaveFirst(schedule)}
                       style={[
                         styles.modalButton,
-                        { backgroundColor: "#1f6feb" },
+                        { backgroundColor: colors.primary[500] },
                       ]}
                     >
-                      <Text style={{ color: "#fff" }}>등록</Text>
+                      <Text style={{ color: colors.background }}>등록</Text>
                     </Pressable>
                     <Pressable
                       onPress={onCloseFirst}
                       style={styles.modalButton}
                     >
-                      <Text style={{ color: "#1f6feb" }}>취소</Text>
+                      <Text style={{ color: colors.primary[500] }}>취소</Text>
                     </Pressable>
                   </View>
                 </View>
@@ -265,7 +266,7 @@ function UpcomingScheduleList({ scheduleList, user }) {
                 <View style={styles.modalContent}>
                   <TextInput
                     style={styles.input}
-                    placeholder="취소 사유를 입력하세요."
+                    placeholder="취소 사유를 입력하세요"
                     value={reason}
                     onChangeText={setReason}
                   />
@@ -274,16 +275,16 @@ function UpcomingScheduleList({ scheduleList, user }) {
                       onPress={() => onSaveSecond(schedule)}
                       style={[
                         styles.modalButton,
-                        { backgroundColor: "#1f6feb" },
+                        { backgroundColor: colors.primary[500] },
                       ]}
                     >
-                      <Text style={{ color: "#fff" }}>등록</Text>
+                      <Text style={{ color: colors.background }}>등록</Text>
                     </Pressable>
                     <Pressable
                       onPress={onCloseSecond}
                       style={styles.modalButton}
                     >
-                      <Text style={{ color: "#1f6feb" }}>취소</Text>
+                      <Text style={{ color: colors.primary[500] }}>취소</Text>
                     </Pressable>
                   </View>
                 </View>
@@ -298,14 +299,15 @@ function UpcomingScheduleList({ scheduleList, user }) {
 
 const styles = StyleSheet.create({
   titleText: {
+    fontFamily: "Cafe24Ssurround",
     fontSize: 24,
-    fontWeight: "500",
+    color: colors.primary[500],
     padding: 12,
   },
   item: {
     borderTopWidth: 1,
     borderBottomWidth: 1,
-    borderColor: "#eeeeee",
+    borderColor: colors.border.light,
     paddingVertical: 16,
     paddingHorizontal: 12,
   },
@@ -331,18 +333,18 @@ const styles = StyleSheet.create({
     borderRadius: 4,
   },
   requestButton: {
-    backgroundColor: "#1f6feb",
+    backgroundColor: colors.primary[500],
   },
   requestText: {
-    color: "#fff",
+    color: colors.background,
   },
   cancelRequestButton: {
-    backgroundColor: "#fff",
-    borderColor: "#1f6feb",
+    backgroundColor: colors.background,
+    borderColor: colors.primary[500],
     borderWidth: 1,
   },
   cancelRequestText: {
-    color: "#1f6feb",
+    color: colors.primary[500],
   },
   modalContainer: {
     flex: 1,
@@ -376,7 +378,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 4,
     borderWidth: 1,
-    borderColor: "#1f6feb",
+    borderColor: colors.primary[500],
   },
 });
 

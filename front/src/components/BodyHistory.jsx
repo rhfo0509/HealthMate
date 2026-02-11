@@ -1,4 +1,4 @@
-import React from "react";
+﻿import React from "react";
 import {
   View,
   Text,
@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { format } from "date-fns";
 import { MaterialIcons } from "@expo/vector-icons";
+import { colors } from "../styles/theme";
 
 import { useUserContext } from "../contexts/UserContext";
 import { removeBodyData } from "../lib/bodyData";
@@ -99,7 +100,7 @@ function BodyHistory({ bodyData, setShow, setEditData, memberId }) {
               onPress={() => handleEdit(item)}
               style={styles.editButton}
             >
-              <MaterialIcons name="edit" size={20} color="#1f6feb" />
+              <MaterialIcons name="edit" size={20} color={colors.primary[500]} />
             </Pressable>
             {/* 삭제 버튼 */}
             <Pressable
@@ -109,7 +110,7 @@ function BodyHistory({ bodyData, setShow, setEditData, memberId }) {
               <MaterialIcons
                 name="remove-circle-outline"
                 size={20}
-                color="#d9534f"
+                color={colors.error}
               />
             </Pressable>
           </View>
@@ -158,14 +159,14 @@ function BodyHistory({ bodyData, setShow, setEditData, memberId }) {
 
 const styles = StyleSheet.create({
   separator: {
-    backgroundColor: "#e0e0e0",
+    backgroundColor: colors.border.main,
     height: 1,
     width: "100%",
   },
   container: {
     padding: 10,
     borderBottomWidth: 1,
-    borderBottomColor: "#ccc",
+    borderBottomColor: colors.border.dark,
   },
   historyHeader: {
     flexDirection: "row",

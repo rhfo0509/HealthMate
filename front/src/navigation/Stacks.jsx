@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import { useUserContext } from "../contexts/UserContext";
 import { getRole } from "../lib/users";
+import { colors } from "../styles/theme";
 
 import MemberDetailTab from "./MemberDetailTab";
 import CalendarScreen from "../screens/CalendarScreen";
@@ -35,7 +36,7 @@ function HomeStack() {
   if (isLoading) {
     return (
       <View style={styles.loading}>
-        <ActivityIndicator size="large" color="#1f6feb" />
+        <ActivityIndicator size="large" color={colors.primary[500]} />
       </View>
     );
   }
@@ -64,7 +65,7 @@ function HomeStack() {
 function MyProfileStack() {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="MyProfile" component={MyProfileScreen} />
+      <Stack.Screen name="MyProfile" component={MyProfileScreen} options={{ title: "" }} />
       <Stack.Screen name="MemberDetail" component={MemberDetailTab} />
     </Stack.Navigator>
   );
@@ -75,7 +76,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#fff",
+    backgroundColor: colors.background,
   },
 });
 

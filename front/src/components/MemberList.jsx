@@ -1,10 +1,11 @@
-import React from "react";
+﻿import React from "react";
 import { Alert, StyleSheet } from "react-native";
 import {
   SwipeableFlatList,
   SwipeableQuickActionButton,
   SwipeableQuickActions,
 } from "react-native-swipe-list";
+import { colors } from "../styles/theme";
 
 import { useUserContext } from "../contexts/UserContext";
 import { removeMemberByTrainer } from "../lib/users";
@@ -71,7 +72,7 @@ function MemberList({ members, memberships, ListHeaderComponent }) {
               paddingHorizontal: 30,
               alignItems: "center",
               justifyContent: "center",
-              backgroundColor: "#d9534f",
+              backgroundColor: colors.error,
             }}
           />
         </SwipeableQuickActions>

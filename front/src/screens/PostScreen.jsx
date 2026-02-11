@@ -14,6 +14,7 @@ import { getComments } from "../lib/comments";
 import PostCard from "../components/PostCard";
 import CommentCard from "../components/CommentCard";
 import IconRightButton from "../components/IconRightButton";
+import { colors } from "../styles/theme";
 
 function PostScreen() {
   const route = useRoute();
@@ -80,7 +81,7 @@ function PostScreen() {
   return (
     <View style={styles.container}>
       <FlatList
-        style={{ backgroundColor: "white" }}
+        style={{ backgroundColor: colors.surface }}
         data={comments}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
@@ -105,7 +106,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   separator: {
-    backgroundColor: "#e0e0e0",
+    backgroundColor: colors.border.light,
     height: 1,
     width: "100%",
   },

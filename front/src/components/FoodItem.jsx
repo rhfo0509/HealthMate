@@ -1,6 +1,7 @@
-import React from "react";
+﻿import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 
+import { colors } from "../styles/theme";
 function FoodItem({ food }) {
   return (
     <View style={styles.foodItem}>
@@ -29,7 +30,7 @@ const styles = StyleSheet.create({
   foodItem: {
     marginBottom: 8,
     borderBottomWidth: 1,
-    borderBottomColor: "#e0e0e0",
+    borderBottomColor: colors.border.main,
     paddingBottom: 8,
   },
   foodRow: {
@@ -40,7 +41,7 @@ const styles = StyleSheet.create({
   foodName: {
     fontSize: 14,
     fontWeight: "500",
-    color: "#333",
+    color: colors.text.primary,
   },
   nutritionRow: {
     flexDirection: "row",
@@ -52,7 +53,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 4,
     borderRadius: 4,
     fontSize: 14,
-    color: "#fff",
+    color: colors.background,
   },
   calories: {
     backgroundColor: "#ffab91",

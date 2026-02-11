@@ -1,8 +1,9 @@
-// MemberProfile.jsx
+﻿// MemberProfile.jsx
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import Avatar from "./Avatar";
 
+import { colors } from "../styles/theme";
 function MemberProfile({ user }) {
   return (
     <View style={styles.container}>
@@ -19,7 +20,7 @@ function MemberProfile({ user }) {
 const styles = StyleSheet.create({
   container: {
     paddingVertical: 20,
-    backgroundColor: "white",
+    backgroundColor: colors.surface,
   },
   userInfo: {
     flexDirection: "row",
@@ -28,7 +29,7 @@ const styles = StyleSheet.create({
   },
   username: {
     fontSize: 18,
-    color: "#424242",
+    color: colors.gray[800],
     marginLeft: 12,
   },
 });

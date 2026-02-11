@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+﻿import React, { useEffect, useState } from "react";
 import { StyleSheet, View, Text } from "react-native";
 import RNPickerSelect from "react-native-picker-select";
 import {
@@ -8,6 +8,7 @@ import {
   where,
   onSnapshot,
 } from "firebase/firestore";
+import { colors } from "../styles/theme";
 
 import { getMembersByTrainer } from "../lib/users";
 import { getMembershipsByTrainer } from "../lib/memberships";
@@ -109,7 +110,7 @@ function TrainerProfile({ user }) {
                   ]}
                   placeholder={{
                     label: "정렬기준 선택",
-                    color: "#ced4da",
+                    color: colors.border.dark,
                   }}
                 />
               </View>
@@ -136,7 +137,7 @@ const styles = StyleSheet.create({
   },
   username: {
     fontSize: 20,
-    color: "#333",
+    color: colors.text.primary,
     marginLeft: 12,
   },
   listHeader: {

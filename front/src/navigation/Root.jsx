@@ -5,6 +5,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useUserContext } from "../contexts/UserContext";
 import { getUser } from "../lib/users";
 import { subscribeAuth } from "../lib/auth";
+import { colors } from "../styles/theme";
 
 // Screens
 import MainTab from "./MainTab";
@@ -46,7 +47,7 @@ function Root() {
   if (loading) {
     return (
       <View style={styles.loading}>
-        <ActivityIndicator size="large" color="#1f6feb" />
+        <ActivityIndicator size="large" color={colors.primary[500]} />
       </View>
     );
   }
@@ -107,11 +108,6 @@ function Root() {
             options={{ title: "나의 루틴" }}
           />
           <Stack.Screen
-            name="Notify"
-            component={NotifyScreen}
-            options={{ title: "알림" }}
-          />
-          <Stack.Screen
             name="AddMembership"
             component={AddMembershipScreen}
             options={{ title: "회원 및 회원권 추가" }}
@@ -120,11 +116,6 @@ function Root() {
             name="Membership"
             component={MembershipScreen}
             options={{ title: "회원권 관리" }}
-          />
-          <Stack.Screen
-            name="Setting"
-            component={SettingScreen}
-            options={{ title: "설정" }}
           />
           <Stack.Screen
             name="EditProfile"
@@ -156,7 +147,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#fff",
+    backgroundColor: colors.background,
   },
 });
 

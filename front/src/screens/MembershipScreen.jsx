@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+﻿import React, { useEffect, useState } from "react";
 import {
   Pressable,
   StyleSheet,
@@ -26,6 +26,7 @@ import {
 } from "../lib/schedules";
 import ExtendCountModal from "../components/ExtendCountModal";
 import ChangeScheduleModal from "../components/ChangeScheduleModal";
+import { colors, spacing, borderRadius, shadows } from "../styles/theme";
 
 function MembershipScreen() {
   const route = useRoute();
@@ -285,7 +286,7 @@ function MembershipScreen() {
         {membership?.status !== "expired" && (
           <Pressable
             style={styles.button}
-            android_ripple={{ color: "#ededed" }}
+            android_ripple={{ color: colors.border.light }}
             onPress={
               membership?.status === "active" ? onPressPause : onPressResume
             }
@@ -298,7 +299,7 @@ function MembershipScreen() {
         {membership?.status !== "paused" && (
           <Pressable
             style={styles.button}
-            android_ripple={{ color: "#ededed" }}
+            android_ripple={{ color: colors.border.light }}
             onPress={onPressExtend}
           >
             <Text style={styles.buttonText}>횟수연장</Text>
@@ -307,7 +308,7 @@ function MembershipScreen() {
         {membership?.status === "active" && (
           <Pressable
             style={styles.button}
-            android_ripple={{ color: "#ededed" }}
+            android_ripple={{ color: colors.border.light }}
             onPress={onPressChange}
           >
             <Text style={styles.buttonText}>요일/시간변경</Text>
@@ -338,54 +339,57 @@ function MembershipScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "white",
+    backgroundColor: colors.surface,
   },
   itemRow: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-    marginBottom: 8,
-    backgroundColor: "#F1F5F9",
-    borderRadius: 8,
-    marginHorizontal: 16,
+    paddingVertical: spacing.md,
+    paddingHorizontal: spacing.md,
+    marginBottom: spacing.sm,
+    backgroundColor: colors.background,
+    borderRadius: borderRadius.md,
+    marginHorizontal: spacing.md,
+    ...shadows.sm,
   },
   itemText: {
+    fontFamily: "Paperlogy-SemiBold",
     fontSize: 16,
-    color: "#2D3748",
-    fontWeight: "bold",
+    color: colors.text.primary,
   },
   itemValue: {
+    fontFamily: "Paperlogy-Regular",
     fontSize: 16,
-    color: "#4A5568",
+    color: colors.text.secondary,
   },
   sectionTitle: {
+    fontFamily: "Cafe24Ssurround",
     fontSize: 18,
-    fontWeight: "bold",
-    color: "#1f6feb",
-    marginVertical: 16,
-    marginLeft: 16,
+    color: colors.primary[500],
+    marginVertical: spacing.md,
+    marginLeft: spacing.md,
   },
   fixedButtons: {
     flexDirection: "row",
     justifyContent: "space-around",
-    paddingVertical: 16,
-    backgroundColor: "white",
+    paddingVertical: spacing.md,
+    backgroundColor: colors.background,
     borderTopWidth: 1,
-    borderColor: "#e2e8f0",
-    marginHorizontal: 16,
-    gap: 8,
+    borderColor: colors.border.light,
+    marginHorizontal: spacing.md,
+    gap: spacing.sm,
   },
   button: {
-    backgroundColor: "#1f6feb",
-    paddingVertical: 16,
-    borderRadius: 4,
+    backgroundColor: colors.primary[500],
+    paddingVertical: spacing.md,
+    borderRadius: borderRadius.md,
     alignItems: "center",
     flex: 1,
   },
   buttonText: {
-    color: "#fff",
+    fontFamily: "Paperlogy-SemiBold",
+    color: colors.text.inverse,
   },
 });
 

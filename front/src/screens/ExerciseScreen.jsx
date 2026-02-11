@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+﻿import React, { useState, useEffect } from "react";
 import { StyleSheet, View, FlatList, Text } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import { isSameDay, format } from "date-fns";
@@ -10,6 +10,7 @@ import {
   onSnapshot,
   orderBy,
 } from "firebase/firestore";
+import { colors } from "../styles/theme";
 
 import { useUserContext } from "../contexts/UserContext";
 import CalendarHeader from "../components/CalendarHeader";
@@ -48,7 +49,7 @@ function ExerciseScreen() {
 
   const markedDates = posts?.map((post) => {
     const date = post.createdAt?.toDate();
-    return { date, dots: [{ color: "#1f6feb", selectedColor: "#1f6feb" }] };
+    return { date, dots: [{ color: colors.primary[500], selectedColor: colors.primary[500] }] };
   });
 
   const filteredPosts = posts.filter((post) => {
@@ -73,7 +74,7 @@ function ExerciseScreen() {
         </View>
       ) : (
         <FlatList
-          style={{ backgroundColor: "white" }}
+          style={{ backgroundColor: colors.surface }}
           data={filteredPosts}
           renderItem={renderItem}
           keyExtractor={(item) => item.id}
@@ -99,7 +100,7 @@ const renderItem = ({ item }) => (
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: colors.surface,
   },
   noPostsContainer: {
     flex: 1,
@@ -108,7 +109,7 @@ const styles = StyleSheet.create({
   },
   noPostsText: {
     fontSize: 18,
-    color: "#757575",
+    color: colors.text.secondary,
   },
 });
 

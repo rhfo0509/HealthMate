@@ -1,5 +1,6 @@
-import React from "react";
+﻿import React from "react";
 import { View, StyleSheet, Text, Pressable, Alert } from "react-native";
+import { colors } from "../styles/theme";
 
 import { removeSchedule, updateSchedule } from "../lib/schedules";
 import { createNotification, updateNotification } from "../lib/notifications";
@@ -101,14 +102,14 @@ function NotificationCard({
         <View style={styles.buttons}>
           <Pressable
             style={[styles.button, styles.acceptButton]}
-            android_ripple={{ color: "#ededed" }}
+            android_ripple={{ color: colors.border.light }}
             onPress={onPressAccept}
           >
             <Text style={styles.acceptText}>수락</Text>
           </Pressable>
           <Pressable
             style={[styles.button, styles.refuseButton]}
-            android_ripple={{ color: "#ededed" }}
+            android_ripple={{ color: colors.border.light }}
             onPress={onPressRefuse}
           >
             <Text style={styles.refuseText}>거절</Text>
@@ -126,10 +127,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.background,
     marginVertical: 8,
     borderRadius: 12,
-    shadowColor: "#000",
+    shadowColor: colors.gray[900],
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 8,
@@ -141,22 +142,22 @@ const styles = StyleSheet.create({
   messageText: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "#333",
+    color: colors.text.primary,
     marginBottom: 6,
   },
   infoText: {
     fontSize: 14,
-    color: "#555",
+    color: colors.gray[700],
     marginBottom: 4,
   },
   reasonText: {
     fontSize: 14,
-    color: "#666",
+    color: colors.text.secondary,
     marginBottom: 4,
   },
   dateText: {
     fontSize: 12,
-    color: "#999",
+    color: colors.text.hint,
     textAlign: "right",
   },
   buttons: {
@@ -173,23 +174,23 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   acceptButton: {
-    backgroundColor: "#1f6feb",
-    borderColor: "#1f6feb",
+    backgroundColor: colors.primary[500],
+    borderColor: colors.primary[500],
   },
   acceptText: {
-    color: "#fff",
+    color: colors.background,
     fontSize: 16,
   },
   refuseButton: {
-    backgroundColor: "#fff",
-    borderColor: "#1f6feb",
+    backgroundColor: colors.surface,
+    borderColor: colors.primary[500],
   },
   refuseText: {
-    color: "#1f6feb",
+    color: colors.primary[500],
     fontSize: 16,
   },
   completedText: {
-    color: "#E57373",
+    color: colors.error,
     fontWeight: "600",
     fontSize: 14,
     textAlign: "center",

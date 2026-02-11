@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useRef } from "react";
+﻿import React, { useState, useCallback, useEffect, useRef } from "react";
 import {
   StyleSheet,
   View,
@@ -30,6 +30,7 @@ import ProgressBar from "../components/ProgressBar";
 import IconRightButton from "../components/IconRightButton";
 import FoodInput from "../components/FoodInput";
 
+import { colors } from "../styles/theme";
 function DietPostScreen() {
   const { width } = useWindowDimensions();
   const {
@@ -269,7 +270,7 @@ function DietPostScreen() {
         ))}
 
         <Pressable style={styles.addButton} onPress={addFood}>
-          <MaterialIcons name="add-circle-outline" size={24} color="#1f6feb" />
+          <MaterialIcons name="add-circle-outline" size={24} color={colors.primary[500]} />
           <Text style={styles.addText}>음식 추가</Text>
         </Pressable>
 
@@ -283,7 +284,7 @@ function DietPostScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: colors.surface,
   },
   image: {
     width: "100%",
@@ -301,7 +302,7 @@ const styles = StyleSheet.create({
   },
   addText: {
     marginLeft: 5,
-    color: "#1f6feb",
+    color: colors.primary[500],
     fontSize: 16,
     marginTop: 1,
   },
@@ -313,7 +314,7 @@ const styles = StyleSheet.create({
   uploadingText: {
     marginTop: 10,
     fontSize: 18,
-    color: "#333",
+    color: colors.text.primary,
   },
 });
 

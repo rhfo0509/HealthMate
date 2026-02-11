@@ -3,6 +3,7 @@ import { ActivityIndicator, StyleSheet, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 
 import CustomButton from "./CustomButton";
+import { colors, spacing } from "../styles/theme";
 
 function SignButtons({ isSignUp, onSubmit, loading }) {
   const navigation = useNavigation();
@@ -19,7 +20,7 @@ function SignButtons({ isSignUp, onSubmit, loading }) {
   if (loading) {
     return (
       <View style={styles.loading}>
-        <ActivityIndicator size={32} color="#1f6feb" />
+        <ActivityIndicator size={32} color={colors.primary[500]} />
       </View>
     );
   }
@@ -38,13 +39,13 @@ function SignButtons({ isSignUp, onSubmit, loading }) {
 
 const styles = StyleSheet.create({
   loading: {
-    marginTop: 64,
+    marginTop: spacing.xxl,
     height: 104,
     justifyContent: "center",
     alignItems: "center",
   },
   buttons: {
-    marginTop: 64,
+    marginTop: spacing.xxl,
   },
 });
 

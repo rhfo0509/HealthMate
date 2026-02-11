@@ -10,6 +10,7 @@ import { getMembership } from "../lib/memberships";
 import MembershipCard from "../components/MembershipCard";
 import UpcomingScheduleList from "../components/UpcomingScheduleList";
 import IconRightButton from "../components/IconRightButton";
+import { colors, spacing } from "../styles/theme";
 
 function MemberHomeScreen() {
   const { user } = useUserContext();
@@ -51,13 +52,7 @@ function MemberHomeScreen() {
 
   useEffect(() => {
     navigation.setOptions({
-      title: "홈",
-      headerRight: () => (
-        <IconRightButton
-          onPress={() => navigation.navigate("Notify")}
-          name="notifications-none"
-        />
-      ),
+      title: "",
     });
   }, [navigation]);
 
@@ -73,12 +68,13 @@ function MemberHomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "white",
+    backgroundColor: colors.surface,
   },
   titleText: {
+    fontFamily: "Cafe24Ssurround",
     fontSize: 24,
-    fontWeight: "500",
-    padding: 12,
+    color: colors.primary[500],
+    padding: spacing.md,
   },
 });
 

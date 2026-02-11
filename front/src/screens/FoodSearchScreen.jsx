@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+﻿import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { useRoute, useNavigation } from "@react-navigation/native";
 
+import { colors } from "../styles/theme";
 const FoodSearchScreen = () => {
   const route = useRoute();
   const navigation = useNavigation();
@@ -138,7 +139,7 @@ const FoodSearchScreen = () => {
   if (loading) {
     return (
       <View style={styles.loading}>
-        <ActivityIndicator size="large" color="#1f6feb" />
+        <ActivityIndicator size="large" color={colors.primary[500]} />
       </View>
     );
   }
@@ -273,7 +274,7 @@ const FoodSearchScreen = () => {
             </View>
           )}
           <Pressable onPress={handleRegister} style={styles.registerButton}>
-            <Text style={[styles.buttonText, { color: "#1f6feb" }]}>등록</Text>
+            <Text style={[styles.buttonText, { color: colors.primary[500] }]}>등록</Text>
           </Pressable>
         </View>
       )}
@@ -301,13 +302,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 12,
-    backgroundColor: "#fff",
+    backgroundColor: colors.surface,
   },
   loading: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#fff",
+    backgroundColor: colors.surface,
   },
   noResultsContainer: {
     flex: 1,
@@ -316,15 +317,15 @@ const styles = StyleSheet.create({
   },
   noResultsText: {
     fontSize: 18,
-    color: "#333",
+    color: colors.text.primary,
   },
   foodItem: {
     padding: 12,
     borderBottomWidth: 1,
-    borderBottomColor: "#ccc",
+    borderBottomColor: colors.border.dark,
   },
   selectedFoodItem: {
-    backgroundColor: "#f0f0f0",
+    backgroundColor: colors.gray[100],
   },
   foodRow: {
     flexDirection: "row",
@@ -337,7 +338,7 @@ const styles = StyleSheet.create({
   },
   servingSize: {
     fontSize: 14,
-    color: "#666",
+    color: colors.text.secondary,
   },
   nutritionRow: {
     flexDirection: "row",
@@ -346,11 +347,11 @@ const styles = StyleSheet.create({
   },
   foodDetails: {
     fontSize: 14,
-    color: "#333",
+    color: colors.text.primary,
   },
   servingContainer: {
     padding: 12,
-    backgroundColor: "#f9f9f9",
+    backgroundColor: colors.surface,
   },
   servingLabel: {
     fontSize: 16,
@@ -368,10 +369,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     alignItems: "center",
     borderWidth: 1,
-    borderColor: "#ccc",
+    borderColor: colors.border.dark,
     marginHorizontal: 2,
     borderRadius: 4,
-    backgroundColor: "#333",
+    backgroundColor: colors.text.primary,
   },
   activeButton: {
     opacity: 0.5,
@@ -381,9 +382,9 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     paddingHorizontal: 8,
     alignItems: "center",
-    backgroundColor: "#333",
+    backgroundColor: colors.text.primary,
     borderWidth: 1,
-    borderColor: "#ccc",
+    borderColor: colors.border.dark,
     marginHorizontal: 2,
     borderRadius: 4,
   },
@@ -395,22 +396,22 @@ const styles = StyleSheet.create({
   customInput: {
     flex: 1,
     borderWidth: 1,
-    borderColor: "#ccc",
+    borderColor: colors.border.dark,
     padding: 8,
     borderRadius: 4,
   },
   unitText: {
     marginLeft: 8,
     fontSize: 14,
-    color: "#333",
+    color: colors.text.primary,
   },
   registerButton: {
-    backgroundColor: "#fff",
+    backgroundColor: colors.surface,
     padding: 8,
     alignItems: "center",
     borderRadius: 4,
     borderWidth: 1,
-    borderColor: "#1f6feb",
+    borderColor: colors.primary[500],
     marginTop: 8,
     marginHorizontal: 2,
   },
@@ -422,7 +423,7 @@ const styles = StyleSheet.create({
   previousButton: {
     flex: 1,
     padding: 12,
-    backgroundColor: "#1f6feb",
+    backgroundColor: colors.primary[500],
     alignItems: "center",
     borderRadius: 4,
     marginRight: 4,
@@ -430,16 +431,16 @@ const styles = StyleSheet.create({
   nextButton: {
     flex: 1,
     padding: 12,
-    backgroundColor: "#1f6feb",
+    backgroundColor: colors.primary[500],
     alignItems: "center",
     borderRadius: 4,
     marginLeft: 4,
   },
   disabledButton: {
-    backgroundColor: "#ccc",
+    backgroundColor: colors.border.dark,
   },
   buttonText: {
-    color: "#fff",
+    color: colors.background,
     fontSize: 14,
   },
 });

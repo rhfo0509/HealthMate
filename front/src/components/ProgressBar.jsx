@@ -1,6 +1,7 @@
-import React, { useEffect, useRef } from "react";
+﻿import React, { useEffect, useRef } from "react";
 import { StyleSheet, Text, View, Animated } from "react-native";
 
+import { colors } from "../styles/theme";
 const ProgressBar = ({ totalStep, currStep }) => {
   const animationValue = useRef(new Animated.Value(0)).current;
 
@@ -17,7 +18,7 @@ const ProgressBar = ({ totalStep, currStep }) => {
       <View style={styles.bar}>
         <Animated.View
           style={{
-            backgroundColor: "#1f6feb",
+            backgroundColor: colors.primary[500],
             width: animationValue.interpolate({
               inputRange: [0, 100],
               outputRange: ["0%", "100%"],
@@ -45,12 +46,12 @@ const styles = StyleSheet.create({
   bar: {
     width: "100%",
     height: 3,
-    backgroundColor: "#e0e0e0",
+    backgroundColor: colors.border.main,
     borderRadius: 2,
     marginVertical: 10,
   },
   step: {
-    color: "#1f6feb",
+    color: colors.primary[500],
     fontWeight: "600",
     fontSize: 18,
     textAlign: "center",

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+﻿import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   View,
@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { format } from "date-fns";
+import { colors } from "../styles/theme";
 
 import { useUserContext } from "../contexts/UserContext";
 import { getRoutines, removeRoutine } from "../lib/routines";
@@ -102,17 +103,17 @@ function MyRoutineScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f4f6f9",
+    backgroundColor: colors.surface,
   },
   listContent: {
     padding: 16,
   },
   routineItem: {
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.background,
     padding: 16,
     borderRadius: 8,
     marginBottom: 12,
-    shadowColor: "#000",
+    shadowColor: colors.gray[900],
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
@@ -129,21 +130,21 @@ const styles = StyleSheet.create({
   routineName: {
     fontSize: 18,
     fontWeight: "bold",
-    color: "#333",
+    color: colors.text.primary,
   },
   routineDate: {
     fontSize: 14,
-    color: "#888",
+    color: colors.text.hint,
     marginTop: 4,
   },
   deleteButton: {
     padding: 8,
-    backgroundColor: "#ff4d4d",
+    backgroundColor: colors.error,
     borderRadius: 4,
     marginLeft: 10,
   },
   deleteButtonText: {
-    color: "#fff",
+    color: colors.background,
     fontSize: 14,
   },
 });

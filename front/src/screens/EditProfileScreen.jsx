@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+﻿import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -19,6 +19,7 @@ import {
   getDownloadURL,
   uploadBytesResumable,
 } from "firebase/storage";
+import { colors } from "../styles/theme";
 
 import { useUserContext } from "../contexts/UserContext";
 import { updateUser } from "../lib/users";
@@ -115,7 +116,7 @@ function EditProfileScreen() {
     return (
       <View style={styles.container}>
         <View style={styles.loading}>
-          <ActivityIndicator size="large" color="#1f6feb" />
+          <ActivityIndicator size="large" color={colors.primary[500]} />
         </View>
       </View>
     );
@@ -248,16 +249,16 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "#212529",
+    color: colors.gray[900],
     marginBottom: 8,
   },
   input: {
     height: 48,
     borderWidth: 1,
-    borderColor: "#ced4da",
+    borderColor: colors.border.dark,
     borderRadius: 4,
     paddingHorizontal: 10,
-    backgroundColor: "#fff",
+    backgroundColor: colors.surface,
   },
   buttonGroup: {
     flexDirection: "row",
@@ -269,21 +270,21 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderWidth: 1,
-    borderColor: "#ced4da",
+    borderColor: colors.border.dark,
     borderRadius: 4,
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.background,
     marginHorizontal: 5,
   },
   selectedButton: {
-    backgroundColor: "#007bff",
-    borderColor: "#0056b3",
+    backgroundColor: colors.primary[500],
+    borderColor: colors.primary[700],
   },
   optionText: {
     fontSize: 16,
-    color: "#212529",
+    color: colors.gray[900],
   },
   selectedText: {
-    color: "#ffffff",
+    color: colors.background,
     fontWeight: "bold",
   },
   dateButton: {
@@ -291,13 +292,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderWidth: 1,
-    borderColor: "#ced4da",
+    borderColor: colors.border.dark,
     borderRadius: 4,
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.background,
   },
   dateText: {
     fontSize: 16,
-    color: "#212529",
+    color: colors.gray[900],
   },
   buttons: {
     marginTop: 24,

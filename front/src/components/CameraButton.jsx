@@ -1,10 +1,11 @@
-import React from "react";
+﻿import React from "react";
 import { View, Pressable, StyleSheet, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useActionSheet } from "@expo/react-native-action-sheet";
 import * as ImagePicker from "expo-image-picker";
 
+import { colors } from "../styles/theme";
 const imagePickerOption = {
   mediaTypes: ImagePicker.MediaTypeOptions.All,
   maxWidth: 768,
@@ -84,7 +85,7 @@ const styles = StyleSheet.create({
     bottom: 10,
   },
   circle: {
-    backgroundColor: "#1f6feb",
+    backgroundColor: colors.primary[500],
     borderRadius: 27,
     height: 54,
     width: 54,

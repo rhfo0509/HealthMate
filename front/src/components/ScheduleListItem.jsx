@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+﻿import React, { useEffect, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 import { ko } from "date-fns/locale";
@@ -10,6 +10,7 @@ import {
   set,
   addMinutes,
 } from "date-fns";
+import { colors } from "../styles/theme";
 
 import { getUser } from "../lib/users";
 import { updateSchedule } from "../lib/schedules";
@@ -159,13 +160,13 @@ function ScheduleListItem({ schedule }) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#fff",
+    backgroundColor: colors.surface,
     flexDirection: "row",
     alignItems: "center",
     padding: 16,
     borderRadius: 12,
     marginBottom: 10,
-    shadowColor: "#000",
+    shadowColor: colors.gray[900],
     shadowOpacity: 0.1,
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 8,
@@ -180,7 +181,7 @@ const styles = StyleSheet.create({
   memberName: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "#333",
+    color: colors.text.primary,
   },
   scheduleContainer: {
     flexDirection: "row",
@@ -188,7 +189,7 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   dateContainer: {
-    backgroundColor: "#f0f4f8",
+    backgroundColor: colors.surface,
     borderRadius: 8,
     paddingVertical: 4,
     paddingHorizontal: 8,
@@ -196,27 +197,27 @@ const styles = StyleSheet.create({
   },
   dateText: {
     fontSize: 14,
-    color: "#555",
+    color: colors.gray[700],
   },
   timeContainer: {
-    backgroundColor: "#e0f7fa",
+    backgroundColor: colors.primary[50],
     borderRadius: 8,
     paddingVertical: 4,
     paddingHorizontal: 8,
   },
   timeText: {
     fontSize: 14,
-    color: "#00796b",
+    color: colors.primary[600],
   },
   separator: {
     fontSize: 14,
-    color: "#00796b",
+    color: colors.primary[600],
     paddingHorizontal: 8,
   },
   statusText: {
     marginTop: 4,
     fontSize: 12,
-    color: "#00796b",
+    color: colors.primary[600],
   },
 });
 

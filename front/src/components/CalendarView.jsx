@@ -1,7 +1,8 @@
-import React from "react";
+﻿import React from "react";
 import { StyleSheet } from "react-native";
 import { Calendar, LocaleConfig } from "react-native-calendars";
 
+import { colors } from "../styles/theme";
 // 캘린더 한글화
 LocaleConfig.locales["ko"] = {
   monthNames: [
@@ -48,10 +49,10 @@ function CalendarView({ markedDates, selectedDate, onSelectDate }) {
       monthFormat={"yyyy년 MM월"}
       hideExtraDays
       theme={{
-        selectedDayBackgroundColor: "#1f6feb",
-        arrowColor: "#1f6feb",
-        dotColor: "#1f6feb",
-        todayTextColor: "#1f6feb",
+        selectedDayBackgroundColor: colors.primary[500],
+        arrowColor: colors.primary[500],
+        dotColor: colors.primary[500],
+        todayTextColor: colors.primary[500],
       }}
     />
   );
@@ -60,7 +61,7 @@ function CalendarView({ markedDates, selectedDate, onSelectDate }) {
 const styles = StyleSheet.create({
   calendar: {
     borderBottomWidth: 1,
-    borderBottomColor: "#e0e0e0",
+    borderBottomColor: colors.border.main,
   },
 });
 

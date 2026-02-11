@@ -1,8 +1,9 @@
-import React from "react";
+﻿import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { isSameDay } from "date-fns";
 import NutritionPieChart from "./NutritionPieChart";
 
+import { colors } from "../styles/theme";
 function NutritionSection({ foods, selectedDate, totals, recommendedIntake }) {
   const todayFoods = foods.filter((food) =>
     isSameDay(food.createdAt?.toDate(), selectedDate)
@@ -20,7 +21,7 @@ function NutritionSection({ foods, selectedDate, totals, recommendedIntake }) {
               title="칼로리"
               total={totals.totalCalories}
               recommended={recommendedIntake.calories}
-              color="#FF6F61"
+              color={colors.error}
             />
             <NutritionPieChart
               title="탄수화물"
@@ -66,7 +67,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 20,
     fontWeight: "bold",
-    color: "#333",
+    color: colors.text.primary,
   },
   pieRow: {
     flexDirection: "row",
@@ -78,7 +79,7 @@ const styles = StyleSheet.create({
   },
   infoText: {
     fontSize: 16,
-    color: "#666",
+    color: colors.text.secondary,
     textAlign: "center",
   },
 });

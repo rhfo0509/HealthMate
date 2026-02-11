@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+﻿import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, ActivityIndicator } from "react-native";
 import {
   getFirestore,
@@ -9,6 +9,7 @@ import {
   where,
 } from "firebase/firestore";
 import { format } from "date-fns";
+import { colors } from "../styles/theme";
 
 import BodyChartButtons from "../components/BodyChartButtons";
 import BodyChart from "../components/BodyChart";
@@ -92,7 +93,7 @@ function BodyStatScreen({ route }) {
 
       {isLoading ? (
         <View style={styles.loading}>
-          <ActivityIndicator size="large" color="#64B5F6" />
+          <ActivityIndicator size="large" color={colors.primary[300]} />
         </View>
       ) : bodyData.length === 0 ? (
         <View style={styles.noDataContainer}>
@@ -124,7 +125,7 @@ function BodyStatScreen({ route }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "white",
+    backgroundColor: colors.surface,
   },
   loading: {
     flex: 1,
@@ -138,7 +139,7 @@ const styles = StyleSheet.create({
   },
   noDataText: {
     fontSize: 20,
-    color: "#757575",
+    color: colors.text.secondary,
     textAlign: "center",
   },
 });

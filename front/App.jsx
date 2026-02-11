@@ -5,12 +5,17 @@ import { ActionSheetProvider } from "@expo/react-native-action-sheet";
 import { NavigationContainer } from "@react-navigation/native";
 import * as Font from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
+import { Text } from 'react-native';
 
 import { UserContextProvider } from "./src/contexts/UserContext";
 import Root from "./src/navigation/Root";
 
 // Splash screen 유지
 SplashScreen.preventAutoHideAsync();
+
+// 글로벌 기본 폰트 설정
+if (Text.defaultProps == null) Text.defaultProps = {};
+Text.defaultProps.style = { fontFamily: 'Paperlogy-Regular' };
 
 function App() {
   const [fontsLoaded, setFontsLoaded] = useState(false);

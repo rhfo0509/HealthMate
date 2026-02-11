@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+﻿import React, { useState } from "react";
 import { View, Text, Pressable, Modal, StyleSheet } from "react-native";
 import { CheckBox } from "react-native-elements";
 import DateTimePicker from "@react-native-community/datetimepicker";
 
+import { colors } from "../styles/theme";
 function ChangeScheduleModal({
   visible,
   onClose,
@@ -78,18 +79,18 @@ function ChangeScheduleModal({
               disabled={isLoading}
               style={[
                 styles.modalButton,
-                { backgroundColor: "#1f6feb" },
+                { backgroundColor: colors.primary[500] },
                 isLoading && styles.disabledButton,
               ]}
             >
-              <Text style={{ color: "#fff" }}>등록</Text>
+              <Text style={{ color: colors.background }}>등록</Text>
             </Pressable>
             <Pressable
               onPress={onClose}
               disabled={isLoading}
               style={[styles.modalButton, isLoading && styles.disabledButton]}
             >
-              <Text style={{ color: "#1f6feb" }}>취소</Text>
+              <Text style={{ color: colors.primary[500] }}>취소</Text>
             </Pressable>
           </View>
         </View>
@@ -116,7 +117,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   modalContent: {
-    backgroundColor: "#fff",
+    backgroundColor: colors.surface,
     padding: 24,
     borderRadius: 4,
     width: "85%",
@@ -138,7 +139,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginRight: 10,
     marginBottom: 5,
-    color: "#333",
+    color: colors.text.primary,
   },
   checkBox: {
     padding: 0,
@@ -148,20 +149,20 @@ const styles = StyleSheet.create({
     flex: 2,
     paddingVertical: 8,
     paddingHorizontal: 12,
-    backgroundColor: "#f0f4f8",
+    backgroundColor: colors.surface,
     borderRadius: 6,
     justifyContent: "center",
     alignItems: "center",
     borderWidth: 1,
-    borderColor: "#ddd",
+    borderColor: colors.border.main,
   },
   disabledButton: {
-    backgroundColor: "#e0e0e0",
-    borderColor: "#ccc",
+    backgroundColor: colors.border.main,
+    borderColor: colors.border.dark,
   },
   timeText: {
     fontSize: 14,
-    color: "#00796b",
+    color: colors.primary[600],
   },
   modalButtons: {
     flexDirection: "row",
@@ -176,7 +177,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 4,
     borderWidth: 1,
-    borderColor: "#1f6feb",
+    borderColor: colors.primary[500],
   },
 });
 

@@ -1,7 +1,8 @@
-import React from "react";
+﻿import React from "react";
 import { View, Text, StyleSheet, Pressable } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 
+import { colors } from "../styles/theme";
 function BodyChartButtons({ setMode, setShow, latestData }) {
   const buttons = [
     { text: "체중", mode: "weight", value: latestData.weight },
@@ -46,7 +47,7 @@ const styles = StyleSheet.create({
   button: {
     paddingVertical: 10,
     paddingHorizontal: 15,
-    backgroundColor: "#f0f0f0",
+    backgroundColor: colors.gray[100],
     marginHorizontal: 5,
     borderRadius: 8,
     justifyContent: "center",
@@ -54,19 +55,19 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   pressedButton: {
-    backgroundColor: "#e0e0e0",
+    backgroundColor: colors.border.main,
   },
   buttonText: {
     fontSize: 14,
-    color: "#333",
+    color: colors.text.primary,
     fontWeight: "500",
   },
   recentValueText: {
     fontSize: 12,
-    color: "#757575",
+    color: colors.text.secondary,
   },
   addButton: {
-    backgroundColor: "#1f6feb",
+    backgroundColor: colors.primary[500],
     paddingHorizontal: 16,
   },
 });

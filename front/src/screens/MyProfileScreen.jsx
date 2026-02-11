@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+﻿import React, { useEffect, useState } from "react";
 import { ActivityIndicator, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { colors } from "../styles/theme";
 
 import { useUserContext } from "../contexts/UserContext";
 import { getRole } from "../lib/users";
@@ -45,7 +46,7 @@ function MyProfileScreen() {
   if (isLoading) {
     return (
       <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <ActivityIndicator size="large" color="#1f6feb" />
+        <ActivityIndicator size="large" color={colors.primary[500]} />
       </View>
     );
   }

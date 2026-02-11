@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+﻿import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   View,
@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
+import { colors } from "../styles/theme";
 
 import exerciseData from "../assets/exercise.json";
 
@@ -119,7 +120,7 @@ function ExerciseSearchScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: colors.surface,
     padding: 16,
   },
   searchContainer: {
@@ -127,11 +128,11 @@ const styles = StyleSheet.create({
   },
   searchInput: {
     borderWidth: 1,
-    borderColor: "#ddd",
+    borderColor: colors.border.main,
     borderRadius: 8,
     padding: 10,
     fontSize: 16,
-    backgroundColor: "#f9f9f9",
+    backgroundColor: colors.surface,
   },
   categoryContainer: {
     marginBottom: 10,
@@ -143,19 +144,19 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
     borderRadius: 20,
     borderWidth: 1,
-    borderColor: "#ddd",
-    backgroundColor: "#f0f0f0",
+    borderColor: colors.border.main,
+    backgroundColor: colors.gray[100],
   },
   selectedCategoryButton: {
-    backgroundColor: "#1f6feb",
-    borderColor: "#1f6feb",
+    backgroundColor: colors.primary[500],
+    borderColor: colors.primary[500],
   },
   categoryButtonText: {
     fontSize: 14,
-    color: "#333",
+    color: colors.text.primary,
   },
   selectedCategoryButtonText: {
-    color: "#fff",
+    color: colors.background,
   },
   exerciseList: {
     marginTop: 10,
@@ -163,15 +164,15 @@ const styles = StyleSheet.create({
   exerciseItem: {
     padding: 12,
     borderBottomWidth: 1,
-    borderBottomColor: "#eee",
+    borderBottomColor: colors.border.light,
   },
   exerciseText: {
     fontSize: 16,
-    color: "#333",
+    color: colors.text.primary,
   },
   categoryText: {
     fontSize: 12,
-    color: "#777",
+    color: colors.text.secondary,
   },
 });
 

@@ -1,17 +1,16 @@
 /**
  * Clean Pro - Typography System
  * 
- * Cafe24Ssurround (Display) + SUIT (Body) 조합
+ * Cafe24Ssurround (Display) + Paperlogy (Body) 조합
  */
 
 export const fonts = {
     display: 'Cafe24Ssurround',     // 임팩트 제목
     displayAir: 'Cafe24SsurroundAir', // 얇은 제목 (옵션)
-    heading: 'SUIT-SemiBold',
-    body: 'SUIT-Regular',
-    medium: 'SUIT-Medium',
-    light: 'SUIT-Light',
-    bold: 'SUIT-Bold',
+    heading: 'Paperlogy-SemiBold',
+    body: 'Paperlogy-Regular',
+    medium: 'Paperlogy-Medium',
+    bold: 'Paperlogy-Bold',
 };
 
 export const typography = {
@@ -29,47 +28,47 @@ export const typography = {
         letterSpacing: -0.25,
     },
 
-    // Headings (SUIT)
+    // Headings (Paperlogy)
     h1: {
-        fontFamily: 'SUIT-Bold',
+        fontFamily: 'Paperlogy-Bold',
         fontSize: 28,
         lineHeight: 36,
         letterSpacing: 0,
     },
     h2: {
-        fontFamily: 'SUIT-SemiBold',
+        fontFamily: 'Paperlogy-SemiBold',
         fontSize: 24,
         lineHeight: 32,
         letterSpacing: 0,
     },
     h3: {
-        fontFamily: 'SUIT-SemiBold',
+        fontFamily: 'Paperlogy-SemiBold',
         fontSize: 20,
         lineHeight: 28,
         letterSpacing: 0,
     },
     h4: {
-        fontFamily: 'SUIT-SemiBold',
+        fontFamily: 'Paperlogy-SemiBold',
         fontSize: 18,
         lineHeight: 24,
         letterSpacing: 0,
     },
 
-    // Body Text (SUIT)
+    // Body Text (Paperlogy)
     bodyLarge: {
-        fontFamily: 'SUIT-Regular',
+        fontFamily: 'Paperlogy-Regular',
         fontSize: 16,
         lineHeight: 24,
         letterSpacing: 0,
     },
     body: {
-        fontFamily: 'SUIT-Regular',
+        fontFamily: 'Paperlogy-Regular',
         fontSize: 14,
         lineHeight: 20,
         letterSpacing: 0,
     },
     bodySmall: {
-        fontFamily: 'SUIT-Regular',
+        fontFamily: 'Paperlogy-Regular',
         fontSize: 12,
         lineHeight: 16,
         letterSpacing: 0,
@@ -77,19 +76,19 @@ export const typography = {
 
     // Special Purpose
     button: {
-        fontFamily: 'SUIT-SemiBold',
+        fontFamily: 'Paperlogy-SemiBold',
         fontSize: 16,
         lineHeight: 20,
         letterSpacing: 0.5,
     },
     caption: {
-        fontFamily: 'SUIT-Regular',
+        fontFamily: 'Paperlogy-Regular',
         fontSize: 12,
         lineHeight: 16,
         letterSpacing: 0,
     },
     overline: {
-        fontFamily: 'SUIT-SemiBold',
+        fontFamily: 'Paperlogy-SemiBold',
         fontSize: 10,
         lineHeight: 16,
         letterSpacing: 1.5,
@@ -98,19 +97,19 @@ export const typography = {
 
     // Numeric/Stats
     statLarge: {
-        fontFamily: 'SUIT-Bold',
+        fontFamily: 'Paperlogy-Bold',
         fontSize: 48,
         lineHeight: 56,
         letterSpacing: -1,
     },
     stat: {
-        fontFamily: 'SUIT-SemiBold',
+        fontFamily: 'Paperlogy-SemiBold',
         fontSize: 32,
         lineHeight: 40,
         letterSpacing: -0.5,
     },
     statSmall: {
-        fontFamily: 'SUIT-Medium',
+        fontFamily: 'Paperlogy-Medium',
         fontSize: 20,
         lineHeight: 28,
         letterSpacing: 0,

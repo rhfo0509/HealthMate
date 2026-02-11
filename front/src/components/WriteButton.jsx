@@ -1,9 +1,10 @@
-import React from "react";
+﻿import React from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useActionSheet } from "@expo/react-native-action-sheet";
 
+import { colors } from "../styles/theme";
 function WriteButton({ postType, relatedUserId }) {
   const navigation = useNavigation();
   const { showActionSheetWithOptions } = useActionSheet();
@@ -16,7 +17,7 @@ function WriteButton({ postType, relatedUserId }) {
         {
           options: ["일지 작성하기", "루틴 등록하기", "취소"],
           cancelButtonIndex: 2,
-          cancelButtonTintColor: "#d9534f",
+          cancelButtonTintColor: colors.error,
         },
         (selectedIndex) => {
           if (selectedIndex === 0) {
@@ -49,7 +50,7 @@ const styles = StyleSheet.create({
     bottom: 10,
   },
   circle: {
-    backgroundColor: "#1f6feb",
+    backgroundColor: colors.primary[500],
     borderRadius: 27,
     height: 54,
     width: 54,

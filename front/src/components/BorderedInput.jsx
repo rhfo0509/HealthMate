@@ -1,6 +1,7 @@
-import React from "react";
+﻿import React from "react";
 import { StyleSheet, TextInput } from "react-native";
 
+import { colors } from "../styles/theme";
 function BorderedInput({ hasMarginBottom, ...rest }, ref) {
   return (
     <TextInput
@@ -13,12 +14,12 @@ function BorderedInput({ hasMarginBottom, ...rest }, ref) {
 
 const styles = StyleSheet.create({
   input: {
-    borderColor: "#bdbdbd",
+    borderColor: colors.text.disabled,
     borderWidth: 1,
     paddingHorizontal: 16,
     borderRadius: 4,
     height: 48,
-    backgroundColor: "white",
+    backgroundColor: colors.surface,
   },
   margin: {
     marginBottom: 16,

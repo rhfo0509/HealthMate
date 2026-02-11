@@ -15,6 +15,7 @@ import { getUser, getRole } from "../lib/users";
 import CalendarHeader from "../components/CalendarHeader";
 import RoutinesSection from "../components/RoutinesSection";
 import NutritionSection from "../components/NutritionSection";
+import { colors } from "../styles/theme";
 
 function DashboardScreen() {
   const route = useRoute();
@@ -160,8 +161,8 @@ function DashboardScreen() {
         foods.some(
           (food) => food.createdAt?.toDate().toDateString() === date
         ) && {
-          color: "#1f6feb",
-          selectedColor: "#1f6feb",
+          color: colors.primary[500],
+          selectedColor: colors.primary[500],
         },
         routines.some(
           (routine) => routine.createdAt?.toDate().toDateString() === date
@@ -185,7 +186,7 @@ function DashboardScreen() {
 
       {isLoading ? (
         <View style={styles.loading}>
-          <ActivityIndicator size="large" color="#1f6feb" />
+          <ActivityIndicator size="large" color={colors.primary[500]} />
         </View>
       ) : (
         <ScrollView>
@@ -211,7 +212,7 @@ function DashboardScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: colors.surface,
   },
   loading: {
     flex: 1,

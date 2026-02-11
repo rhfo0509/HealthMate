@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+﻿import React, { useState, useEffect } from "react";
 import { StyleSheet, View, FlatList } from "react-native";
 import {
   getFirestore,
@@ -8,6 +8,7 @@ import {
   orderBy,
   where,
 } from "firebase/firestore";
+import { colors } from "../styles/theme";
 
 import { useUserContext } from "../contexts/UserContext";
 import NotificationCard from "../components/NotificationCard";
@@ -68,7 +69,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   separator: {
-    backgroundColor: "#e0e0e0",
+    backgroundColor: colors.border.main,
     height: 1,
     width: "100%",
   },

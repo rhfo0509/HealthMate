@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+﻿import React, { useEffect, useState } from "react";
 import { StyleSheet, View, Text, ActivityIndicator } from "react-native";
 import {
   startOfWeek,
@@ -15,6 +15,7 @@ import {
   where,
   onSnapshot,
 } from "firebase/firestore";
+import { colors } from "../styles/theme";
 
 import { useUserContext } from "../contexts/UserContext";
 import CalorieChart from "../components/CalorieChart";
@@ -113,7 +114,7 @@ const CalorieStatScreen = () => {
     return (
       <View style={styles.container}>
         <View style={styles.loading}>
-          <ActivityIndicator size="large" color="#1f6feb" />
+          <ActivityIndicator size="large" color={colors.primary[500]} />
         </View>
       </View>
     );
@@ -160,7 +161,7 @@ export default CalorieStatScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "white",
+    backgroundColor: colors.surface,
   },
   loading: {
     flex: 1,
@@ -178,7 +179,7 @@ const styles = StyleSheet.create({
   },
   dateRangeText: {
     fontSize: 14,
-    color: "#666",
+    color: colors.text.secondary,
     marginTop: 4,
   },
   summeryContainer: {
@@ -188,7 +189,7 @@ const styles = StyleSheet.create({
   averageText: {
     fontSize: 20,
     fontWeight: "bold",
-    color: "#1f6feb",
+    color: colors.primary[500],
   },
   percentageText: {
     fontSize: 16,

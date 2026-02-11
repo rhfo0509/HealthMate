@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+﻿import React, { useState } from "react";
 import {
   ActivityIndicator,
   Pressable,
@@ -17,6 +17,7 @@ import {
   getDownloadURL,
   uploadBytesResumable,
 } from "firebase/storage";
+import { colors } from "../styles/theme";
 
 import { useUserContext } from "../contexts/UserContext";
 import { logOut } from "../lib/auth";
@@ -215,7 +216,7 @@ function SetupProfile() {
           />
         )}
         {loading ? (
-          <ActivityIndicator size={32} color="#1f6feb" style={styles.spinner} />
+          <ActivityIndicator size={32} color={colors.primary[500]} style={styles.spinner} />
         ) : (
           <View style={styles.buttons}>
             <CustomButton title="다음" onPress={onSubmit} hasMarginBottom />
@@ -247,7 +248,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 16,
     fontWeight: "500",
-    color: "#212529",
+    color: colors.gray[900],
     width: "30%",
   },
   buttonGroup: {
@@ -261,20 +262,20 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderWidth: 1,
-    borderColor: "#ced4da",
+    borderColor: colors.border.dark,
     borderRadius: 4,
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.background,
   },
   selectedButton: {
-    backgroundColor: "#007bff",
-    borderColor: "#0056b3",
+    backgroundColor: colors.primary[500],
+    borderColor: colors.primary[700],
   },
   optionText: {
     fontSize: 16,
-    color: "#212529",
+    color: colors.gray[900],
   },
   selectedText: {
-    color: "#ffffff",
+    color: colors.background,
     fontWeight: "bold",
   },
   dateButton: {
@@ -283,13 +284,13 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderWidth: 1,
-    borderColor: "#ced4da",
+    borderColor: colors.border.dark,
     borderRadius: 4,
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.background,
   },
   dateText: {
     fontSize: 16,
-    color: "#212529",
+    color: colors.gray[900],
   },
   spinner: {
     marginTop: 32,

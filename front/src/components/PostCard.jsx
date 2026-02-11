@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+﻿import React, { useEffect, useMemo, useState } from "react";
 import {
   View,
   StyleSheet,
@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { MaterialIcons } from "@expo/vector-icons";
+import { colors } from "../styles/theme";
 
 import { useUserContext } from "../contexts/UserContext";
 import useActions from "../hooks/useActions";
@@ -86,7 +87,7 @@ function PostCard({ author, URL, content, createdAt, id, isDetailMode }) {
           <View style={styles.profileInfo}>
             <Text style={styles.displayName}>{author.displayName}</Text>
             {isLoading ? (
-              <ActivityIndicator size="small" color="#757575" />
+              <ActivityIndicator size="small" color={colors.text.secondary} />
             ) : (
               <Text style={styles.role}>
                 {role === "trainer" ? "트레이너" : "회원"}
@@ -96,7 +97,7 @@ function PostCard({ author, URL, content, createdAt, id, isDetailMode }) {
         </View>
         {user.id === author.id && (
           <Pressable hitSlop={8} onPress={onPressMore}>
-            <MaterialIcons name="more-vert" size={24} color="#757575" />
+            <MaterialIcons name="more-vert" size={24} color={colors.text.secondary} />
           </Pressable>
         )}
       </View>
@@ -165,9 +166,9 @@ function PostCard({ author, URL, content, createdAt, id, isDetailMode }) {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: "#fff",
+    backgroundColor: colors.surface,
     borderRadius: 12,
-    shadowColor: "#000",
+    shadowColor: colors.gray[900],
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.1,
     shadowRadius: 8,
@@ -193,10 +194,10 @@ const styles = StyleSheet.create({
   displayName: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "#333",
+    color: colors.text.primary,
   },
   role: {
-    color: "#757575",
+    color: colors.text.secondary,
   },
   contentContainer: {
     flexDirection: "row",
@@ -215,7 +216,7 @@ const styles = StyleSheet.create({
   },
   contentText: {
     fontSize: 16,
-    color: "#333",
+    color: colors.text.primary,
     lineHeight: 24,
   },
   footer: {
@@ -224,7 +225,7 @@ const styles = StyleSheet.create({
   },
   date: {
     fontSize: 12,
-    color: "#757575",
+    color: colors.text.secondary,
   },
   imageViewer: {
     padding: 16,
@@ -232,7 +233,7 @@ const styles = StyleSheet.create({
   foodsContainer: {
     marginTop: 12,
     padding: 10,
-    backgroundColor: "#f9f9f9",
+    backgroundColor: colors.surface,
     borderRadius: 8,
   },
 });

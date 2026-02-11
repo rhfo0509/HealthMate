@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+﻿import React, { useState, useEffect } from "react";
 import {
   Modal,
   View,
@@ -9,6 +9,7 @@ import {
   Alert,
 } from "react-native";
 import { format } from "date-fns";
+import { colors } from "../styles/theme";
 
 import { useUserContext } from "../contexts/UserContext";
 import { createBodyData, updateBodyData } from "../lib/bodyData";
@@ -118,9 +119,9 @@ function BodyDataModal({ memberId, show, setShow, editData, latestData }) {
           <View style={styles.modalButtons}>
             <Pressable
               onPress={onSave}
-              style={[styles.modalButton, { backgroundColor: "#1f6feb" }]}
+              style={[styles.modalButton, { backgroundColor: colors.primary[500] }]}
             >
-              <Text style={{ color: "#fff" }}>
+              <Text style={{ color: colors.background }}>
                 {editData ? "수정" : "등록"}
               </Text>
             </Pressable>
@@ -128,7 +129,7 @@ function BodyDataModal({ memberId, show, setShow, editData, latestData }) {
               onPress={() => setShow(false)}
               style={styles.modalButton}
             >
-              <Text style={{ color: "#1f6feb" }}>취소</Text>
+              <Text style={{ color: colors.primary[500] }}>취소</Text>
             </Pressable>
           </View>
         </View>
@@ -145,7 +146,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, 0.5)",
   },
   content: {
-    backgroundColor: "white",
+    backgroundColor: colors.surface,
     paddingVertical: 20,
     paddingHorizontal: 15,
     borderRadius: 10,
@@ -156,11 +157,11 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "600",
     marginBottom: 10,
-    color: "#333",
+    color: colors.text.primary,
   },
   dateContainer: {
     borderWidth: 1,
-    borderColor: "#ccc",
+    borderColor: colors.border.dark,
     borderRadius: 5,
     paddingVertical: 8,
     paddingHorizontal: 10,
@@ -170,7 +171,7 @@ const styles = StyleSheet.create({
   },
   selectText: {
     fontSize: 16,
-    color: "#333",
+    color: colors.text.primary,
   },
   inputContainer: {
     width: "100%",
@@ -183,20 +184,20 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 16,
-    color: "#333",
+    color: colors.text.primary,
     width: 80,
   },
   input: {
     flex: 1,
     paddingVertical: 8,
     borderBottomWidth: 1,
-    borderColor: "#ccc",
+    borderColor: colors.border.dark,
     textAlign: "center",
     fontSize: 16,
   },
   unit: {
     fontSize: 16,
-    color: "#666",
+    color: colors.text.secondary,
     marginLeft: 5,
   },
   modalButtons: {
@@ -212,7 +213,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 4,
     borderWidth: 1,
-    borderColor: "#1f6feb",
+    borderColor: colors.primary[500],
   },
 });
 

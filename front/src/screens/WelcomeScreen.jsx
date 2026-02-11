@@ -1,7 +1,8 @@
-import React from "react";
+﻿import React from "react";
 import { SafeAreaView, StyleSheet, Text } from "react-native";
 import SetupProfile from "../components/SetupProfile";
 
+import { colors } from "../styles/theme";
 function WelcomeScreen() {
   return (
     <SafeAreaView style={styles.container}>
@@ -24,7 +25,7 @@ const styles = StyleSheet.create({
   description: {
     marginTop: 12,
     fontSize: 16,
-    color: "#757575",
+    color: colors.text.secondary,
   },
 });
 

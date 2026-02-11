@@ -1,7 +1,8 @@
-import React from "react";
+﻿import React from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { differenceInYears, parse } from "date-fns";
 import { useNavigation } from "@react-navigation/native";
+import { colors } from "../styles/theme";
 
 import Avatar from "./Avatar";
 
@@ -42,7 +43,7 @@ function MemberListItem({ member }) {
   return (
     <Pressable
       style={styles.container}
-      android_ripple={{ color: "#ededed" }}
+      android_ripple={{ color: colors.border.light }}
       onPress={onPress}
     >
       <View style={styles.content}>
@@ -63,11 +64,11 @@ function MemberListItem({ member }) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "white",
+    backgroundColor: colors.surface,
     padding: 16,
     borderRadius: 12,
     marginBottom: 10,
-    shadowColor: "#000",
+    shadowColor: colors.gray[900],
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 8,
@@ -84,15 +85,15 @@ const styles = StyleSheet.create({
   nameText: {
     fontSize: 18,
     fontWeight: "bold",
-    color: "#37474f",
+    color: colors.gray[800],
   },
   subText: {
     fontSize: 14,
-    color: "#757575",
+    color: colors.text.secondary,
     marginTop: 4,
   },
   statusContainer: {
-    backgroundColor: "#f0f4f8",
+    backgroundColor: colors.surface,
     paddingHorizontal: 10,
     paddingVertical: 5,
     borderRadius: 8,
@@ -100,7 +101,7 @@ const styles = StyleSheet.create({
   statusText: {
     fontSize: 14,
     fontWeight: "600",
-    color: "#00796b",
+    color: colors.primary[600],
   },
 });
 

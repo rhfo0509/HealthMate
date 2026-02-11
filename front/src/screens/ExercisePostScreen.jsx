@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+﻿import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   StyleSheet,
   View,
@@ -17,6 +17,7 @@ import {
   uploadBytesResumable,
 } from "firebase/storage";
 import { Image, Video } from "react-native-compressor";
+import { colors } from "../styles/theme";
 
 import { createPost } from "../lib/posts";
 import { useUserContext } from "../contexts/UserContext";
@@ -176,7 +177,7 @@ function ExercisePostScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: colors.surface,
   },
   image: {
     width: "100%",
@@ -195,7 +196,7 @@ const styles = StyleSheet.create({
   uploadingText: {
     marginTop: 10,
     fontSize: 18,
-    color: "#333",
+    color: colors.text.primary,
   },
 });
 

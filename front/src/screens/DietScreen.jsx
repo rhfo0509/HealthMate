@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+﻿import React, { useState, useEffect } from "react";
 import { StyleSheet, View, ScrollView, Text } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import { isSameDay } from "date-fns";
@@ -10,6 +10,7 @@ import {
   onSnapshot,
   orderBy,
 } from "firebase/firestore";
+import { colors } from "../styles/theme";
 
 import { useUserContext } from "../contexts/UserContext";
 import CalendarHeader from "../components/CalendarHeader";
@@ -61,7 +62,7 @@ function DietScreen() {
       <CalendarHeader
         markedDates={posts.map((post) => ({
           date: post.createdAt?.toDate(),
-          dots: [{ color: "#1f6feb", selectedColor: "#1f6feb" }],
+          dots: [{ color: colors.primary[500], selectedColor: colors.primary[500] }],
         }))}
         selectedDate={selectedDate}
         onSelectDate={setSelectedDate}
@@ -97,7 +98,7 @@ function DietScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: colors.surface,
   },
   dietSection: {
     marginVertical: 10,
@@ -105,12 +106,12 @@ const styles = StyleSheet.create({
   dietText: {
     fontSize: 20,
     fontWeight: "bold",
-    color: "#333",
+    color: colors.text.primary,
     marginLeft: 16,
   },
   noPostsText: {
     fontSize: 16,
-    color: "#757575",
+    color: colors.text.secondary,
     textAlign: "center",
     marginTop: 10,
   },

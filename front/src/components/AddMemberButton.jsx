@@ -1,8 +1,9 @@
-import React from "react";
+﻿import React from "react";
 import { View, Pressable, StyleSheet } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 
+import { colors } from "../styles/theme";
 function AddMemberButton() {
   const navigation = useNavigation();
 
@@ -30,7 +31,7 @@ const styles = StyleSheet.create({
     bottom: 10,
   },
   circle: {
-    backgroundColor: "#1f6feb",
+    backgroundColor: colors.primary[500],
     borderRadius: 27,
     height: 54,
     width: 54,

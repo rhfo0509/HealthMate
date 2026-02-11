@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+﻿import React, { useState } from "react";
 import { View, Text, Pressable } from "react-native";
 import CalendarStrip from "react-native-calendar-strip";
 import { DateTimePickerAndroid } from "@react-native-community/datetimepicker";
 
+import { colors } from "../styles/theme";
 function CalendarHeader({ markedDates, selectedDate, onSelectDate }) {
   // 날짜 선택 모달 열기
   const openDatePicker = () => {
@@ -38,23 +39,23 @@ function CalendarHeader({ markedDates, selectedDate, onSelectDate }) {
           onPress={openDatePicker}
           style={{
             padding: 5,
-            backgroundColor: "#ccc",
+            backgroundColor: colors.border.dark,
             borderRadius: 5,
             marginRight: 5,
           }}
         >
-          <Text style={{ color: "#333", fontSize: 12 }}>날짜 선택</Text>
+          <Text style={{ color: colors.text.primary, fontSize: 12 }}>날짜 선택</Text>
         </Pressable>
 
         <Pressable
           onPress={goToToday}
           style={{
             padding: 5,
-            backgroundColor: "#ccc",
+            backgroundColor: colors.border.dark,
             borderRadius: 5,
           }}
         >
-          <Text style={{ color: "#333", fontSize: 12 }}>오늘</Text>
+          <Text style={{ color: colors.text.primary, fontSize: 12 }}>오늘</Text>
         </Pressable>
       </View>
 
@@ -63,15 +64,15 @@ function CalendarHeader({ markedDates, selectedDate, onSelectDate }) {
         scrollable
         style={{ height: 80 }}
         calendarColor={"white"}
-        calendarHeaderStyle={{ color: "#333" }}
-        dateNumberStyle={{ color: "#333" }}
+        calendarHeaderStyle={{ color: colors.text.primary }}
+        dateNumberStyle={{ color: colors.text.primary }}
         dateNameStyle={{ display: "none" }}
         iconContainer={{ flex: 0.1 }}
         markedDates={markedDates}
         onDateSelected={(date) => onSelectDate(new Date(date))}
         selectedDate={new Date(selectedDate)}
         highlightDateNameStyle={{ display: "none" }}
-        highlightDateNumberStyle={{ color: "#1f6feb" }}
+        highlightDateNumberStyle={{ color: colors.primary[500] }}
         calendarHeaderFormat={"YYYY년 M월"}
       />
     </View>

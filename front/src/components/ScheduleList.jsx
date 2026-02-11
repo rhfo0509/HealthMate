@@ -1,10 +1,11 @@
-import React from "react";
+﻿import React from "react";
 import { StyleSheet, Alert } from "react-native";
 import {
   SwipeableFlatList,
   SwipeableQuickActionButton,
   SwipeableQuickActions,
 } from "react-native-swipe-list";
+import { colors } from "../styles/theme";
 
 import { removeSchedule } from "../lib/schedules";
 import ScheduleListItem from "./ScheduleListItem";
@@ -49,7 +50,7 @@ function ScheduleList({ schedules, ListHeaderComponent }) {
               paddingHorizontal: 30,
               alignItems: "center",
               justifyContent: "center",
-              backgroundColor: "#d9534f",
+              backgroundColor: colors.error,
             }}
           />
         </SwipeableQuickActions>

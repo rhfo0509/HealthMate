@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+﻿import React, { useEffect, useMemo, useState } from "react";
 import {
   View,
   StyleSheet,
@@ -16,6 +16,7 @@ import {
   onSnapshot,
   orderBy,
 } from "firebase/firestore";
+import { colors } from "../styles/theme";
 
 import { useUserContext } from "../contexts/UserContext";
 import useActions from "../hooks/useActions";
@@ -93,7 +94,7 @@ function CommentCard({ createdAt, content, id, author, postId, parentId }) {
   return (
     <View style={styles.card}>
       <FlatList
-        style={{ backgroundColor: "white" }}
+        style={{ backgroundColor: colors.surface }}
         data={subcomments}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
@@ -101,7 +102,7 @@ function CommentCard({ createdAt, content, id, author, postId, parentId }) {
         ListHeaderComponent={
           <Pressable
             style={[styles.cardContent, parentId ? styles.sub : null]}
-            android_ripple={{ color: "#ededed" }}
+            android_ripple={{ color: colors.border.light }}
             onPress={onPress}
             disabled={parentId ? true : false}
           >
@@ -111,7 +112,7 @@ function CommentCard({ createdAt, content, id, author, postId, parentId }) {
                 <View style={styles.profileInfo}>
                   <Text style={styles.displayName}>{author.displayName}</Text>
                   {isLoading ? (
-                    <ActivityIndicator size="small" color="#757575" />
+                    <ActivityIndicator size="small" color={colors.text.secondary} />
                   ) : (
                     <Text style={styles.role}>
                       {role === "trainer" ? "트레이너" : "회원"}
@@ -121,7 +122,7 @@ function CommentCard({ createdAt, content, id, author, postId, parentId }) {
               </View>
               {isMyComment && (
                 <Pressable hitSlop={8} onPress={onPressMore}>
-                  <MaterialIcons name="more-vert" size={20} color="#757575" />
+                  <MaterialIcons name="more-vert" size={20} color={colors.text.secondary} />
                 </Pressable>
               )}
             </View>
@@ -140,9 +141,9 @@ function CommentCard({ createdAt, content, id, author, postId, parentId }) {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: "#fff",
+    backgroundColor: colors.surface,
     borderRadius: 12,
-    shadowColor: "#000",
+    shadowColor: colors.gray[900],
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.1,
     shadowRadius: 8,
@@ -156,7 +157,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
   },
   separator: {
-    backgroundColor: "#e0e0e0",
+    backgroundColor: colors.border.main,
     height: 1,
     width: "100%",
   },
@@ -176,10 +177,10 @@ const styles = StyleSheet.create({
   displayName: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "#333",
+    color: colors.text.primary,
   },
   role: {
-    color: "#757575",
+    color: colors.text.secondary,
     fontSize: 14,
   },
   contentContainer: {
@@ -187,19 +188,19 @@ const styles = StyleSheet.create({
   },
   content: {
     fontSize: 16,
-    color: "#333",
+    color: colors.text.primary,
     lineHeight: 24,
     marginBottom: 8,
   },
   date: {
     fontSize: 12,
-    color: "#757575",
+    color: colors.text.secondary,
   },
   sub: {
     paddingLeft: 20,
-    backgroundColor: "#f9f9f9",
+    backgroundColor: colors.surface,
     borderLeftWidth: 4,
-    borderLeftColor: "#e0e0e0",
+    borderLeftColor: colors.border.main,
   },
 });
 

@@ -1,7 +1,8 @@
-import React from "react";
+﻿import React from "react";
 import { View, Text, StyleSheet, Pressable } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
+import { colors } from "../styles/theme";
 
 import Avatar from "./Avatar";
 
@@ -27,7 +28,7 @@ function MembershipCard({ membership }) {
 
   return (
     <LinearGradient
-      colors={["#1f6feb", "#4a90e2"]}
+      colors={[colors.primary[500], colors.primary[400]]}
       start={[0, 0]}
       end={[1, 1]}
       style={styles.card}
@@ -101,13 +102,13 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 8,
     right: 8,
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.background,
     borderRadius: 12,
     paddingHorizontal: 12,
     paddingVertical: 4,
   },
   statusText: {
-    color: "#1f6feb",
+    color: colors.primary[500],
     fontWeight: "bold",
   },
   trainerInfo: {
@@ -119,7 +120,7 @@ const styles = StyleSheet.create({
     marginLeft: 12,
     fontSize: 20,
     fontWeight: "bold",
-    color: "#fff",
+    color: colors.background,
   },
   details: {
     marginBottom: 16,
@@ -131,7 +132,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   label: {
-    color: "#fff",
+    color: colors.background,
     fontWeight: "bold",
     fontSize: 16,
     paddingHorizontal: 4,
@@ -139,17 +140,17 @@ const styles = StyleSheet.create({
   },
   detailText: {
     fontSize: 16,
-    color: "#fff",
+    color: colors.background,
   },
   button: {
     alignItems: "center",
-    backgroundColor: "#ffffff",
+    backgroundColor: colors.background,
     borderRadius: 4,
     paddingHorizontal: 16,
     paddingVertical: 8,
   },
   buttonText: {
-    color: "#1f6feb",
+    color: colors.primary[500],
     fontWeight: "bold",
     fontSize: 16,
   },

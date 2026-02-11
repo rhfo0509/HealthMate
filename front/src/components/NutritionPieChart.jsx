@@ -1,7 +1,8 @@
-import React from "react";
+﻿import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { PieChart } from "react-native-gifted-charts";
 
+import { colors } from "../styles/theme";
 const NutritionPieChart = ({ title, total, recommended, color }) => {
   const createPieData = (total, recommended, color) => {
     return [
@@ -11,7 +12,7 @@ const NutritionPieChart = ({ title, total, recommended, color }) => {
       },
       {
         value: +total > +recommended ? 0 : parseFloat(recommended - total),
-        color: "#e0e0e0", // 남은 섭취량은 회색으로
+        color: colors.border.main, // 남은 섭취량은 회색으로
       },
     ];
   };
@@ -60,7 +61,7 @@ const styles = StyleSheet.create({
   },
   percentageLabel: {
     fontSize: 12,
-    color: "#888",
+    color: colors.text.hint,
     marginTop: 5,
   },
 });

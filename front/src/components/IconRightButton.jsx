@@ -1,14 +1,15 @@
-import React from "react";
+﻿import React from "react";
 import { StyleSheet, View, Pressable } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 
-function IconRightButton({ name, color = "#1f6feb", onPress }) {
+import { colors } from "../styles/theme";
+function IconRightButton({ name, color = colors.primary[500], onPress }) {
   return (
     <View style={styles.container}>
       <Pressable
         style={styles.circle}
         onPress={onPress}
-        android_ripple={{ color: "#eee" }}
+        android_ripple={{ color: colors.border.light }}
       >
         <MaterialIcons name={name} size={24} color={color} />
       </Pressable>

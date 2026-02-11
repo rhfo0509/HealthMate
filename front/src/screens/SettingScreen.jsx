@@ -4,6 +4,7 @@ import { useNavigation } from "@react-navigation/native";
 
 import { useUserContext } from "../contexts/UserContext";
 import { logOut } from "../lib/auth";
+import { colors, spacing } from "../styles/theme";
 
 function SettingScreen() {
   const { setUser } = useUserContext();
@@ -33,19 +34,22 @@ function SettingScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: 32,
+    paddingTop: spacing.xl,
+    backgroundColor: colors.surface,
   },
   item: {
     borderTopWidth: 1,
     borderBottomWidth: 1,
-    borderColor: "#eeeeee",
-    backgroundColor: "white",
-    paddingVertical: 16,
-    paddingHorizontal: 12,
-    marginBottom: 16,
+    borderColor: colors.border.light,
+    backgroundColor: colors.background,
+    paddingVertical: spacing.md,
+    paddingHorizontal: spacing.md,
+    marginBottom: spacing.md,
   },
   itemText: {
+    fontFamily: "Paperlogy-Medium",
     fontSize: 16,
+    color: colors.text.primary,
   },
 });
 

@@ -1,4 +1,4 @@
-import React from "react";
+﻿import React from "react";
 import {
   View,
   Text,
@@ -8,6 +8,7 @@ import {
   StyleSheet,
 } from "react-native";
 
+import { colors } from "../styles/theme";
 function ExtendCountModal({
   visible,
   onClose,
@@ -38,12 +39,12 @@ function ExtendCountModal({
           <View style={styles.modalButtons}>
             <Pressable
               onPress={onSave}
-              style={[styles.modalButton, { backgroundColor: "#1f6feb" }]}
+              style={[styles.modalButton, { backgroundColor: colors.primary[500] }]}
             >
-              <Text style={{ color: "#fff" }}>등록</Text>
+              <Text style={{ color: colors.background }}>등록</Text>
             </Pressable>
             <Pressable onPress={onClose} style={styles.modalButton}>
-              <Text style={{ color: "#1f6feb" }}>취소</Text>
+              <Text style={{ color: colors.primary[500] }}>취소</Text>
             </Pressable>
           </View>
         </View>
@@ -60,7 +61,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   modalContent: {
-    backgroundColor: "#fff",
+    backgroundColor: colors.surface,
     padding: 24,
     borderRadius: 4,
     width: "80%",
@@ -78,7 +79,7 @@ const styles = StyleSheet.create({
   },
   input: {
     borderBottomWidth: 1,
-    borderColor: "#ccc",
+    borderColor: colors.border.dark,
     marginRight: 8,
     fontSize: 16,
     textAlign: "center",
@@ -86,7 +87,7 @@ const styles = StyleSheet.create({
   },
   unitText: {
     fontSize: 16,
-    color: "#555",
+    color: colors.gray[700],
   },
   modalButtons: {
     flexDirection: "row",
@@ -101,7 +102,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 4,
     borderWidth: 1,
-    borderColor: "#1f6feb",
+    borderColor: colors.primary[500],
   },
 });
 

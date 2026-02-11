@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+﻿import React, { useEffect, useState } from "react";
 import { Pressable, Text } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { format } from "date-fns";
@@ -10,6 +10,7 @@ import {
   onSnapshot,
   orderBy,
 } from "firebase/firestore";
+import { colors } from "../styles/theme";
 
 import { useUserContext } from "../contexts/UserContext";
 import IconRightButton from "../components/IconRightButton";
@@ -50,21 +51,15 @@ function CalendarScreen() {
 
   useEffect(() => {
     navigation.setOptions({
-      title: "월간 일정",
+      title: "",
       headerRight: () => (
-        <>
-          <Pressable
-            onPress={() => {
-              navigation.navigate("WeeklyCalendar");
-            }}
-          >
-            <Text style={{ color: "#1f6feb" }}>주간 일정 보기</Text>
-          </Pressable>
-          <IconRightButton
-            onPress={() => navigation.navigate("Notify")}
-            name="notifications-none"
-          />
-        </>
+        <Pressable
+          onPress={() => {
+            navigation.navigate("WeeklyCalendar");
+          }}
+        >
+          <Text style={{ color: colors.primary[500] }}>주간 일정 보기</Text>
+        </Pressable>
       ),
     });
   }, [navigation]);

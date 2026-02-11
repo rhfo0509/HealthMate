@@ -1,7 +1,8 @@
-import React from "react";
+﻿import React from "react";
 import { View, TextInput, Pressable, StyleSheet, Text } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 
+import { colors } from "../styles/theme";
 function FoodInput({ food, onChange, onRemove, onSearch }) {
   return (
     <View style={styles.foodCard}>
@@ -13,13 +14,13 @@ function FoodInput({ food, onChange, onRemove, onSearch }) {
           style={styles.foodInput}
         />
         <Pressable onPress={onSearch} style={styles.searchButton}>
-          <MaterialIcons name="search" size={24} color="#1f6feb" />
+          <MaterialIcons name="search" size={24} color={colors.primary[500]} />
         </Pressable>
         <Pressable onPress={onRemove} style={styles.removeButton}>
           <MaterialIcons
             name="remove-circle-outline"
             size={24}
-            color="#ff6b6b"
+            color={colors.error}
           />
         </Pressable>
       </View>
@@ -76,8 +77,8 @@ const styles = StyleSheet.create({
     padding: 12,
     marginBottom: 10,
     borderRadius: 8,
-    backgroundColor: "#f9f9f9",
-    shadowColor: "#000",
+    backgroundColor: colors.surface,
+    shadowColor: colors.gray[900],
     shadowOpacity: 0.1,
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 5,
@@ -91,10 +92,10 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 4,
     paddingHorizontal: 10,
-    backgroundColor: "#fff",
+    backgroundColor: colors.surface,
     borderRadius: 6,
     borderWidth: 1,
-    borderColor: "#ccc",
+    borderColor: colors.border.dark,
   },
   searchButton: {
     marginLeft: 8,
@@ -111,10 +112,10 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#fff",
+    backgroundColor: colors.surface,
     borderRadius: 6,
     borderWidth: 1,
-    borderColor: "#ccc",
+    borderColor: colors.border.dark,
     paddingHorizontal: 8,
     marginHorizontal: 0,
   },
@@ -124,7 +125,7 @@ const styles = StyleSheet.create({
     textAlign: "left",
   },
   unitText: {
-    color: "#757575",
+    color: colors.text.secondary,
     marginLeft: 4,
   },
 });
