@@ -1,5 +1,5 @@
 ﻿import React, { useState, useEffect } from "react";
-import { StyleSheet, View, FlatList } from "react-native";
+import { StyleSheet, View, FlatList, Text } from "react-native";
 import {
   getFirestore,
   collection,
@@ -41,13 +41,19 @@ function NotifyScreen() {
 
   return (
     <View style={styles.container}>
-      <FlatList
-        inverted
-        data={notifications}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id}
-        ItemSeparatorComponent={() => <View style={styles.separator} />}
-      />
+      {notifications.length === 0 ? (
+        <View style={styles.emptyContainer}>
+          <Text style={styles.emptyText}>알림이 없습니다.</Text>
+        </View>
+      ) : (
+        <FlatList
+          inverted
+          data={notifications}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id}
+          ItemSeparatorComponent={() => <View style={styles.separator} />}
+        />
+      )}
     </View>
   );
 }
@@ -72,6 +78,18 @@ const styles = StyleSheet.create({
     backgroundColor: colors.border.main,
     height: 1,
     width: "100%",
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingTop: 100,
+  },
+  emptyText: {
+    fontSize: 16,
+    lineHeight: 24,
+    fontFamily: 'Cafe24SsurroundAir',
+    color: colors.gray[400],
   },
 });
 

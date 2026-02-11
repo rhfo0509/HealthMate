@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import {
   StyleSheet,
   TextInput,
@@ -162,6 +162,7 @@ const styles = StyleSheet.create({
   input: {
     padding: 16,
     fontSize: 16,
+    fontFamily: 'Cafe24SsurroundAir',
   },
   addButton: {
     flexDirection: "row",
@@ -172,6 +173,7 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     color: colors.primary[500],
     fontSize: 16,
+    fontFamily: 'Cafe24SsurroundAir',
     marginTop: 1,
   },
 });

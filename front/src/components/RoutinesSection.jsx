@@ -1,4 +1,4 @@
-﻿import React from "react";
+import React from "react";
 import { View, Text, Pressable, Alert } from "react-native";
 import { isSameDay } from "date-fns";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -172,7 +172,8 @@ const styles = {
   },
   sectionTitle: {
     fontSize: 20,
-    fontWeight: "bold",
+    lineHeight: 28,
+    fontFamily: 'Cafe24SsurroundAir',
     color: colors.text.primary,
   },
   editButton: {
@@ -193,12 +194,14 @@ const styles = {
   },
   summaryLabel: {
     fontSize: 14,
+    fontFamily: 'Cafe24SsurroundAir',
     color: colors.text.secondary,
     marginBottom: 4,
   },
   summaryValue: {
     fontSize: 16,
-    fontWeight: "bold",
+    lineHeight: 24,
+    fontFamily: 'Cafe24SsurroundAir',
     color: colors.text.primary,
   },
   routinesContainer: {
@@ -232,7 +235,8 @@ const styles = {
   },
   routineName: {
     fontSize: 16,
-    fontWeight: "500",
+    lineHeight: 24,
+    fontFamily: 'Cafe24SsurroundAir',
   },
   exerciseRow: {
     flexDirection: "row",
@@ -244,6 +248,7 @@ const styles = {
     paddingHorizontal: 4,
     borderRadius: 4,
     fontSize: 14,
+    fontFamily: 'Cafe24SsurroundAir',
     color: colors.background,
   },
   exerciseName: {
@@ -261,6 +266,7 @@ const styles = {
   },
   infoText: {
     fontSize: 16,
+    fontFamily: 'Cafe24SsurroundAir',
     color: colors.text.secondary,
     textAlign: "center",
   },

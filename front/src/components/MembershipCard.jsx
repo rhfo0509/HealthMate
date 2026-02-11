@@ -1,4 +1,4 @@
-﻿import React from "react";
+import React from "react";
 import { View, Text, StyleSheet, Pressable } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
@@ -91,6 +91,7 @@ const styles = StyleSheet.create({
   },
   noMembershipText: {
     fontSize: 18,
+    fontFamily: 'Cafe24SsurroundAir',
     color: "gray",
   },
   card: {
@@ -109,7 +110,8 @@ const styles = StyleSheet.create({
   },
   statusText: {
     color: colors.primary[500],
-    fontWeight: "bold",
+    fontFamily: 'Cafe24SsurroundAir',
+    fontSize: 14,
   },
   trainerInfo: {
     flexDirection: "row",
@@ -119,7 +121,8 @@ const styles = StyleSheet.create({
   trainerName: {
     marginLeft: 12,
     fontSize: 20,
-    fontWeight: "bold",
+    lineHeight: 28,
+    fontFamily: 'Cafe24SsurroundAir',
     color: colors.background,
   },
   details: {
@@ -133,13 +136,15 @@ const styles = StyleSheet.create({
   },
   label: {
     color: colors.background,
-    fontWeight: "bold",
     fontSize: 16,
+    lineHeight: 24,
+    fontFamily: 'Cafe24SsurroundAir',
     paddingHorizontal: 4,
     borderRadius: 6,
   },
   detailText: {
     fontSize: 16,
+    fontFamily: 'Cafe24SsurroundAir',
     color: colors.background,
   },
   button: {
@@ -151,8 +156,9 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: colors.primary[500],
-    fontWeight: "bold",
     fontSize: 16,
+    lineHeight: 24,
+    fontFamily: 'Cafe24SsurroundAir',
   },
 });
 

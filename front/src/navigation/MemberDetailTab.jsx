@@ -20,6 +20,9 @@ function MemberDetailTab() {
         role === "trainer"
           ? `${relatedUser.displayName} 회원`
           : `${relatedUser.displayName} 트레이너`,
+      headerTitleStyle: {
+        fontFamily: 'Cafe24SsurroundAir',
+      },
       headerRight: () =>
         role === "trainer" ? (
           <IconRightButton
@@ -38,7 +41,11 @@ function MemberDetailTab() {
       screenOptions={{
         headerShown: false,
         tabBarActiveTintColor: "#1f6feb",
-        tabBarLabelStyle: { color: "black" },
+        tabBarLabelStyle: {
+          color: "black",
+          fontFamily: 'Cafe24SsurroundAir',
+          fontSize: 14,
+        },
       }}
     >
       <Tab.Screen

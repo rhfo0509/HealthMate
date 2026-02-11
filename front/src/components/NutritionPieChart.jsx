@@ -1,4 +1,4 @@
-﻿import React from "react";
+import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { PieChart } from "react-native-gifted-charts";
 
@@ -48,7 +48,8 @@ const styles = StyleSheet.create({
   },
   pieTitle: {
     fontSize: 18,
-    fontWeight: "500",
+    lineHeight: 26,
+    fontFamily: 'Cafe24SsurroundAir',
     marginBottom: 10,
   },
   centerLabelWrapper: {
@@ -57,10 +58,12 @@ const styles = StyleSheet.create({
   },
   centerLabel: {
     fontSize: 14,
-    fontWeight: "bold",
+    lineHeight: 20,
+    fontFamily: 'Cafe24SsurroundAir',
   },
   percentageLabel: {
     fontSize: 12,
+    fontFamily: 'Cafe24SsurroundAir',
     color: colors.text.hint,
     marginTop: 5,
   },

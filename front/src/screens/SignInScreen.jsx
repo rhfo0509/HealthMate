@@ -13,6 +13,7 @@ import { logIn, signUp } from "../lib/auth";
 import { getUser } from "../lib/users";
 import SignForm from "../components/SignForm";
 import SignButtons from "../components/SignButtons";
+import { colors } from "../styles/theme";
 
 function SignInScreen({ navigation, route }) {
   const { setUser } = useUserContext();
@@ -86,10 +87,13 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 48,
-    fontWeight: "bold",
+    fontFamily: 'Cafe24Ssurround',
+    color: colors.primary[500],
   },
   description: {
     fontSize: 16,
+    lineHeight: 24,
+    fontFamily: 'Cafe24SsurroundAir',
   },
   form: {
     marginTop: 64,

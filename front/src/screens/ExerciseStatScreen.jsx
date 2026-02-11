@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, View, Text, ActivityIndicator } from "react-native";
 import {
   startOfWeek,
@@ -146,6 +146,8 @@ const ExerciseStatScreen = () => {
       : 0;
   const differenceText = differencePercentage > 0 ? "증가" : "감소";
 
+  const hasData = totalWeeklyVolume > 0;
+
   return (
     <View style={styles.container}>
       <View style={styles.weekInfoContainer}>
@@ -156,19 +158,27 @@ const ExerciseStatScreen = () => {
           ({format(start, "yyyy-MM-dd")} ~ {format(end, "yyyy-MM-dd")})
         </Text>
       </View>
-      <ExerciseChart
-        weeklyVolume={weeklyVolume}
-        lastWeekAverage={lastWeekAverage}
-      />
-      <View style={styles.summaryContainer}>
-        <Text style={styles.averageText}>
-          주간 평균 볼륨: {Math.round(weeklyAverage)} kg
-        </Text>
-        <Text style={styles.comparisonText}>
-          지난 주 대비 {Math.abs(differencePercentage).toFixed(1)}%{" "}
-          {differenceText}했어요
-        </Text>
-      </View>
+      {hasData ? (
+        <>
+          <ExerciseChart
+            weeklyVolume={weeklyVolume}
+            lastWeekAverage={lastWeekAverage}
+          />
+          <View style={styles.summaryContainer}>
+            <Text style={styles.averageText}>
+              주간 평균 볼륨: {Math.round(weeklyAverage)} kg
+            </Text>
+            <Text style={styles.comparisonText}>
+              지난 주 대비 {Math.abs(differencePercentage).toFixed(1)}%{" "}
+              {differenceText}했어요
+            </Text>
+          </View>
+        </>
+      ) : (
+        <View style={styles.emptyContainer}>
+          <Text style={styles.emptyText}>데이터가 없습니다.</Text>
+        </View>
+      )}
     </View>
   );
 };
@@ -192,10 +202,13 @@ const styles = StyleSheet.create({
   },
   weekInfoText: {
     fontSize: 20,
-    fontWeight: "600",
+    lineHeight: 28,
+    fontFamily: 'Cafe24SsurroundAir',
   },
   dateRangeText: {
     fontSize: 14,
+    lineHeight: 20,
+    fontFamily: 'Cafe24SsurroundAir',
     color: colors.text.secondary,
     marginTop: 4,
   },
@@ -205,12 +218,27 @@ const styles = StyleSheet.create({
   },
   averageText: {
     fontSize: 20,
-    fontWeight: "bold",
+    lineHeight: 28,
+    fontFamily: 'Cafe24SsurroundAir',
     color: colors.primary[500],
   },
   comparisonText: {
     fontSize: 16,
+    lineHeight: 24,
+    fontFamily: 'Cafe24SsurroundAir',
     color: "gray",
     marginTop: 8,
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 100,
+  },
+  emptyText: {
+    fontSize: 18,
+    lineHeight: 26,
+    fontFamily: 'Cafe24SsurroundAir',
+    color: colors.text.secondary,
   },
 });

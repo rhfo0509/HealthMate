@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -10,7 +10,6 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { CheckBox } from "react-native-elements";
-import { getDoc } from "firebase/firestore";
 import { colors } from "../styles/theme";
 
 import { useUserContext } from "../contexts/UserContext";
@@ -127,19 +126,15 @@ function AddMembershipScreen() {
       // 트레이너에 회원 추가
       await addMemberToTrainer(trainer.id, memberId);
 
-      // 회원권 생성
-      const membershipDoc = await createMembership({
+      // 회원권 생성 (Cloud Function이 생성된 회원권 데이터를 반환)
+      const membershipData = await createMembership({
         ...formattedMembershipInfo,
         memberId,
         trainerId: trainer.id,
       });
-      const snapshot = await getDoc(membershipDoc);
 
       // 생성된 회원권의 정보를 이용해 스케줄 생성
-      await createSchedulesWithMembership({
-        ...snapshot.data(),
-        id: snapshot.id,
-      });
+      await createSchedulesWithMembership(membershipData);
 
       Alert.alert("알림", "회원권과 스케줄이 성공적으로 생성되었습니다.", [
         { text: "확인", onPress: () => navigation.goBack() },
@@ -149,6 +144,7 @@ function AddMembershipScreen() {
       resetForm();
     } catch (error) {
       console.error("회원권 생성 중 오류 발생:", error);
+      Alert.alert("오류", "회원권 생성 중 문제가 발생했습니다.");
     }
   };
 
@@ -340,7 +336,8 @@ const styles = StyleSheet.create({
   },
   header: {
     fontSize: 20,
-    fontWeight: "bold",
+    lineHeight: 28,
+    fontFamily: 'Cafe24SsurroundAir',
     marginBottom: 15,
     color: colors.gray[900],
   },
@@ -357,8 +354,10 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary[500],
   },
   buttonText: {
+    fontSize: 16,
+    lineHeight: 24,
+    fontFamily: 'Cafe24SsurroundAir',
     color: colors.background,
-    fontWeight: "bold",
   },
   disabledButton: {
     backgroundColor: colors.border.dark,
@@ -371,6 +370,7 @@ const styles = StyleSheet.create({
   label: {
     width: 70,
     fontSize: 16,
+    fontFamily: 'Cafe24SsurroundAir',
     color: colors.gray[900],
     marginRight: 10,
   },
@@ -385,11 +385,15 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   datePickerText: {
+    fontSize: 16,
+    lineHeight: 24,
+    fontFamily: 'Cafe24SsurroundAir',
     color: colors.gray[700],
   },
   subHeader: {
     fontSize: 16,
-    fontWeight: "600",
+    lineHeight: 24,
+    fontFamily: 'Cafe24SsurroundAir',
     marginVertical: 10,
     color: colors.gray[700],
   },
@@ -414,6 +418,7 @@ const styles = StyleSheet.create({
   },
   dayText: {
     fontSize: 16,
+    fontFamily: 'Cafe24SsurroundAir',
     marginRight: 15,
     marginBottom: 5,
     color: colors.gray[900],

@@ -1,4 +1,4 @@
-﻿// MemberProfile.jsx
+// MemberProfile.jsx
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 import Avatar from "./Avatar";
@@ -29,6 +29,7 @@ const styles = StyleSheet.create({
   },
   username: {
     fontSize: 18,
+    fontFamily: 'Cafe24SsurroundAir',
     color: colors.gray[800],
     marginLeft: 12,
   },

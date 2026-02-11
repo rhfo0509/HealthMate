@@ -47,8 +47,8 @@ const styles = StyleSheet.create({
     marginBottom: spacing.md,
   },
   itemText: {
-    fontFamily: "Paperlogy-Medium",
     fontSize: 16,
+    fontFamily: 'Cafe24SsurroundAir',
     color: colors.text.primary,
   },
 });

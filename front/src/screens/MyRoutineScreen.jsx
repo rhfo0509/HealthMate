@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   StyleSheet,
   View,
@@ -129,11 +129,13 @@ const styles = StyleSheet.create({
   },
   routineName: {
     fontSize: 18,
-    fontWeight: "bold",
+    lineHeight: 26,
+    fontFamily: 'Cafe24SsurroundAir',
     color: colors.text.primary,
   },
   routineDate: {
     fontSize: 14,
+    fontFamily: 'Cafe24SsurroundAir',
     color: colors.text.hint,
     marginTop: 4,
   },
@@ -146,6 +148,7 @@ const styles = StyleSheet.create({
   deleteButtonText: {
     color: colors.background,
     fontSize: 14,
+    fontFamily: 'Cafe24SsurroundAir',
   },
 });
 

@@ -1,5 +1,6 @@
 import React from "react";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import { colors } from "../styles/theme";
 
 import BodyStatScreen from "../screens/BodyStatScreen";
 import CalorieStatScreen from "../screens/CalorieStatScreen";
@@ -12,8 +13,15 @@ function MemberStatTab({ user }) {
     <StatTab.Navigator
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: "#1f6feb",
-        tabBarLabelStyle: { color: "black" },
+        tabBarActiveTintColor: colors.primary[500],
+        tabBarInactiveTintColor: colors.gray[600],
+        tabBarLabelStyle: {
+          fontSize: 14,
+          fontFamily: 'Cafe24SsurroundAir',
+        },
+        tabBarIndicatorStyle: {
+          backgroundColor: colors.primary[500],
+        },
       }}
     >
       <StatTab.Screen

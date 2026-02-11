@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Modal,
   View,
@@ -155,7 +155,8 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 20,
-    fontWeight: "600",
+    lineHeight: 28,
+    fontFamily: 'Cafe24SsurroundAir',
     marginBottom: 10,
     color: colors.text.primary,
   },
@@ -171,6 +172,7 @@ const styles = StyleSheet.create({
   },
   selectText: {
     fontSize: 16,
+    fontFamily: 'Cafe24SsurroundAir',
     color: colors.text.primary,
   },
   inputContainer: {
@@ -184,6 +186,7 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 16,
+    fontFamily: 'Cafe24SsurroundAir',
     color: colors.text.primary,
     width: 80,
   },
@@ -194,9 +197,11 @@ const styles = StyleSheet.create({
     borderColor: colors.border.dark,
     textAlign: "center",
     fontSize: 16,
+    fontFamily: 'Cafe24SsurroundAir',
   },
   unit: {
     fontSize: 16,
+    fontFamily: 'Cafe24SsurroundAir',
     color: colors.text.secondary,
     marginLeft: 5,
   },

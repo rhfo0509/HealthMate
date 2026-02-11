@@ -1,4 +1,4 @@
-﻿import React, { useState, useCallback, useEffect, useRef } from "react";
+import React, { useState, useCallback, useEffect, useRef } from "react";
 import {
   StyleSheet,
   View,
@@ -294,6 +294,7 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     flex: 1,
     fontSize: 16,
+    fontFamily: 'Cafe24SsurroundAir',
   },
   addButton: {
     flexDirection: "row",
@@ -304,6 +305,7 @@ const styles = StyleSheet.create({
     marginLeft: 5,
     color: colors.primary[500],
     fontSize: 16,
+    fontFamily: 'Cafe24SsurroundAir',
     marginTop: 1,
   },
   uploading: {
@@ -314,6 +316,7 @@ const styles = StyleSheet.create({
   uploadingText: {
     marginTop: 10,
     fontSize: 18,
+    fontFamily: 'Cafe24SsurroundAir',
     color: colors.text.primary,
   },
 });

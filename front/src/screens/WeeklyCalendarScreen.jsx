@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, Pressable, StyleSheet, ScrollView } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { startOfWeek, endOfWeek, format, addDays } from "date-fns";
@@ -51,10 +51,10 @@ function WeeklyCalendarScreen() {
 
   useEffect(() => {
     navigation.setOptions({
-      title: "주간 일정",
+      title: "",
       headerRight: () => (
         <Pressable onPress={() => navigation.navigate("Calendar")}>
-          <Text style={{ color: colors.primary[500] }}>월간 일정 보기</Text>
+          <Text style={{ color: colors.primary[500], fontFamily: 'Cafe24SsurroundAir', fontSize: 14 }}>월간 일정 보기</Text>
         </Pressable>
       ),
     });
@@ -177,6 +177,7 @@ const styles = StyleSheet.create({
   },
   timeText: {
     fontSize: 14,
+    fontFamily: 'Cafe24SsurroundAir',
     color: colors.text.secondary,
   },
   headerTextPlaceholder: {
@@ -196,11 +197,13 @@ const styles = StyleSheet.create({
   },
   dateText: {
     fontSize: 16,
-    fontWeight: "bold",
+    lineHeight: 22,
+    fontFamily: 'Cafe24SsurroundAir',
     color: colors.text.primary,
   },
   dayText: {
     fontSize: 12,
+    fontFamily: 'Cafe24SsurroundAir',
     color: colors.text.secondary,
   },
   event: {
@@ -212,6 +215,7 @@ const styles = StyleSheet.create({
   eventText: {
     color: "white",
     fontSize: 10,
+    fontFamily: 'Cafe24SsurroundAir',
     textAlign: "center",
   },
 });

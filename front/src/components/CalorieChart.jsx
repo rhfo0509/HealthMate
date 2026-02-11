@@ -1,5 +1,6 @@
 import React from "react";
 import { BarChart } from "react-native-gifted-charts";
+import { colors } from "../styles/theme";
 
 function ExerciseChart({ weeklyCal, lastWeekAverageCal }) {
   const daysOfWeek = ["월", "화", "수", "목", "금", "토", "일"];
@@ -8,18 +9,29 @@ function ExerciseChart({ weeklyCal, lastWeekAverageCal }) {
     value: weeklyCal[day],
     label: day,
     spacing: 36,
-    labelTextStyle: { color: "gray", fontSize: 12 },
-    frontColor: "#FFB3BA",
+    labelTextStyle: { 
+      color: "gray", 
+      fontSize: 12,
+      fontFamily: 'Cafe24SsurroundAir',
+    },
+    frontColor: colors.primary[400],
+    gradientColor: colors.primary[300],
   }));
 
   return (
     <BarChart
       data={data}
       barWidth={12}
+      barBorderRadius={4}
+      isAnimated
       hideRules
       xAxisThickness={0}
       yAxisThickness={0}
-      yAxisTextStyle={{ color: "gray", fontSize: 12 }}
+      yAxisTextStyle={{ 
+        color: "gray", 
+        fontSize: 12,
+        fontFamily: 'Cafe24SsurroundAir',
+      }}
       noOfSections={3}
       maxValue={Math.max(
         1,

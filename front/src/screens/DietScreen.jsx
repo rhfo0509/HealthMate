@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, View, ScrollView, Text } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import { isSameDay } from "date-fns";
@@ -105,12 +105,14 @@ const styles = StyleSheet.create({
   },
   dietText: {
     fontSize: 20,
-    fontWeight: "bold",
+    lineHeight: 28,
+    fontFamily: 'Cafe24SsurroundAir',
     color: colors.text.primary,
     marginLeft: 16,
   },
   noPostsText: {
     fontSize: 16,
+    fontFamily: 'Cafe24SsurroundAir',
     color: colors.text.secondary,
     textAlign: "center",
     marginTop: 10,

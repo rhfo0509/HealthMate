@@ -1,4 +1,4 @@
-﻿import React from "react";
+import React from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { differenceInYears, parse } from "date-fns";
 import { useNavigation } from "@react-navigation/native";
@@ -84,11 +84,13 @@ const styles = StyleSheet.create({
   },
   nameText: {
     fontSize: 18,
-    fontWeight: "bold",
+    lineHeight: 26,
+    fontFamily: 'Cafe24SsurroundAir',
     color: colors.gray[800],
   },
   subText: {
     fontSize: 14,
+    fontFamily: 'Cafe24SsurroundAir',
     color: colors.text.secondary,
     marginTop: 4,
   },
@@ -100,7 +102,8 @@ const styles = StyleSheet.create({
   },
   statusText: {
     fontSize: 14,
-    fontWeight: "600",
+    lineHeight: 20,
+    fontFamily: 'Cafe24SsurroundAir',
     color: colors.primary[600],
   },
 });

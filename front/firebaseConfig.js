@@ -1,6 +1,6 @@
 import { initializeApp, getApps, getApp } from "firebase/app";
-import { getReactNativePersistence, initializeAuth } from "firebase/auth";
-import { getFunctions } from "firebase/functions";
+import { getReactNativePersistence, initializeAuth, getAuth } from "firebase/auth";
+import { getFunctions, connectFunctionsEmulator } from "firebase/functions";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const firebaseConfig = {
@@ -12,13 +12,14 @@ const firebaseConfig = {
 };
 
 let functions = null;
+let auth = null;
 
 export const initFirebase = () => {
   let app = null;
   if (getApps().length === 0) {
     try {
       app = initializeApp(firebaseConfig);
-      initializeAuth(app, {
+      auth = initializeAuth(app, {
         persistence: getReactNativePersistence(AsyncStorage),
         experimentalForceLongPolling: true,
       });
@@ -27,8 +28,10 @@ export const initFirebase = () => {
     }
   } else {
     app = getApp();
+    auth = getAuth(app);
   }
-  functions = getFunctions(app);
+  // us-central1 region 설정
+  functions = getFunctions(app, 'us-central1');
 };
 
 export const getFirebaseFunctions = () => {
@@ -36,4 +39,11 @@ export const getFirebaseFunctions = () => {
     initFirebase();
   }
   return functions;
+};
+
+export const getFirebaseAuth = () => {
+  if (!auth) {
+    initFirebase();
+  }
+  return auth;
 };

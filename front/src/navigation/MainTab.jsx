@@ -43,21 +43,26 @@ function MainTab() {
       screenOptions={{
         tabBarActiveTintColor: colors.primary[500],
         tabBarInactiveTintColor: colors.gray[400],
+        tabBarShowLabel: true,
         tabBarStyle: {
           backgroundColor: colors.background,
           borderTopColor: colors.border.light,
+          height: 60,
+          paddingBottom: 8,
+          paddingTop: 4,
         },
         tabBarLabelStyle: {
-          fontFamily: "Paperlogy-Medium",
-          fontSize: 11,
+          fontSize: 12,
+          fontFamily: 'Cafe24SsurroundAir',
+          marginTop: -4,
         },
-        headerShown: false,
       }}
     >
       <Tab.Screen
         name="HomeTab"
         component={HomeStack}
         options={{
+          headerShown: false,
           tabBarLabel: role === "trainer" ? "캘린더" : "홈",
           tabBarIcon: ({ color, size }) => (
             <MaterialIcons
@@ -73,20 +78,25 @@ function MainTab() {
         component={NotifyScreen}
         options={{
           tabBarLabel: "알림",
+          title: "HealthMate",
           headerShown: true,
-          title: "",
+          headerTitleStyle: { 
+            fontFamily: 'Cafe24Ssurround',
+            color: '#1f6feb',
+          },
           tabBarIcon: ({ color, size }) => (
             <MaterialIcons name="notifications-none" size={size} color={color} />
           ),
         }}
       />
       <Tab.Screen
-        name="ProfileTab"
+        name="MyProfileTab"
         component={MyProfileStack}
         options={{
-          tabBarLabel: "내 정보",
-          tabBarIcon: ({ color, size }) => (
-            <MaterialIcons name="person-outline" size={size} color={color} />
+          headerShown: false,
+          tabBarLabel: "MY",
+          tabBarIcon: ({ color, size}) => (
+            <MaterialIcons name="person" size={size} color={color} />
           ),
         }}
       />
@@ -95,8 +105,12 @@ function MainTab() {
         component={SettingScreen}
         options={{
           tabBarLabel: "설정",
+          title: "HealthMate",
           headerShown: true,
-          title: "",
+          headerTitleStyle: { 
+            fontFamily: 'Cafe24Ssurround',
+            color: '#1f6feb',
+          },
           tabBarIcon: ({ color, size }) => (
             <MaterialIcons name="settings" size={size} color={color} />
           ),

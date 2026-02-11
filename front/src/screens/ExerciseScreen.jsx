@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, View, FlatList, Text } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import { isSameDay, format } from "date-fns";
@@ -109,6 +109,7 @@ const styles = StyleSheet.create({
   },
   noPostsText: {
     fontSize: 18,
+    fontFamily: 'Cafe24SsurroundAir',
     color: colors.text.secondary,
   },
 });

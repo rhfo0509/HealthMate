@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   View,
   StyleSheet,
@@ -176,24 +176,28 @@ const styles = StyleSheet.create({
   },
   displayName: {
     fontSize: 16,
-    fontWeight: "bold",
+    lineHeight: 24,
+    fontFamily: 'Cafe24SsurroundAir',
     color: colors.text.primary,
   },
   role: {
     color: colors.text.secondary,
     fontSize: 14,
+    fontFamily: 'Cafe24SsurroundAir',
   },
   contentContainer: {
     marginTop: 8,
   },
   content: {
     fontSize: 16,
+    fontFamily: 'Cafe24SsurroundAir',
     color: colors.text.primary,
     lineHeight: 24,
     marginBottom: 8,
   },
   date: {
     fontSize: 12,
+    fontFamily: 'Cafe24SsurroundAir',
     color: colors.text.secondary,
   },
   sub: {

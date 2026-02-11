@@ -1,4 +1,4 @@
-﻿import React from "react";
+import React from "react";
 import { View, StyleSheet, Text, Pressable, Alert } from "react-native";
 import { colors } from "../styles/theme";
 
@@ -141,22 +141,26 @@ const styles = StyleSheet.create({
   },
   messageText: {
     fontSize: 16,
-    fontWeight: "bold",
+    lineHeight: 24,
+    fontFamily: 'Cafe24SsurroundAir',
     color: colors.text.primary,
     marginBottom: 6,
   },
   infoText: {
     fontSize: 14,
+    fontFamily: 'Cafe24SsurroundAir',
     color: colors.gray[700],
     marginBottom: 4,
   },
   reasonText: {
     fontSize: 14,
+    fontFamily: 'Cafe24SsurroundAir',
     color: colors.text.secondary,
     marginBottom: 4,
   },
   dateText: {
     fontSize: 12,
+    fontFamily: 'Cafe24SsurroundAir',
     color: colors.text.hint,
     textAlign: "right",
   },
@@ -180,6 +184,7 @@ const styles = StyleSheet.create({
   acceptText: {
     color: colors.background,
     fontSize: 16,
+    fontFamily: 'Cafe24SsurroundAir',
   },
   refuseButton: {
     backgroundColor: colors.surface,
@@ -188,11 +193,13 @@ const styles = StyleSheet.create({
   refuseText: {
     color: colors.primary[500],
     fontSize: 16,
+    fontFamily: 'Cafe24SsurroundAir',
   },
   completedText: {
     color: colors.error,
-    fontWeight: "600",
     fontSize: 14,
+    lineHeight: 20,
+    fontFamily: 'Cafe24SsurroundAir',
     textAlign: "center",
     marginTop: 12,
   },

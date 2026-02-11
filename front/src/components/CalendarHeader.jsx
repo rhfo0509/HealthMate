@@ -44,7 +44,7 @@ function CalendarHeader({ markedDates, selectedDate, onSelectDate }) {
             marginRight: 5,
           }}
         >
-          <Text style={{ color: colors.text.primary, fontSize: 12 }}>날짜 선택</Text>
+          <Text style={{ color: colors.text.primary, fontSize: 12, fontFamily: 'Cafe24SsurroundAir' }}>날짜 선택</Text>
         </Pressable>
 
         <Pressable
@@ -55,7 +55,7 @@ function CalendarHeader({ markedDates, selectedDate, onSelectDate }) {
             borderRadius: 5,
           }}
         >
-          <Text style={{ color: colors.text.primary, fontSize: 12 }}>오늘</Text>
+          <Text style={{ color: colors.text.primary, fontSize: 12, fontFamily: 'Cafe24SsurroundAir' }}>오늘</Text>
         </Pressable>
       </View>
 
@@ -63,7 +63,7 @@ function CalendarHeader({ markedDates, selectedDate, onSelectDate }) {
       <CalendarStrip
         scrollable
         style={{ height: 80 }}
-        calendarColor={"white"}
+        calendarColor={colors.surface}
         calendarHeaderStyle={{ color: colors.text.primary }}
         dateNumberStyle={{ color: colors.text.primary }}
         dateNameStyle={{ display: "none" }}

@@ -48,7 +48,6 @@ const styles = StyleSheet.create({
 
     textBase: {
         ...typography.caption,
-        fontFamily: 'Paperlogy-SemiBold',
     },
 
     // Types

@@ -1,4 +1,4 @@
-﻿import React from "react";
+import React from "react";
 import {
   View,
   Text,
@@ -69,7 +69,8 @@ const styles = StyleSheet.create({
   },
   modalTitle: {
     fontSize: 18,
-    fontWeight: "500",
+    lineHeight: 26,
+    fontFamily: 'Cafe24SsurroundAir',
     marginBottom: 16,
   },
   inputRow: {
@@ -82,11 +83,13 @@ const styles = StyleSheet.create({
     borderColor: colors.border.dark,
     marginRight: 8,
     fontSize: 16,
+    fontFamily: 'Cafe24SsurroundAir',
     textAlign: "center",
     width: 120,
   },
   unitText: {
     fontSize: 16,
+    fontFamily: 'Cafe24SsurroundAir',
     color: colors.gray[700],
   },
   modalButtons: {

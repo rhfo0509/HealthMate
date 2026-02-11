@@ -58,6 +58,7 @@ const styles = StyleSheet.create({
     paddingBottom: 16,
     flex: 1,
     fontSize: 16,
+    fontFamily: 'Cafe24SsurroundAir',
   },
 });
 

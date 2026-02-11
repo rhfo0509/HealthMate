@@ -65,17 +65,26 @@ function Root() {
           <Stack.Screen
             name="DietPost"
             component={DietPostScreen}
-            options={{ title: "오늘의 식단기록" }}
+            options={{ 
+              title: "오늘의 식단기록",
+              headerTitleStyle: { fontFamily: 'Cafe24SsurroundAir' },
+            }}
           />
           <Stack.Screen
             name="ExercisePost"
             component={ExercisePostScreen}
-            options={{ title: "오늘의 운동기록" }}
+            options={{ 
+              title: "오늘의 운동기록",
+              headerTitleStyle: { fontFamily: 'Cafe24SsurroundAir' },
+            }}
           />
           <Stack.Screen
             name="Routine"
             component={RoutineScreen}
-            options={{ title: "오늘의 운동루틴" }}
+            options={{ 
+              title: "오늘의 운동루틴",
+              headerTitleStyle: { fontFamily: 'Cafe24SsurroundAir' },
+            }}
           />
           <Stack.Screen
             name="Post"
@@ -110,17 +119,26 @@ function Root() {
           <Stack.Screen
             name="AddMembership"
             component={AddMembershipScreen}
-            options={{ title: "회원 및 회원권 추가" }}
+            options={{ 
+              title: "회원권 추가",
+              headerTitleStyle: { fontFamily: 'Cafe24SsurroundAir' },
+            }}
           />
           <Stack.Screen
             name="Membership"
             component={MembershipScreen}
-            options={{ title: "회원권 관리" }}
+            options={{ 
+              title: "회원권 관리",
+              headerTitleStyle: { fontFamily: 'Cafe24SsurroundAir' },
+            }}
           />
           <Stack.Screen
             name="EditProfile"
             component={EditProfileScreen}
-            options={{ title: "회원정보 수정" }}
+            options={{ 
+              title: "회원정보 수정",
+              headerTitleStyle: { fontFamily: 'Cafe24SsurroundAir' },
+            }}
           />
         </>
       ) : (

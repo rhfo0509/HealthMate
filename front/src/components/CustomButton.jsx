@@ -1,7 +1,8 @@
-﻿import React from "react";
+import React from "react";
 import { StyleSheet, View, Pressable, Text, Platform } from "react-native";
 
 import { colors } from "../styles/theme";
+
 function CustomButton({ onPress, title, hasMarginBottom, theme = "primary" }) {
   const isPrimary = theme === "primary";
   return (
@@ -45,8 +46,8 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary[500],
   },
   text: {
-    fontWeight: "bold",
-    fontSize: 14,
+    fontSize: 16,
+    fontFamily: 'Cafe24SsurroundAir',
     color: "white",
   },
   primaryText: {

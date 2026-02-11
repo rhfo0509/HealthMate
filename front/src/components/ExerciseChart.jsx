@@ -6,12 +6,12 @@ function ExerciseChart({ weeklyVolume, lastWeekAverage }) {
   const daysOfWeek = ["월", "화", "수", "목", "금", "토", "일"];
   const categories = ["등", "어깨", "팔", "가슴", "다리", "코어"];
   const colors = [
-    "#FFB3BA",
-    "#FFDFBA",
-    "#FFFFBA",
-    "#B2F7EF",
-    "#B2A4FF",
-    "#C4F0C5",
+    "#FF6B9D",  // 핑크 (등)
+    "#FFA726",  // 오렌지 (어깨)
+    "#FFD93D",  // 노랑 (팔)
+    "#6BCF7F",  // 초록 (가슴)
+    "#4FC3F7",  // 하늘색 (다리)
+    "#BA68C8",  // 보라 (코어)
   ];
 
   const stackData = daysOfWeek.map((day) => ({
@@ -20,10 +20,15 @@ function ExerciseChart({ weeklyVolume, lastWeekAverage }) {
         ? 0
         : weeklyVolume[day][category],
       color: colors[index % colors.length],
+      marginBottom: 2,
     })),
     label: day,
     spacing: 36,
-    labelTextStyle: { color: "gray", fontSize: 12 },
+    labelTextStyle: { 
+      color: "gray", 
+      fontSize: 12,
+      fontFamily: 'Cafe24SsurroundAir',
+    },
   }));
 
   const renderTitle = () => (
@@ -49,7 +54,13 @@ function ExerciseChart({ weeklyVolume, lastWeekAverage }) {
               marginRight: 4,
             }}
           />
-          <Text style={{ width: 24, height: 16, color: "gray", fontSize: 12 }}>
+          <Text style={{ 
+            width: 24, 
+            height: 16, 
+            color: "gray", 
+            fontSize: 12,
+            fontFamily: 'Cafe24SsurroundAir',
+          }}>
             {category}
           </Text>
         </View>
@@ -62,10 +73,15 @@ function ExerciseChart({ weeklyVolume, lastWeekAverage }) {
       <BarChart
         stackData={stackData}
         barWidth={12}
+        barBorderRadius={4}
         hideRules
         xAxisThickness={0}
         yAxisThickness={0}
-        yAxisTextStyle={{ color: "gray", fontSize: 12 }}
+        yAxisTextStyle={{ 
+          color: "gray", 
+          fontSize: 12,
+          fontFamily: 'Cafe24SsurroundAir',
+        }}
         noOfSections={3}
         maxValue={Math.max(
           1,

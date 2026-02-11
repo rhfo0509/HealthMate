@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -317,6 +317,7 @@ const styles = StyleSheet.create({
   },
   noResultsText: {
     fontSize: 18,
+    fontFamily: 'Cafe24SsurroundAir',
     color: colors.text.primary,
   },
   foodItem: {
@@ -334,10 +335,12 @@ const styles = StyleSheet.create({
   },
   foodName: {
     fontSize: 16,
-    fontWeight: "bold",
+    lineHeight: 24,
+    fontFamily: 'Cafe24SsurroundAir',
   },
   servingSize: {
     fontSize: 14,
+    fontFamily: 'Cafe24SsurroundAir',
     color: colors.text.secondary,
   },
   nutritionRow: {
@@ -347,6 +350,7 @@ const styles = StyleSheet.create({
   },
   foodDetails: {
     fontSize: 14,
+    fontFamily: 'Cafe24SsurroundAir',
     color: colors.text.primary,
   },
   servingContainer: {
@@ -355,7 +359,8 @@ const styles = StyleSheet.create({
   },
   servingLabel: {
     fontSize: 16,
-    fontWeight: "500",
+    lineHeight: 24,
+    fontFamily: 'Cafe24SsurroundAir',
     marginBottom: 8,
   },
   buttonGroup: {
@@ -403,6 +408,7 @@ const styles = StyleSheet.create({
   unitText: {
     marginLeft: 8,
     fontSize: 14,
+    fontFamily: 'Cafe24SsurroundAir',
     color: colors.text.primary,
   },
   registerButton: {
@@ -442,6 +448,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: colors.background,
     fontSize: 14,
+    fontFamily: 'Cafe24SsurroundAir',
   },
 });
 

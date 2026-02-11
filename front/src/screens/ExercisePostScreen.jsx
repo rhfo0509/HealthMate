@@ -1,4 +1,4 @@
-﻿import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   StyleSheet,
   View,
@@ -187,6 +187,7 @@ const styles = StyleSheet.create({
     paddingVertical: 16,
     flex: 1,
     fontSize: 16,
+    fontFamily: 'Cafe24SsurroundAir',
   },
   uploading: {
     flex: 1,
@@ -196,6 +197,7 @@ const styles = StyleSheet.create({
   uploadingText: {
     marginTop: 10,
     fontSize: 18,
+    fontFamily: 'Cafe24SsurroundAir',
     color: colors.text.primary,
   },
 });

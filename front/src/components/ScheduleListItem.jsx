@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
 import { ko } from "date-fns/locale";
@@ -180,7 +180,8 @@ const styles = StyleSheet.create({
   },
   memberName: {
     fontSize: 16,
-    fontWeight: "bold",
+    lineHeight: 24,
+    fontFamily: 'Cafe24SsurroundAir',
     color: colors.text.primary,
   },
   scheduleContainer: {
@@ -197,6 +198,7 @@ const styles = StyleSheet.create({
   },
   dateText: {
     fontSize: 14,
+    fontFamily: 'Cafe24SsurroundAir',
     color: colors.gray[700],
   },
   timeContainer: {
@@ -207,16 +209,19 @@ const styles = StyleSheet.create({
   },
   timeText: {
     fontSize: 14,
+    fontFamily: 'Cafe24SsurroundAir',
     color: colors.primary[600],
   },
   separator: {
     fontSize: 14,
+    fontFamily: 'Cafe24SsurroundAir',
     color: colors.primary[600],
     paddingHorizontal: 8,
   },
   statusText: {
     marginTop: 4,
     fontSize: 12,
+    fontFamily: 'Cafe24SsurroundAir',
     color: colors.primary[600],
   },
 });

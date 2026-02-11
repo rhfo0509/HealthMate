@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, ActivityIndicator } from "react-native";
 import {
   getFirestore,
@@ -139,6 +139,7 @@ const styles = StyleSheet.create({
   },
   noDataText: {
     fontSize: 20,
+    fontFamily: 'Cafe24SsurroundAir',
     color: colors.text.secondary,
     textAlign: "center",
   },

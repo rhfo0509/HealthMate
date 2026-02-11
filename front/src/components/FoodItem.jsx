@@ -1,4 +1,4 @@
-﻿import React from "react";
+import React from "react";
 import { View, Text, StyleSheet } from "react-native";
 
 import { colors } from "../styles/theme";
@@ -40,7 +40,8 @@ const styles = StyleSheet.create({
   },
   foodName: {
     fontSize: 14,
-    fontWeight: "500",
+    lineHeight: 20,
+    fontFamily: 'Cafe24SsurroundAir',
     color: colors.text.primary,
   },
   nutritionRow: {
@@ -53,6 +54,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 4,
     borderRadius: 4,
     fontSize: 14,
+    fontFamily: 'Cafe24SsurroundAir',
     color: colors.background,
   },
   calories: {

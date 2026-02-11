@@ -1,4 +1,4 @@
-﻿import React from "react";
+import React from "react";
 import { SafeAreaView, StyleSheet, Text } from "react-native";
 import SetupProfile from "../components/SetupProfile";
 
@@ -21,10 +21,12 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
+    fontFamily: 'Cafe24SsurroundAir',
   },
   description: {
     marginTop: 12,
     fontSize: 16,
+    fontFamily: 'Cafe24SsurroundAir',
     color: colors.text.secondary,
   },
 });

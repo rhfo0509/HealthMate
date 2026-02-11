@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, View, Text, ActivityIndicator } from "react-native";
 import {
   startOfWeek,
@@ -128,6 +128,8 @@ const CalorieStatScreen = () => {
         ).toFixed(2)
       : 0;
 
+  const hasData = Object.values(weeklyCal).some(cal => cal > 0);
+
   return (
     <View style={styles.container}>
       <View style={styles.weekInfoContainer}>
@@ -138,20 +140,28 @@ const CalorieStatScreen = () => {
           ({format(start, "yyyy-MM-dd")} ~ {format(end, "yyyy-MM-dd")})
         </Text>
       </View>
-      <View style={{ marginTop: 40 }} />
-      <CalorieChart
-        weeklyCal={weeklyCal}
-        lastWeekAverageCal={lastWeekAverageCal}
-      />
-      <View style={styles.summeryContainer}>
-        <Text style={styles.averageText}>
-          주간 평균 칼로리: {Math.round(weeklyAverageCal)} kcal
-        </Text>
-        <Text style={styles.percentageText}>
-          지난 주 대비 {Math.abs(percentageChange).toFixed(1)}%{" "}
-          {percentageChange >= 0 ? "증가" : "감소"}했어요
-        </Text>
-      </View>
+      {hasData ? (
+        <>
+          <View style={{ marginTop: 40 }} />
+          <CalorieChart
+            weeklyCal={weeklyCal}
+            lastWeekAverageCal={lastWeekAverageCal}
+          />
+          <View style={styles.summeryContainer}>
+            <Text style={styles.averageText}>
+              주간 평균 칼로리: {Math.round(weeklyAverageCal)} kcal
+            </Text>
+            <Text style={styles.percentageText}>
+              지난 주 대비 {Math.abs(percentageChange).toFixed(1)}%{" "}
+              {percentageChange >= 0 ? "증가" : "감소"}했어요
+            </Text>
+          </View>
+        </>
+      ) : (
+        <View style={styles.emptyContainer}>
+          <Text style={styles.emptyText}>데이터가 없습니다.</Text>
+        </View>
+      )}
     </View>
   );
 };
@@ -175,10 +185,13 @@ const styles = StyleSheet.create({
   },
   weekInfoText: {
     fontSize: 20,
-    fontWeight: "600",
+    lineHeight: 28,
+    fontFamily: 'Cafe24SsurroundAir',
   },
   dateRangeText: {
     fontSize: 14,
+    lineHeight: 20,
+    fontFamily: 'Cafe24SsurroundAir',
     color: colors.text.secondary,
     marginTop: 4,
   },
@@ -188,12 +201,27 @@ const styles = StyleSheet.create({
   },
   averageText: {
     fontSize: 20,
-    fontWeight: "bold",
+    lineHeight: 28,
+    fontFamily: 'Cafe24SsurroundAir',
     color: colors.primary[500],
   },
   percentageText: {
     fontSize: 16,
+    lineHeight: 24,
+    fontFamily: 'Cafe24SsurroundAir',
     color: "gray",
     marginTop: 8,
+  },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 100,
+  },
+  emptyText: {
+    fontSize: 18,
+    lineHeight: 26,
+    fontFamily: 'Cafe24SsurroundAir',
+    color: colors.text.secondary,
   },
 });

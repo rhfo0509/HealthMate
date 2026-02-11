@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   View,
@@ -132,6 +132,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 10,
     fontSize: 16,
+    fontFamily: 'Cafe24SsurroundAir',
     backgroundColor: colors.surface,
   },
   categoryContainer: {
@@ -153,6 +154,7 @@ const styles = StyleSheet.create({
   },
   categoryButtonText: {
     fontSize: 14,
+    fontFamily: 'Cafe24SsurroundAir',
     color: colors.text.primary,
   },
   selectedCategoryButtonText: {
@@ -168,10 +170,12 @@ const styles = StyleSheet.create({
   },
   exerciseText: {
     fontSize: 16,
+    fontFamily: 'Cafe24SsurroundAir',
     color: colors.text.primary,
   },
   categoryText: {
     fontSize: 12,
+    fontFamily: 'Cafe24SsurroundAir',
     color: colors.text.secondary,
   },
 });

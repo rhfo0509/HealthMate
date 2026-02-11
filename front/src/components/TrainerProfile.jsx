@@ -14,7 +14,6 @@ import { getMembersByTrainer } from "../lib/users";
 import { getMembershipsByTrainer } from "../lib/memberships";
 import Avatar from "./Avatar";
 import MemberList from "./MemberList";
-import MemberSearchBar from "./MemberSearchBar";
 import AddMemberButton from "./AddMemberButton";
 
 function TrainerProfile({ user }) {
@@ -96,10 +95,6 @@ function TrainerProfile({ user }) {
               </Text>
             </View>
             <View style={styles.listHeader}>
-              <MemberSearchBar
-                members={memberList}
-                setFilteredMembers={setFilteredMemberList}
-              />
               <View style={styles.select}>
                 <RNPickerSelect
                   value={sortBy}
@@ -137,6 +132,8 @@ const styles = StyleSheet.create({
   },
   username: {
     fontSize: 20,
+    lineHeight: 28,
+    fontFamily: 'Cafe24SsurroundAir',
     color: colors.text.primary,
     marginLeft: 12,
   },

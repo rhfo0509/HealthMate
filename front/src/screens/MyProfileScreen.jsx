@@ -1,17 +1,14 @@
 ﻿import React, { useEffect, useState } from "react";
 import { ActivityIndicator, View } from "react-native";
-import { useNavigation } from "@react-navigation/native";
 import { colors } from "../styles/theme";
 
 import { useUserContext } from "../contexts/UserContext";
 import { getRole } from "../lib/users";
-import IconRightButton from "../components/IconRightButton";
 import TrainerProfile from "../components/TrainerProfile";
 import MemberProfile from "../components/MemberProfile";
 import MemberStatTab from "../navigation/MemberStatTab";
 
 function MyProfileScreen() {
-  const navigation = useNavigation();
   const { user } = useUserContext();
 
   const [role, setRole] = useState("");
@@ -30,18 +27,6 @@ function MyProfileScreen() {
       }
     })();
   }, [user.id]);
-
-  useEffect(() => {
-    navigation.setOptions({
-      title: "내 프로필",
-      headerRight: () => (
-        <IconRightButton
-          name="settings"
-          onPress={() => navigation.push("Setting")}
-        />
-      ),
-    });
-  }, [navigation, user]);
 
   if (isLoading) {
     return (

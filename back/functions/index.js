@@ -273,15 +273,23 @@ exports.createMembership = onCall(async (request) => {
   }
 
   const db = admin.firestore();
-  const docRef = await db.collection("memberships").add({
+  const membershipData = {
     ...membership,
     remaining: membership.count,
     status: "active",
     createdAt: admin.firestore.FieldValue.serverTimestamp(),
-  });
+  };
+  
+  const docRef = await db.collection("memberships").add(membershipData);
 
   logger.info(`회원권 생성: id=${docRef.id}`);
-  return { id: docRef.id };
+  
+  return {
+    ...membership,
+    id: docRef.id,
+    remaining: membership.count,
+    status: "active",
+  };
 });
 
 /**

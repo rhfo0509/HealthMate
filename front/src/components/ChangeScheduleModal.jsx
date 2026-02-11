@@ -1,4 +1,4 @@
-﻿import React, { useState } from "react";
+import React, { useState } from "react";
 import { View, Text, Pressable, Modal, StyleSheet } from "react-native";
 import { CheckBox } from "react-native-elements";
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -125,7 +125,8 @@ const styles = StyleSheet.create({
   },
   modalTitle: {
     fontSize: 18,
-    fontWeight: "500",
+    lineHeight: 26,
+    fontFamily: 'Cafe24SsurroundAir',
     marginBottom: 16,
     textAlign: "center",
   },
@@ -137,6 +138,7 @@ const styles = StyleSheet.create({
   },
   dayText: {
     fontSize: 16,
+    fontFamily: 'Cafe24SsurroundAir',
     marginRight: 10,
     marginBottom: 5,
     color: colors.text.primary,
@@ -162,6 +164,7 @@ const styles = StyleSheet.create({
   },
   timeText: {
     fontSize: 14,
+    fontFamily: 'Cafe24SsurroundAir',
     color: colors.primary[600],
   },
   modalButtons: {

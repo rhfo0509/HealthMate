@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -8,6 +8,7 @@ import {
   ActivityIndicator,
   TextInput,
   Alert,
+  ScrollView,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import RNDateTimePicker from "@react-native-community/datetimepicker";
@@ -123,7 +124,10 @@ function EditProfileScreen() {
   }
 
   return (
-    <View style={styles.container}>
+    <ScrollView 
+      style={styles.container}
+      showsVerticalScrollIndicator={false}
+    >
       <Pressable onPress={onSelectImage} style={styles.avatarContainer}>
         <Avatar
           source={response && { uri: response.assets[0].uri }}
@@ -227,7 +231,7 @@ function EditProfileScreen() {
           />
         )}
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
@@ -245,15 +249,22 @@ const styles = StyleSheet.create({
   },
   section: {
     marginBottom: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   label: {
     fontSize: 16,
-    fontWeight: "bold",
+    lineHeight: 24,
+    fontFamily: 'Cafe24SsurroundAir',
     color: colors.gray[900],
-    marginBottom: 8,
+    width: 120,
   },
   input: {
+    flex: 1,
     height: 48,
+    fontSize: 16,
+    lineHeight: 24,
+    fontFamily: 'Cafe24SsurroundAir',
     borderWidth: 1,
     borderColor: colors.border.dark,
     borderRadius: 4,
@@ -261,6 +272,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
   },
   buttonGroup: {
+    flex: 1,
     flexDirection: "row",
     justifyContent: "space-between",
   },
@@ -273,21 +285,22 @@ const styles = StyleSheet.create({
     borderColor: colors.border.dark,
     borderRadius: 4,
     backgroundColor: colors.background,
-    marginHorizontal: 5,
   },
   selectedButton: {
-    backgroundColor: colors.primary[500],
-    borderColor: colors.primary[700],
+    borderColor: colors.primary[500],
+    borderWidth: 2,
   },
   optionText: {
     fontSize: 16,
+    lineHeight: 24,
+    fontFamily: 'Cafe24SsurroundAir',
     color: colors.gray[900],
   },
   selectedText: {
-    color: colors.background,
-    fontWeight: "bold",
+    color: colors.primary[500],
   },
   dateButton: {
+    flex: 1,
     height: 48,
     justifyContent: "center",
     alignItems: "center",
@@ -295,9 +308,12 @@ const styles = StyleSheet.create({
     borderColor: colors.border.dark,
     borderRadius: 4,
     backgroundColor: colors.background,
+    paddingHorizontal: 16,
   },
   dateText: {
     fontSize: 16,
+    lineHeight: 24,
+    fontFamily: 'Cafe24SsurroundAir',
     color: colors.gray[900],
   },
   buttons: {

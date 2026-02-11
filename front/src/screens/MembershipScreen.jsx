@@ -354,12 +354,12 @@ const styles = StyleSheet.create({
     ...shadows.sm,
   },
   itemText: {
-    fontFamily: "Paperlogy-SemiBold",
+    fontFamily: 'Cafe24SsurroundAir',
     fontSize: 16,
     color: colors.text.primary,
   },
   itemValue: {
-    fontFamily: "Paperlogy-Regular",
+    fontFamily: 'Cafe24SsurroundAir',
     fontSize: 16,
     color: colors.text.secondary,
   },
@@ -388,7 +388,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   buttonText: {
-    fontFamily: "Paperlogy-SemiBold",
+    fontFamily: 'Cafe24SsurroundAir',
     color: colors.text.inverse,
   },
 });

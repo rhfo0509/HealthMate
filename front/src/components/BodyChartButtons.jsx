@@ -1,4 +1,4 @@
-﻿import React from "react";
+import React from "react";
 import { View, Text, StyleSheet, Pressable } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 
@@ -59,11 +59,13 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     fontSize: 14,
+    lineHeight: 20,
+    fontFamily: 'Cafe24SsurroundAir',
     color: colors.text.primary,
-    fontWeight: "500",
   },
   recentValueText: {
     fontSize: 12,
+    fontFamily: 'Cafe24SsurroundAir',
     color: colors.text.secondary,
   },
   addButton: {

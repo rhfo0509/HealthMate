@@ -1,4 +1,4 @@
-﻿import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import {
   StyleSheet,
   View,
@@ -292,6 +292,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: colors.background,
     fontSize: 14,
+    fontFamily: 'Cafe24SsurroundAir',
   },
   saveRoutineContainer: {
     flexDirection: "row",
@@ -346,7 +347,8 @@ const styles = StyleSheet.create({
   },
   exerciseName: {
     fontSize: 16,
-    fontWeight: "bold",
+    lineHeight: 24,
+    fontFamily: 'Cafe24SsurroundAir',
     color: colors.primary[500],
   },
   removeExerciseButton: {
@@ -362,7 +364,8 @@ const styles = StyleSheet.create({
   },
   setLabel: {
     fontSize: 16,
-    fontWeight: "600",
+    lineHeight: 24,
+    fontFamily: 'Cafe24SsurroundAir',
     marginRight: 10,
     color: colors.text.primary,
   },
@@ -378,6 +381,7 @@ const styles = StyleSheet.create({
   },
   unitText: {
     fontSize: 14,
+    fontFamily: 'Cafe24SsurroundAir',
     color: colors.text.primary,
     marginRight: 10,
   },

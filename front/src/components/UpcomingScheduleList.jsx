@@ -236,13 +236,13 @@ function UpcomingScheduleList({ scheduleList, user }) {
                         { backgroundColor: colors.primary[500] },
                       ]}
                     >
-                      <Text style={{ color: colors.background }}>등록</Text>
+                      <Text style={styles.modalButtonTextPrimary}>등록</Text>
                     </Pressable>
                     <Pressable
                       onPress={onCloseFirst}
                       style={styles.modalButton}
                     >
-                      <Text style={{ color: colors.primary[500] }}>취소</Text>
+                      <Text style={styles.modalButtonTextSecondary}>취소</Text>
                     </Pressable>
                   </View>
                 </View>
@@ -278,13 +278,13 @@ function UpcomingScheduleList({ scheduleList, user }) {
                         { backgroundColor: colors.primary[500] },
                       ]}
                     >
-                      <Text style={{ color: colors.background }}>등록</Text>
+                      <Text style={styles.modalButtonTextPrimary}>등록</Text>
                     </Pressable>
                     <Pressable
                       onPress={onCloseSecond}
                       style={styles.modalButton}
                     >
-                      <Text style={{ color: colors.primary[500] }}>취소</Text>
+                      <Text style={styles.modalButtonTextSecondary}>취소</Text>
                     </Pressable>
                   </View>
                 </View>
@@ -319,6 +319,7 @@ const styles = StyleSheet.create({
   },
   itemText: {
     fontSize: 16,
+    fontFamily: 'Cafe24SsurroundAir',
   },
   buttonContainer: {
     flexDirection: "row",
@@ -379,6 +380,16 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     borderWidth: 1,
     borderColor: colors.primary[500],
+  },
+  modalButtonTextPrimary: {
+    color: colors.background,
+    fontFamily: 'Cafe24SsurroundAir',
+    fontSize: 16,
+  },
+  modalButtonTextSecondary: {
+    color: colors.primary[500],
+    fontFamily: 'Cafe24SsurroundAir',
+    fontSize: 16,
   },
 });
 

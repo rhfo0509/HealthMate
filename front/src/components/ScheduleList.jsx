@@ -44,7 +44,7 @@ function ScheduleList({ schedules, ListHeaderComponent }) {
               );
             }}
             text="삭제"
-            textStyle={{ fontWeight: "bold", color: "white" }}
+            textStyle={{ fontFamily: 'Cafe24SsurroundAir', color: "white" }}
             style={{
               flex: 1,
               paddingHorizontal: 30,

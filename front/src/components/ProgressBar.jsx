@@ -1,4 +1,4 @@
-﻿import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { StyleSheet, Text, View, Animated } from "react-native";
 
 import { colors } from "../styles/theme";
@@ -52,8 +52,9 @@ const styles = StyleSheet.create({
   },
   step: {
     color: colors.primary[500],
-    fontWeight: "600",
     fontSize: 18,
+    lineHeight: 26,
+    fontFamily: 'Cafe24SsurroundAir',
     textAlign: "center",
     marginTop: 5,
   },

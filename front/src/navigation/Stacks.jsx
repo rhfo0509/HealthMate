@@ -42,19 +42,50 @@ function HomeStack() {
   }
 
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: true,
+      }}
+    >
       {role === "trainer" ? (
         <>
-          <Stack.Screen name="Calendar" component={CalendarScreen} />
+          <Stack.Screen 
+            name="Calendar" 
+            component={CalendarScreen} 
+            options={{
+              title: "HealthMate",
+              headerTitleStyle: {
+                fontFamily: 'Cafe24Ssurround',
+                color: '#1f6feb',
+              },
+            }}
+          />
           <Stack.Screen
             name="WeeklyCalendar"
             component={WeeklyCalendarScreen}
-            options={{ headerBackVisible: false }}
+            options={{ 
+              title: "HealthMate",
+              headerTitleStyle: {
+                fontFamily: 'Cafe24Ssurround',
+                color: '#1f6feb',
+              },
+              headerBackVisible: false,
+            }}
           />
         </>
       ) : (
         <>
-          <Stack.Screen name="MemberHome" component={MemberHomeScreen} />
+          <Stack.Screen 
+            name="MemberHome" 
+            component={MemberHomeScreen} 
+            options={{
+              title: "HealthMate",
+              headerTitleStyle: {
+                fontFamily: 'Cafe24Ssurround',
+                color: '#1f6feb',
+              },
+            }}
+          />
           <Stack.Screen name="MemberDetail" component={MemberDetailTab} />
         </>
       )}
@@ -65,7 +96,17 @@ function HomeStack() {
 function MyProfileStack() {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="MyProfile" component={MyProfileScreen} options={{ title: "" }} />
+      <Stack.Screen 
+        name="MyProfile" 
+        component={MyProfileScreen} 
+        options={{ 
+          title: "HealthMate",
+          headerTitleStyle: { 
+            fontFamily: 'Cafe24Ssurround',
+            color: '#1f6feb',
+          },
+        }} 
+      />
       <Stack.Screen name="MemberDetail" component={MemberDetailTab} />
     </Stack.Navigator>
   );

@@ -1,4 +1,4 @@
-﻿import React, { useState } from "react";
+import React, { useState } from "react";
 import {
   ActivityIndicator,
   Pressable,
@@ -247,7 +247,8 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 16,
-    fontWeight: "500",
+    lineHeight: 24,
+    fontFamily: 'Cafe24SsurroundAir',
     color: colors.gray[900],
     width: "30%",
   },
@@ -257,7 +258,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   optionButton: {
-    flex: 1,
+    paddingHorizontal: 24,
     height: 48,
     justifyContent: "center",
     alignItems: "center",
@@ -265,18 +266,20 @@ const styles = StyleSheet.create({
     borderColor: colors.border.dark,
     borderRadius: 4,
     backgroundColor: colors.background,
+    marginLeft: 8,
   },
   selectedButton: {
-    backgroundColor: colors.primary[500],
-    borderColor: colors.primary[700],
+    borderColor: colors.primary[500],
+    borderWidth: 2,
   },
   optionText: {
     fontSize: 16,
+    lineHeight: 24,
+    fontFamily: 'Cafe24SsurroundAir',
     color: colors.gray[900],
   },
   selectedText: {
-    color: colors.background,
-    fontWeight: "bold",
+    color: colors.primary[500],
   },
   dateButton: {
     flex: 1,
@@ -290,6 +293,8 @@ const styles = StyleSheet.create({
   },
   dateText: {
     fontSize: 16,
+    lineHeight: 24,
+    fontFamily: 'Cafe24SsurroundAir',
     color: colors.gray[900],
   },
   spinner: {

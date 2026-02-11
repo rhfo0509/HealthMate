@@ -58,7 +58,7 @@ function CalendarScreen() {
             navigation.navigate("WeeklyCalendar");
           }}
         >
-          <Text style={{ color: colors.primary[500] }}>주간 일정 보기</Text>
+          <Text style={{ color: colors.primary[500], fontFamily: 'Cafe24SsurroundAir', fontSize: 14 }}>주간 일정 보기</Text>
         </Pressable>
       ),
     });

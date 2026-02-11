@@ -66,7 +66,7 @@ function MemberList({ members, memberships, ListHeaderComponent }) {
               );
             }}
             text="삭제"
-            textStyle={{ fontWeight: "bold", color: "white" }}
+            textStyle={{ fontFamily: 'Cafe24SsurroundAir', fontSize: 16, color: "white" }}
             style={{
               flex: 1,
               paddingHorizontal: 30,
