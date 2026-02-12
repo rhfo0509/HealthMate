@@ -1,4 +1,8 @@
 <div align="center">
+  
+<img width="120" height="120" alt="image" src="https://github.com/user-attachments/assets/f411a972-09fc-4618-9f27-78eeeb00b89a" />
+
+# 부산대학교 LINC3.0 캡스톤디자인
 
 <img src="스크린샷/헤더.png" width="100%" />
 
