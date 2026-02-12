@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     fontSize: 14,
     fontFamily: 'Cafe24SsurroundAir',
-    color: colors.background,
+    color: colors.text.inverse,
   },
   calories: {
     backgroundColor: "#ffab91",

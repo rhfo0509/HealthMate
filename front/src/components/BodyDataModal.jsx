@@ -100,7 +100,7 @@ function BodyDataModal({ memberId, show, setShow, editData, latestData }) {
                   style={styles.input}
                   value={
                     bodyData[
-                      index === 0 ? "weight" : index === 1 ? "SMM" : "PBF"
+                    index === 0 ? "weight" : index === 1 ? "SMM" : "PBF"
                     ]
                   }
                   onChangeText={(text) =>
@@ -121,7 +121,7 @@ function BodyDataModal({ memberId, show, setShow, editData, latestData }) {
               onPress={onSave}
               style={[styles.modalButton, { backgroundColor: colors.primary[500] }]}
             >
-              <Text style={{ color: colors.background }}>
+              <Text style={{ color: colors.text.inverse }}>
                 {editData ? "수정" : "등록"}
               </Text>
             </Pressable>

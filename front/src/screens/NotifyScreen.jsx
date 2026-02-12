@@ -73,6 +73,7 @@ const renderItem = ({ item }) => (
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: colors.background,
   },
   separator: {
     backgroundColor: colors.border.main,

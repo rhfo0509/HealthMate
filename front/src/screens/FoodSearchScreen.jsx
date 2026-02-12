@@ -46,11 +46,11 @@ const FoodSearchScreen = () => {
             ? aEndsWith === bEndsWith
               ? 0
               : aEndsWith
-              ? -1
-              : 1
+                ? -1
+                : 1
             : aExact
-            ? -1
-            : 1;
+              ? -1
+              : 1;
         });
 
         setFoods(sortedFoods);
@@ -208,8 +208,8 @@ const FoodSearchScreen = () => {
               style={[
                 styles.servingButton,
                 servingAmount === "0.33" &&
-                  !isCustomInputActive &&
-                  styles.activeButton,
+                !isCustomInputActive &&
+                styles.activeButton,
               ]}
             >
               <Text style={styles.buttonText}>1/3</Text>
@@ -222,8 +222,8 @@ const FoodSearchScreen = () => {
               style={[
                 styles.servingButton,
                 servingAmount === "0.5" &&
-                  !isCustomInputActive &&
-                  styles.activeButton,
+                !isCustomInputActive &&
+                styles.activeButton,
               ]}
             >
               <Text style={styles.buttonText}>1/2</Text>
@@ -236,8 +236,8 @@ const FoodSearchScreen = () => {
               style={[
                 styles.servingButton,
                 servingAmount === "1" &&
-                  !isCustomInputActive &&
-                  styles.activeButton,
+                !isCustomInputActive &&
+                styles.activeButton,
               ]}
             >
               <Text style={styles.buttonText}>1</Text>
@@ -302,13 +302,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 12,
-    backgroundColor: colors.surface,
+    backgroundColor: colors.background,
   },
   loading: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: colors.surface,
+    backgroundColor: colors.background,
   },
   noResultsContainer: {
     flex: 1,
@@ -446,7 +446,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.border.dark,
   },
   buttonText: {
-    color: colors.background,
+    color: colors.text.inverse,
     fontSize: 14,
     fontFamily: 'Cafe24SsurroundAir',
   },

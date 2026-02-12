@@ -51,6 +51,7 @@ function CommentScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#FFFFFF',
   },
   input: {
     paddingHorizontal: 16,

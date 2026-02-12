@@ -168,7 +168,7 @@ function UpcomingScheduleList({ scheduleList, user }) {
                 {schedule.trainer.displayName} 트레이너
               </Text>
             </View>
-            <Text style={styles.itemText}>
+            <Text style={[styles.itemText, styles.accentTime]}>
               {format(new Date(schedule.date), "M/d(E)", { locale: ko })}{" "}
               {schedule.startTime}
             </Text>
@@ -337,10 +337,10 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary[500],
   },
   requestText: {
-    color: colors.background,
+    color: colors.text.inverse,
   },
   cancelRequestButton: {
-    backgroundColor: colors.background,
+    backgroundColor: colors.surface,
     borderColor: colors.primary[500],
     borderWidth: 1,
   },
@@ -365,6 +365,8 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderRadius: 5,
     marginVertical: 10,
+    fontFamily: 'Cafe24SsurroundAir',
+    fontSize: 16,
   },
   modalButtons: {
     flexDirection: "row",
@@ -382,12 +384,17 @@ const styles = StyleSheet.create({
     borderColor: colors.primary[500],
   },
   modalButtonTextPrimary: {
-    color: colors.background,
+    color: colors.text.inverse,
     fontFamily: 'Cafe24SsurroundAir',
     fontSize: 16,
   },
   modalButtonTextSecondary: {
     color: colors.primary[500],
+    fontFamily: 'Cafe24SsurroundAir',
+    fontSize: 16,
+  },
+  accentTime: {
+    color: colors.accent.main,
     fontFamily: 'Cafe24SsurroundAir',
     fontSize: 16,
   },

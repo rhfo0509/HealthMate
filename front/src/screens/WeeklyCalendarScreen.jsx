@@ -51,7 +51,7 @@ function WeeklyCalendarScreen() {
 
   useEffect(() => {
     navigation.setOptions({
-      title: "",
+      title: "HealthMate",
       headerRight: () => (
         <Pressable onPress={() => navigation.navigate("Calendar")}>
           <Text style={{ color: colors.primary[500], fontFamily: 'Cafe24SsurroundAir', fontSize: 14 }}>월간 일정 보기</Text>
@@ -159,7 +159,7 @@ function WeeklyCalendarScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.surface,
+    backgroundColor: colors.background,
   },
   row: {
     flexDirection: "row",

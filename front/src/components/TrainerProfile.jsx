@@ -105,8 +105,40 @@ function TrainerProfile({ user }) {
                   ]}
                   placeholder={{
                     label: "정렬기준 선택",
-                    color: colors.border.dark,
+                    color: colors.text.hint,
                   }}
+                  useNativeAndroidPickerStyle={false}
+                  style={{
+                    inputIOS: {
+                      fontSize: 16,
+                      fontFamily: 'Cafe24SsurroundAir',
+                      paddingVertical: 8,
+                      paddingHorizontal: 0,
+                      paddingRight: 24,
+                      color: colors.text.primary,
+                      backgroundColor: 'transparent',
+                    },
+                    inputAndroid: {
+                      fontSize: 16,
+                      fontFamily: 'Cafe24SsurroundAir',
+                      paddingVertical: 8,
+                      paddingHorizontal: 0,
+                      paddingRight: 24,
+                      color: colors.text.primary,
+                      backgroundColor: 'transparent',
+                    },
+                    placeholder: {
+                      fontFamily: 'Cafe24SsurroundAir',
+                      color: colors.text.hint,
+                    },
+                    iconContainer: {
+                      top: 10,
+                      right: 0,
+                    },
+                  }}
+                  Icon={() => (
+                    <Text style={{ fontSize: 16, color: colors.text.secondary }}>▼</Text>
+                  )}
                 />
               </View>
             </View>

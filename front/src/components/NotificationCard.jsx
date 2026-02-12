@@ -127,7 +127,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: colors.background,
+    backgroundColor: colors.surface,
     marginVertical: 8,
     borderRadius: 12,
     shadowColor: colors.gray[900],
@@ -182,7 +182,7 @@ const styles = StyleSheet.create({
     borderColor: colors.primary[500],
   },
   acceptText: {
-    color: colors.background,
+    color: colors.text.inverse,
     fontSize: 16,
     fontFamily: 'Cafe24SsurroundAir',
   },

@@ -124,7 +124,7 @@ function EditProfileScreen() {
   }
 
   return (
-    <ScrollView 
+    <ScrollView
       style={styles.container}
       showsVerticalScrollIndicator={false}
     >
@@ -239,6 +239,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
+    backgroundColor: colors.background,
   },
   avatarContainer: {
     alignItems: "center",
@@ -284,7 +285,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.border.dark,
     borderRadius: 4,
-    backgroundColor: colors.background,
+    backgroundColor: colors.surface,
   },
   selectedButton: {
     borderColor: colors.primary[500],
@@ -307,7 +308,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.border.dark,
     borderRadius: 4,
-    backgroundColor: colors.background,
+    backgroundColor: colors.surface,
     paddingHorizontal: 16,
   },
   dateText: {

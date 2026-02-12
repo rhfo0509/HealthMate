@@ -123,9 +123,9 @@ const CalorieStatScreen = () => {
   const percentageChange =
     lastWeekAverageCal > 0
       ? (
-          ((weeklyAverageCal - lastWeekAverageCal) / lastWeekAverageCal) *
-          100
-        ).toFixed(2)
+        ((weeklyAverageCal - lastWeekAverageCal) / lastWeekAverageCal) *
+        100
+      ).toFixed(2)
       : 0;
 
   const hasData = Object.values(weeklyCal).some(cal => cal > 0);
@@ -171,7 +171,7 @@ export default CalorieStatScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.surface,
+    backgroundColor: colors.background,
   },
   loading: {
     flex: 1,

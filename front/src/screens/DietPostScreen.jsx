@@ -242,6 +242,29 @@ function DietPostScreen() {
           onPress={setSelectedIndex}
           selectedIndex={selectedIndex}
           buttons={buttons}
+          containerStyle={{
+            marginBottom: 16,
+            borderRadius: 0,
+            borderWidth: 0,
+            backgroundColor: colors.background,
+          }}
+          buttonStyle={{
+            backgroundColor: colors.background,
+          }}
+          selectedButtonStyle={{
+            backgroundColor: colors.primary[500],
+          }}
+          textStyle={{
+            fontFamily: 'Cafe24SsurroundAir',
+            color: colors.text.primary,
+          }}
+          selectedTextStyle={{
+            fontFamily: 'Cafe24SsurroundAir',
+            color: colors.text.inverse,
+          }}
+          innerBorderStyle={{
+            color: colors.border.light,
+          }}
         />
         {result && (
           <Animated.Image
@@ -284,7 +307,7 @@ function DietPostScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.surface,
+    backgroundColor: colors.background,
   },
   image: {
     width: "100%",

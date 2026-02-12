@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+﻿import React, { useCallback, useEffect, useState } from "react";
 import {
   StyleSheet,
   View,
@@ -248,7 +248,7 @@ function RoutineScreen() {
               onPress={() => removeLastSet(exerciseIndex)}
               disabled={exercise.sets.length === 1}
             >
-              <Text style={{ color: colors.primary[500] }}>세트 삭제</Text>
+              <Text style={{ color: colors.primary[500], fontFamily: 'Cafe24SsurroundAir' }}>세트 삭제</Text>
             </Pressable>
           </View>
         </View>
@@ -260,7 +260,7 @@ function RoutineScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.surface,
+    backgroundColor: colors.background,
     padding: 16,
   },
   loading: {
@@ -290,8 +290,9 @@ const styles = StyleSheet.create({
     marginLeft: 5,
   },
   buttonText: {
-    color: colors.background,
+    color: colors.text.inverse,
     fontSize: 14,
+    lineHeight: 21,
     fontFamily: 'Cafe24SsurroundAir',
   },
   saveRoutineContainer: {
@@ -321,6 +322,9 @@ const styles = StyleSheet.create({
   saveRoutineText: {
     color: colors.text.primary,
     marginBottom: 3,
+    fontSize: 14,
+    lineHeight: 21,
+    fontFamily: 'Cafe24SsurroundAir',
   },
   routineNameInput: {
     flex: 1,
@@ -331,12 +335,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     marginLeft: 10,
     backgroundColor: colors.surface,
+    fontFamily: 'Cafe24SsurroundAir',
   },
   exerciseContainer: {
     marginTop: 10,
     padding: 15,
     borderRadius: 10,
-    backgroundColor: colors.background,
+    backgroundColor: colors.surface,
     marginBottom: 20,
   },
   exerciseHeader: {

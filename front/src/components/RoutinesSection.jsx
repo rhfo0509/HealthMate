@@ -183,7 +183,7 @@ const styles = {
     flexDirection: "row",
     flexWrap: "wrap",
     padding: 16,
-    backgroundColor: colors.surface,
+    backgroundColor: 'transparent',
     borderRadius: 8,
     marginBottom: 12,
   },
@@ -207,7 +207,7 @@ const styles = {
   routinesContainer: {
     marginTop: 12,
     padding: 10,
-    backgroundColor: colors.surface,
+    backgroundColor: 'transparent',
     borderRadius: 8,
   },
   routineItem: {
@@ -248,8 +248,9 @@ const styles = {
     paddingHorizontal: 4,
     borderRadius: 4,
     fontSize: 14,
+    lineHeight: 21,
     fontFamily: 'Cafe24SsurroundAir',
-    color: colors.background,
+    color: colors.text.inverse,
   },
   exerciseName: {
     backgroundColor: "#ffab91",

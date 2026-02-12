@@ -74,8 +74,9 @@ function FoodInput({ food, onChange, onRemove, onSearch }) {
 
 const styles = StyleSheet.create({
   foodCard: {
-    padding: 12,
-    marginBottom: 10,
+    padding: 16,
+    marginBottom: 12,
+    marginHorizontal: 16,
     borderRadius: 8,
     backgroundColor: colors.surface,
     shadowColor: colors.gray[900],
@@ -87,46 +88,49 @@ const styles = StyleSheet.create({
   foodInputRow: {
     flexDirection: "row",
     alignItems: "center",
+    marginBottom: 8,
   },
   foodInput: {
     flex: 1,
-    paddingVertical: 4,
-    paddingHorizontal: 10,
-    backgroundColor: colors.surface,
-    borderRadius: 6,
-    borderWidth: 1,
+    paddingVertical: 8,
+    paddingHorizontal: 0,
+    backgroundColor: 'transparent',
+    borderBottomWidth: 1,
     borderColor: colors.border.dark,
+    fontFamily: 'Cafe24SsurroundAir',
   },
   searchButton: {
-    marginLeft: 8,
+    marginLeft: 12,
   },
   removeButton: {
-    marginLeft: 8,
+    marginLeft: 12,
   },
   nutritionRow: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginTop: 10,
+    marginTop: 12,
+    gap: 12,
   },
   nutritionInputWrapper: {
     flex: 1,
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: colors.surface,
-    borderRadius: 6,
-    borderWidth: 1,
+    backgroundColor: 'transparent',
+    paddingHorizontal: 0,
+    borderBottomWidth: 1,
     borderColor: colors.border.dark,
-    paddingHorizontal: 8,
-    marginHorizontal: 0,
   },
   nutritionInput: {
     flex: 1,
-    paddingVertical: 4,
+    paddingVertical: 8,
     textAlign: "left",
+    fontFamily: 'Cafe24SsurroundAir',
   },
   unitText: {
     color: colors.text.secondary,
     marginLeft: 4,
+    fontFamily: 'Cafe24SsurroundAir',
+    fontSize: 14,
   },
 });
 

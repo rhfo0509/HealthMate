@@ -62,7 +62,7 @@ function MembershipCard({ membership }) {
         <View style={styles.detailItem}>
           <Text style={styles.label}>세션</Text>
           <Text style={styles.detailText}>
-            {membership.count - membership.remaining}회 / {membership.count}회
+            <Text style={styles.accentText}>{membership.remaining}회</Text> / {membership.count}회 남음
           </Text>
         </View>
 
@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 8,
     right: 8,
-    backgroundColor: colors.background,
+    backgroundColor: colors.surface,
     borderRadius: 12,
     paddingHorizontal: 12,
     paddingVertical: 4,
@@ -123,7 +123,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     lineHeight: 28,
     fontFamily: 'Cafe24SsurroundAir',
-    color: colors.background,
+    color: colors.text.inverse,
   },
   details: {
     marginBottom: 16,
@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   label: {
-    color: colors.background,
+    color: colors.text.inverse,
     fontSize: 16,
     lineHeight: 24,
     fontFamily: 'Cafe24SsurroundAir',
@@ -145,11 +145,11 @@ const styles = StyleSheet.create({
   detailText: {
     fontSize: 16,
     fontFamily: 'Cafe24SsurroundAir',
-    color: colors.background,
+    color: colors.text.inverse,
   },
   button: {
     alignItems: "center",
-    backgroundColor: colors.background,
+    backgroundColor: colors.surface,
     borderRadius: 4,
     paddingHorizontal: 16,
     paddingVertical: 8,
@@ -159,6 +159,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 24,
     fontFamily: 'Cafe24SsurroundAir',
+  },
+  accentText: {
+    color: colors.accent.main,
+    fontFamily: 'Cafe24SsurroundAir',
+    fontSize: 16,
   },
 });
 

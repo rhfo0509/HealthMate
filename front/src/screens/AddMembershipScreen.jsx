@@ -288,9 +288,9 @@ function AddMembershipScreen() {
                     <Text style={styles.datePickerText}>
                       {time
                         ? time.toLocaleTimeString([], {
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          })
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })
                         : "시간 선택"}
                     </Text>
                   </Pressable>
@@ -332,7 +332,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: colors.surface,
+    backgroundColor: colors.background,
   },
   header: {
     fontSize: 20,
@@ -357,7 +357,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 24,
     fontFamily: 'Cafe24SsurroundAir',
-    color: colors.background,
+    color: colors.text.inverse,
   },
   disabledButton: {
     backgroundColor: colors.border.dark,
@@ -381,7 +381,7 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     borderWidth: 1,
     borderColor: colors.border.dark,
-    backgroundColor: colors.background,
+    backgroundColor: colors.surface,
     justifyContent: "center",
   },
   datePickerText: {
@@ -428,7 +428,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     borderWidth: 1,
     borderColor: colors.border.dark,
-    backgroundColor: colors.background,
+    backgroundColor: colors.surface,
     flex: 1,
     alignItems: "center",
   },

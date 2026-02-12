@@ -52,7 +52,7 @@ function MemberHomeScreen() {
 
   useEffect(() => {
     navigation.setOptions({
-      title: "",
+      title: "HealthMate",
     });
   }, [navigation]);
 
@@ -68,7 +68,7 @@ function MemberHomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.surface,
+    backgroundColor: colors.background,
   },
   titleText: {
     fontFamily: "Cafe24Ssurround",

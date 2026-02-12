@@ -1,29 +1,30 @@
 /**
- * Clean Pro - Color System
+ * HealthMate - Color System
  * 
- * 네이비 기반 프로페셔널 색상 팔레트
+ * 코랄 오렌지 기반 활기찬 색상 팔레트
+ * Cafe24Ssurround 폰트와 완벽한 조화
  */
 
 export const colors = {
-    // Primary - Navy Blue (전문성, 신뢰)
+    // Primary - Coral Orange (활력, 열정, 따뜻함)
     primary: {
-        50: '#E8EAF6',
-        100: '#C5CAE9',
-        200: '#9FA8DA',
-        300: '#7986CB',
-        400: '#5C6BC0',
-        500: '#3F51B5',   // Main
-        600: '#3949AB',
-        700: '#303F9F',
-        800: '#283593',
-        900: '#1A237E',
+        50: '#FFF0ED',
+        100: '#FFE0DB',
+        200: '#FFC1B7',
+        300: '#FFA193',
+        400: '#FF826F',
+        500: '#FF6B6B',   // Main - 활기찬 코랄
+        600: '#E85555',
+        700: '#CC3F3F',
+        800: '#B02929',
+        900: '#8A1313',
     },
 
-    // Accent - Gold (프리미엄 포인트)
+    // Accent - Mint Teal (신선함, 보조 포인트)
     accent: {
-        light: '#E6D5B8',
-        main: '#C9A961',
-        dark: '#B8935C',
+        light: '#B8F5ED',
+        main: '#4ECDC4',
+        dark: '#3BA89F',
     },
 
     // Neutral - Grayscale
@@ -41,8 +42,8 @@ export const colors = {
     },
 
     // Semantic Colors
-    background: '#FFFFFF',
-    surface: '#F8F9FA',
+    background: '#FFF8F5',  // 화면 배경 - 연한 코랄 틴트
+    surface: '#FFFFFF',  // 카드 배경 - 깔끔한 흰색
     error: '#D32F2F',
     success: '#388E3C',
     warning: '#F57C00',

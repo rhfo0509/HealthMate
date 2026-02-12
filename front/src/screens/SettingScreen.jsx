@@ -35,13 +35,13 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingTop: spacing.xl,
-    backgroundColor: colors.surface,
+    backgroundColor: colors.background,
   },
   item: {
     borderTopWidth: 1,
     borderBottomWidth: 1,
     borderColor: colors.border.light,
-    backgroundColor: colors.background,
+    backgroundColor: colors.surface,
     paddingVertical: spacing.md,
     paddingHorizontal: spacing.md,
     marginBottom: spacing.md,

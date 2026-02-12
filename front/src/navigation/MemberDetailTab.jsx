@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useRoute, useNavigation } from "@react-navigation/native";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import { colors } from "../styles/theme";
 
 import DashboardScreen from "../screens/DashboardScreen";
 import DietScreen from "../screens/DietScreen";
@@ -26,7 +27,7 @@ function MemberDetailTab() {
       headerRight: () =>
         role === "trainer" ? (
           <IconRightButton
-            name="remember-me"
+            name="card-membership"
             onPress={() =>
               // 회원권 관리 페이지로 이동
               navigation.push("Membership", { memberId: relatedUser.id })
@@ -40,7 +41,7 @@ function MemberDetailTab() {
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: "#1f6feb",
+        tabBarActiveTintColor: colors.background,
         tabBarLabelStyle: {
           color: "black",
           fontFamily: 'Cafe24SsurroundAir',
@@ -51,21 +52,19 @@ function MemberDetailTab() {
       <Tab.Screen
         name="Dashboard"
         component={DashboardScreen}
-        options={{ tabBarLabel: "대시보드" }}
+        options={{ tabBarLabel: "대시보드", tabBarActiveTintColor: colors.background }}
         initialParams={{ relatedUserId: relatedUser.id }}
       />
       <Tab.Screen
         name="Diet"
         component={DietScreen}
-        options={{
-          tabBarLabel: "식단일지",
-        }}
+        options={{ tabBarLabel: "식단일지", tabBarActiveTintColor: colors.background }}
         initialParams={{ relatedUserId: relatedUser.id, postType: "Diet" }}
       />
       <Tab.Screen
         name="Exercise"
         component={ExerciseScreen}
-        options={{ tabBarLabel: "운동일지" }}
+        options={{ tabBarLabel: "운동일지", tabBarActiveTintColor: colors.background }}
         initialParams={{
           relatedUserId: relatedUser.id,
           postType: "Exercise",

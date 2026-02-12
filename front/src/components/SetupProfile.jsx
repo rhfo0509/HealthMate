@@ -265,7 +265,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.border.dark,
     borderRadius: 4,
-    backgroundColor: colors.background,
+    backgroundColor: colors.surface,
     marginLeft: 8,
   },
   selectedButton: {
@@ -289,7 +289,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.border.dark,
     borderRadius: 4,
-    backgroundColor: colors.background,
+    backgroundColor: colors.surface,
   },
   dateText: {
     fontSize: 16,

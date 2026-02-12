@@ -1,5 +1,5 @@
 ﻿import React from "react";
-import { StyleSheet, Alert } from "react-native";
+import { StyleSheet, Alert, View } from "react-native";
 import {
   SwipeableFlatList,
   SwipeableQuickActionButton,
@@ -18,6 +18,7 @@ function ScheduleList({ schedules, ListHeaderComponent }) {
       renderItem={({ item }) => <ScheduleListItem schedule={item} />}
       keyExtractor={(schedule) => schedule.id}
       ListHeaderComponent={ListHeaderComponent}
+      ItemSeparatorComponent={() => <View style={styles.separator} />}
       // 오른쪽으로 스와이프 시 삭제 버튼 렌더링
       renderRightActions={({ item }) => (
         <SwipeableQuickActions>
@@ -61,6 +62,7 @@ function ScheduleList({ schedules, ListHeaderComponent }) {
 
 const styles = StyleSheet.create({
   container: { flex: 1 },
+  separator: { height: 10 },
 });
 
 export default ScheduleList;

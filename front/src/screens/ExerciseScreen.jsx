@@ -74,7 +74,7 @@ function ExerciseScreen() {
         </View>
       ) : (
         <FlatList
-          style={{ backgroundColor: colors.surface }}
+          style={{ backgroundColor: 'transparent' }}
           data={filteredPosts}
           renderItem={renderItem}
           keyExtractor={(item) => item.id}
@@ -100,7 +100,7 @@ const renderItem = ({ item }) => (
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.surface,
+    backgroundColor: colors.background,
   },
   noPostsContainer: {
     flex: 1,
@@ -109,6 +109,7 @@ const styles = StyleSheet.create({
   },
   noPostsText: {
     fontSize: 18,
+    lineHeight: 27,
     fontFamily: 'Cafe24SsurroundAir',
     color: colors.text.secondary,
   },

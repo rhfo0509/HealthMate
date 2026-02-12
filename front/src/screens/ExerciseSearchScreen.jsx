@@ -35,14 +35,14 @@ function ExerciseSearchScreen() {
       selectedCategory === "전체"
         ? allExercises
         : allExercises.filter(
-            (exercise) => exercise.category === selectedCategory
-          );
+          (exercise) => exercise.category === selectedCategory
+        );
 
     // 검색어에 따른 운동 목록 필터링
     const finalFiltered = searchQuery.trim()
       ? filteredByCategory.filter((exercise) =>
-          exercise.name.toLowerCase().includes(searchQuery.toLowerCase())
-        )
+        exercise.name.toLowerCase().includes(searchQuery.toLowerCase())
+      )
       : filteredByCategory;
 
     setFilteredExercises(
@@ -96,7 +96,7 @@ function ExerciseSearchScreen() {
                 style={[
                   styles.categoryButtonText,
                   selectedCategory === item &&
-                    styles.selectedCategoryButtonText,
+                  styles.selectedCategoryButtonText,
                 ]}
               >
                 {item}
@@ -120,20 +120,20 @@ function ExerciseSearchScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.surface,
+    backgroundColor: colors.background,
     padding: 16,
   },
   searchContainer: {
     marginBottom: 16,
   },
   searchInput: {
-    borderWidth: 1,
-    borderColor: colors.border.main,
-    borderRadius: 8,
-    padding: 10,
+    borderBottomWidth: 1,
+    borderColor: colors.border.dark,
+    paddingVertical: 8,
+    paddingHorizontal: 0,
     fontSize: 16,
     fontFamily: 'Cafe24SsurroundAir',
-    backgroundColor: colors.surface,
+    backgroundColor: 'transparent',
   },
   categoryContainer: {
     marginBottom: 10,
@@ -158,7 +158,7 @@ const styles = StyleSheet.create({
     color: colors.text.primary,
   },
   selectedCategoryButtonText: {
-    color: colors.background,
+    color: colors.text.inverse,
   },
   exerciseList: {
     marginTop: 10,

@@ -31,7 +31,7 @@ const Card = ({
 
 const styles = StyleSheet.create({
     base: {
-        backgroundColor: colors.background,
+        backgroundColor: colors.surface,
         borderRadius: borderRadius.lg,
         borderWidth: 1,
         borderColor: colors.border.light,

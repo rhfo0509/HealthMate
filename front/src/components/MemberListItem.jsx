@@ -32,7 +32,12 @@ function MemberListItem({ member }) {
   // 회원 상태 텍스트 표시 함수
   const getStatusText = () => {
     if (status === "active") {
-      return `${remaining} / ${count}회 남음`;
+      return (
+        <>
+          <Text style={styles.accentBold}>{remaining}회</Text>
+          <Text> / {count}회 남음</Text>
+        </>
+      );
     } else if (status === "paused") {
       return "중단됨";
     } else {
@@ -67,7 +72,6 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
     padding: 16,
     borderRadius: 12,
-    marginBottom: 10,
     shadowColor: colors.gray[900],
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
@@ -105,6 +109,11 @@ const styles = StyleSheet.create({
     lineHeight: 20,
     fontFamily: 'Cafe24SsurroundAir',
     color: colors.primary[600],
+  },
+  accentBold: {
+    color: colors.accent.main,
+    fontFamily: 'Cafe24SsurroundAir',
+    fontSize: 14,
   },
 });
 

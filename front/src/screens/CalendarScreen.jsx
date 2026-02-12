@@ -1,5 +1,5 @@
 ﻿import React, { useEffect, useState } from "react";
-import { Pressable, Text } from "react-native";
+import { Pressable, Text, View, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { format } from "date-fns";
 import {
@@ -51,7 +51,7 @@ function CalendarScreen() {
 
   useEffect(() => {
     navigation.setOptions({
-      title: "",
+      title: "HealthMate",
       headerRight: () => (
         <Pressable
           onPress={() => {
@@ -76,17 +76,26 @@ function CalendarScreen() {
   );
 
   return (
-    <ScheduleList
-      schedules={filteredScheduleList}
-      ListHeaderComponent={
-        <CalendarView
-          markedDates={markedDates}
-          selectedDate={selectedDate}
-          onSelectDate={setSelectedDate}
-        />
-      }
-    />
+    <View style={styles.container}>
+      <ScheduleList
+        schedules={filteredScheduleList}
+        ListHeaderComponent={
+          <CalendarView
+            markedDates={markedDates}
+            selectedDate={selectedDate}
+            onSelectDate={setSelectedDate}
+          />
+        }
+      />
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: colors.background,
+  },
+});
 
 export default CalendarScreen;

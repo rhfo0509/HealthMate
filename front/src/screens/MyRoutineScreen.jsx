@@ -103,13 +103,13 @@ function MyRoutineScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.surface,
+    backgroundColor: colors.background,
   },
   listContent: {
     padding: 16,
   },
   routineItem: {
-    backgroundColor: colors.background,
+    backgroundColor: colors.surface,
     padding: 16,
     borderRadius: 8,
     marginBottom: 12,
@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   deleteButtonText: {
-    color: colors.background,
+    color: colors.text.inverse,
     fontSize: 14,
     fontFamily: 'Cafe24SsurroundAir',
   },

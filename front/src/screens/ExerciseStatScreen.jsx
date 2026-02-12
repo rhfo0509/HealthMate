@@ -188,7 +188,7 @@ export default ExerciseStatScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.surface,
+    backgroundColor: colors.background,
   },
   loading: {
     flex: 1,

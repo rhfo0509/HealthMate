@@ -1,5 +1,5 @@
 ﻿import React, { useEffect, useState } from "react";
-import { ActivityIndicator, View } from "react-native";
+import { ActivityIndicator, View, StyleSheet } from "react-native";
 import { colors } from "../styles/theme";
 
 import { useUserContext } from "../contexts/UserContext";
@@ -30,21 +30,38 @@ function MyProfileScreen() {
 
   if (isLoading) {
     return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <View style={styles.loading}>
         <ActivityIndicator size="large" color={colors.primary[500]} />
       </View>
     );
   }
 
   // 로딩 이후 역할에 따른 프로필 화면 표시
-  return role === "trainer" ? (
-    <TrainerProfile user={user} />
-  ) : (
-    <>
-      <MemberProfile user={user} />
-      <MemberStatTab user={user} />
-    </>
+  return (
+    <View style={styles.container}>
+      {role === "trainer" ? (
+        <TrainerProfile user={user} />
+      ) : (
+        <>
+          <MemberProfile user={user} />
+          <MemberStatTab user={user} />
+        </>
+      )}
+    </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: colors.background,
+  },
+  loading: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: colors.background,
+  },
+});
 
 export default MyProfileScreen;

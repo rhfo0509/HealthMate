@@ -24,8 +24,8 @@ function ExerciseChart({ weeklyVolume, lastWeekAverage }) {
     })),
     label: day,
     spacing: 36,
-    labelTextStyle: { 
-      color: "gray", 
+    labelTextStyle: {
+      color: "gray",
       fontSize: 12,
       fontFamily: 'Cafe24SsurroundAir',
     },
@@ -54,10 +54,10 @@ function ExerciseChart({ weeklyVolume, lastWeekAverage }) {
               marginRight: 4,
             }}
           />
-          <Text style={{ 
-            width: 24, 
-            height: 16, 
-            color: "gray", 
+          <Text style={{
+            width: 24,
+            height: 16,
+            color: "gray",
             fontSize: 12,
             fontFamily: 'Cafe24SsurroundAir',
           }}>
@@ -77,16 +77,16 @@ function ExerciseChart({ weeklyVolume, lastWeekAverage }) {
         hideRules
         xAxisThickness={0}
         yAxisThickness={0}
-        yAxisTextStyle={{ 
-          color: "gray", 
+        yAxisTextStyle={{
+          color: "gray",
           fontSize: 12,
           fontFamily: 'Cafe24SsurroundAir',
         }}
         noOfSections={3}
         maxValue={Math.max(
           1,
-          ...Object.values(weeklyVolume).flatMap((day) =>
-            Object.values(day).map((value) => (isNaN(value) ? 0 : value))
+          ...Object.values(weeklyVolume).map((day) =>
+            Object.values(day).reduce((sum, value) => sum + (isNaN(value) ? 0 : value), 0)
           )
         )}
         width={400}

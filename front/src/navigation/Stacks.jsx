@@ -45,29 +45,34 @@ function HomeStack() {
     <Stack.Navigator
       screenOptions={{
         headerShown: true,
+        headerTitleStyle: {
+          fontFamily: 'Cafe24Ssurround',
+          color: colors.primary[500],
+        },
+        headerTintColor: colors.primary[500],
       }}
     >
       {role === "trainer" ? (
         <>
-          <Stack.Screen 
-            name="Calendar" 
-            component={CalendarScreen} 
+          <Stack.Screen
+            name="Calendar"
+            component={CalendarScreen}
             options={{
               title: "HealthMate",
               headerTitleStyle: {
                 fontFamily: 'Cafe24Ssurround',
-                color: '#1f6feb',
+                color: colors.primary[500],
               },
             }}
           />
           <Stack.Screen
             name="WeeklyCalendar"
             component={WeeklyCalendarScreen}
-            options={{ 
+            options={{
               title: "HealthMate",
               headerTitleStyle: {
                 fontFamily: 'Cafe24Ssurround',
-                color: '#1f6feb',
+                color: colors.primary[500],
               },
               headerBackVisible: false,
             }}
@@ -75,14 +80,14 @@ function HomeStack() {
         </>
       ) : (
         <>
-          <Stack.Screen 
-            name="MemberHome" 
-            component={MemberHomeScreen} 
+          <Stack.Screen
+            name="MemberHome"
+            component={MemberHomeScreen}
             options={{
               title: "HealthMate",
               headerTitleStyle: {
                 fontFamily: 'Cafe24Ssurround',
-                color: '#1f6feb',
+                color: colors.primary[500],
               },
             }}
           />
@@ -95,17 +100,25 @@ function HomeStack() {
 
 function MyProfileStack() {
   return (
-    <Stack.Navigator>
-      <Stack.Screen 
-        name="MyProfile" 
-        component={MyProfileScreen} 
-        options={{ 
+    <Stack.Navigator
+      screenOptions={{
+        headerTitleStyle: {
+          fontFamily: 'Cafe24Ssurround',
+          color: colors.primary[500],
+        },
+        headerTintColor: colors.primary[500],
+      }}
+    >
+      <Stack.Screen
+        name="MyProfile"
+        component={MyProfileScreen}
+        options={{
           title: "HealthMate",
-          headerTitleStyle: { 
+          headerTitleStyle: {
             fontFamily: 'Cafe24Ssurround',
-            color: '#1f6feb',
+            color: colors.primary[500],
           },
-        }} 
+        }}
       />
       <Stack.Screen name="MemberDetail" component={MemberDetailTab} />
     </Stack.Navigator>

@@ -83,14 +83,14 @@ function ChangeScheduleModal({
                 isLoading && styles.disabledButton,
               ]}
             >
-              <Text style={{ color: colors.background }}>등록</Text>
+              <Text style={{ color: colors.text.inverse, fontFamily: 'Cafe24SsurroundAir' }}>등록</Text>
             </Pressable>
             <Pressable
               onPress={onClose}
               disabled={isLoading}
               style={[styles.modalButton, isLoading && styles.disabledButton]}
             >
-              <Text style={{ color: colors.primary[500] }}>취소</Text>
+              <Text style={{ color: colors.primary[500], fontFamily: 'Cafe24SsurroundAir' }}>취소</Text>
             </Pressable>
           </View>
         </View>

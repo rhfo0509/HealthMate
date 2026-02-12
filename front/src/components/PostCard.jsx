@@ -199,6 +199,8 @@ const styles = StyleSheet.create({
   },
   role: {
     color: colors.text.secondary,
+    fontSize: 14,
+    fontFamily: 'Cafe24SsurroundAir',
   },
   contentContainer: {
     flexDirection: "row",

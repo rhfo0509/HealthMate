@@ -1,5 +1,5 @@
 ﻿import React from "react";
-import { Alert, StyleSheet } from "react-native";
+import { Alert, StyleSheet, View } from "react-native";
 import {
   SwipeableFlatList,
   SwipeableQuickActionButton,
@@ -39,6 +39,7 @@ function MemberList({ members, memberships, ListHeaderComponent }) {
       renderItem={({ item }) => <MemberListItem member={item} />}
       keyExtractor={(member) => member.id}
       ListHeaderComponent={ListHeaderComponent}
+      ItemSeparatorComponent={() => <View style={styles.separator} />}
       // 오른쪽으로 스와이프 시 삭제 버튼 렌더링
       renderRightActions={({ item }) => (
         <SwipeableQuickActions>
@@ -83,6 +84,7 @@ function MemberList({ members, memberships, ListHeaderComponent }) {
 
 const styles = StyleSheet.create({
   memberList: { flex: 1 },
+  separator: { height: 10 },
 });
 
 export default MemberList;

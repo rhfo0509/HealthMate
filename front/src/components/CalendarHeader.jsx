@@ -63,16 +63,22 @@ function CalendarHeader({ markedDates, selectedDate, onSelectDate }) {
       <CalendarStrip
         scrollable
         style={{ height: 80 }}
-        calendarColor={colors.surface}
-        calendarHeaderStyle={{ color: colors.text.primary }}
-        dateNumberStyle={{ color: colors.text.primary }}
+        calendarColor={colors.background}
+        calendarHeaderStyle={{
+          color: colors.text.primary,
+        }}
+        dateNumberStyle={{
+          color: colors.text.primary,
+        }}
         dateNameStyle={{ display: "none" }}
         iconContainer={{ flex: 0.1 }}
         markedDates={markedDates}
         onDateSelected={(date) => onSelectDate(new Date(date))}
         selectedDate={new Date(selectedDate)}
         highlightDateNameStyle={{ display: "none" }}
-        highlightDateNumberStyle={{ color: colors.primary[500] }}
+        highlightDateNumberStyle={{
+          color: colors.primary[500],
+        }}
         calendarHeaderFormat={"YYYY년 M월"}
       />
     </View>

@@ -91,7 +91,7 @@ function BodyHistory({ bodyData, setShow, setEditData, memberId }) {
     return (
       <View style={styles.container}>
         <View style={styles.historyHeader}>
-          <Text style={{ fontWeight: "bold" }}>
+          <Text style={{ fontFamily: 'Cafe24SsurroundAir', fontSize: 16, lineHeight: 24 }}>
             {format(item.date.toDate(), "yyyy년 MM월 dd일")}
           </Text>
           <View style={styles.historyButtonGroup}>

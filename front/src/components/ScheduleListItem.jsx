@@ -165,7 +165,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 16,
     borderRadius: 12,
-    marginBottom: 10,
     shadowColor: colors.gray[900],
     shadowOpacity: 0.1,
     shadowOffset: { width: 0, height: 2 },
